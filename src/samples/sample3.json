@@ -1,0 +1,217 @@
+{
+    "title": "Coorg Weekend Getaway",
+    "startDate": "18 Sept 2026",
+    "endDate": "20 Sept 2026",
+    "days": [
+        {
+            "day": "Day 1",
+            "title": "Travel to Coorg",
+            "summary": "Drive and relax",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "6:00 AM",
+                    "title": "Start from Bengaluru",
+                    "type": "travel",
+                    "duration": "6h",
+                    "description": "Start from Bengaluru during 6:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "1:00 PM",
+                    "title": "Check-in Resort",
+                    "type": "stay",
+                    "description": "Check-in Resort during 1:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "5:00 PM",
+                    "title": "Coffee Plantation Walk",
+                    "type": "activity",
+                    "description": "Coffee Plantation Walk during 5:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-18",
+            "week": "Friday"
+        },
+        {
+            "day": "Day 2",
+            "title": "Coorg Sightseeing",
+            "summary": "Waterfalls and viewpoints",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Abbey Falls",
+                    "type": "activity",
+                    "description": "Abbey Falls during 9:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "11:30 AM",
+                    "title": "Raja's Seat",
+                    "type": "activity",
+                    "description": "Raja's Seat during 11:30 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "4:00 PM",
+                    "title": "Dubare Elephant Camp",
+                    "type": "activity",
+                    "description": "Dubare Elephant Camp during 4:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-19",
+            "week": "Saturday"
+        },
+        {
+            "day": "Day 3",
+            "title": "Return to Bengaluru",
+            "summary": "Relaxed return",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Breakfast & Checkout",
+                    "type": "stay",
+                    "description": "Breakfast & Checkout during 9:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "10:00 AM",
+                    "title": "Drive Back",
+                    "type": "travel",
+                    "duration": "6h",
+                    "description": "Drive Back during 10:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-20",
+            "week": "Sunday"
+        }
+    ],
+    "prebookingData": {
+        "flights": [
+            {
+                "id": 1,
+                "date": "2026-09-18",
+                "from": "BLR",
+                "to": "Destination",
+                "departure": "09:00 AM",
+                "arrival": "11:00 AM",
+                "airline": "Sample Airlines",
+                "duration": "2h",
+                "durationMinutes": 120,
+                "type": "domestic",
+                "status": "pending",
+                "price": "₹5000",
+                "terminal": {
+                    "departure": "T1",
+                    "arrival": "T1"
+                },
+                "baggage": {
+                    "cabin": "7kg",
+                    "checkin": "15kg"
+                },
+                "pnr": "",
+                "seat": "",
+                "booking": {
+                    "platform": "",
+                    "bookedOn": ""
+                },
+                "timeToAirport": "2 hrs",
+                "notes": "Reach early",
+                "alerts": [],
+                "links": []
+            }
+        ],
+        "rooms": [
+            {
+                "id": 1,
+                "name": "undefined Hotel",
+                "checkin": "2026-09-18 14:00",
+                "checkout": "2026-09-21 11:00",
+                "price": "₹10000",
+                "links": []
+            }
+        ],
+        "activities": [
+            {
+                "id": 1,
+                "name": "Local Activity",
+                "status": "To Book",
+                "price": "₹1500",
+                "priority": "medium",
+                "notes": "Optional but recommended",
+                "links": []
+            }
+        ]
+    }
+}

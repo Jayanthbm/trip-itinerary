@@ -1,0 +1,330 @@
+{
+    "title": "Kerala Scenic Escape",
+    "startDate": "10 Sept 2026",
+    "endDate": "14 Sept 2026",
+    "days": [
+        {
+            "day": "Day 1",
+            "title": "Travel to Munnar",
+            "summary": "Drive from Bengaluru to Munnar via scenic route",
+            "type": "travel",
+            "city": "Munnar",
+            "country": "India",
+            "timeline": [
+                {
+                    "time": "5:00 AM",
+                    "title": "Start from Bengaluru",
+                    "type": "travel",
+                    "transport": "car",
+                    "duration": "10h",
+                    "location": "Bangalore",
+                    "description": "Start from Bengaluru during 5:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Bangalore"
+                },
+                {
+                    "time": "4:00 PM",
+                    "title": "Reach Munnar & Check-in",
+                    "type": "stay",
+                    "location": "Munnar Hotel",
+                    "description": "Reach Munnar & Check-in during 4:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Munnar%20Hotel"
+                },
+                {
+                    "time": "6:30 PM",
+                    "title": "Sunset View",
+                    "type": "activity",
+                    "location": "Tea Gardens",
+                    "description": "Sunset View during 6:30 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Tea%20Gardens"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-10",
+            "week": "Thursday"
+        },
+        {
+            "day": "Day 2",
+            "title": "Munnar Exploration",
+            "summary": "Tea plantations and waterfalls",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Eravikulam National Park",
+                    "type": "activity",
+                    "description": "Eravikulam National Park during 9:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "1:00 PM",
+                    "title": "Lunch",
+                    "type": "food",
+                    "description": "Lunch during 1:00 PM.",
+                    "icon": "food",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "3:00 PM",
+                    "title": "Attukal Waterfalls",
+                    "type": "activity",
+                    "description": "Attukal Waterfalls during 3:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-11",
+            "week": "Friday"
+        },
+        {
+            "day": "Day 3",
+            "title": "Munnar → Alleppey",
+            "summary": "Travel to backwaters",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Drive to Alleppey",
+                    "type": "travel",
+                    "duration": "5h",
+                    "description": "Drive to Alleppey during 9:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "2:00 PM",
+                    "title": "Houseboat Check-in",
+                    "type": "stay",
+                    "description": "Houseboat Check-in during 2:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "5:00 PM",
+                    "title": "Backwater Cruise",
+                    "type": "activity",
+                    "description": "Backwater Cruise during 5:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-12",
+            "week": "Saturday"
+        },
+        {
+            "day": "Day 4",
+            "title": "Alleppey → Kochi",
+            "summary": "Explore Fort Kochi",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Drive to Kochi",
+                    "type": "travel",
+                    "description": "Drive to Kochi during 9:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "1:00 PM",
+                    "title": "Fort Kochi Walk",
+                    "type": "activity",
+                    "description": "Fort Kochi Walk during 1:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "6:00 PM",
+                    "title": "Kathakali Show",
+                    "type": "activity",
+                    "description": "Kathakali Show during 6:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-13",
+            "week": "Sunday"
+        },
+        {
+            "day": "Day 5",
+            "title": "Return to Bengaluru",
+            "summary": "Flight/train back",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "10:00 AM",
+                    "title": "Airport Transfer",
+                    "type": "travel",
+                    "description": "Airport Transfer during 10:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "1:00 PM",
+                    "title": "Flight to Bengaluru",
+                    "type": "travel",
+                    "description": "Flight to Bengaluru during 1:00 PM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-09-14",
+            "week": "Monday"
+        }
+    ],
+    "prebookingData": {
+        "flights": [
+            {
+                "id": 1,
+                "date": "2026-09-10",
+                "from": "BLR",
+                "to": "Munnar",
+                "departure": "09:00 AM",
+                "arrival": "11:00 AM",
+                "airline": "Sample Airlines",
+                "duration": "2h",
+                "durationMinutes": 120,
+                "type": "domestic",
+                "status": "pending",
+                "price": "₹5000",
+                "terminal": {
+                    "departure": "T1",
+                    "arrival": "T1"
+                },
+                "baggage": {
+                    "cabin": "7kg",
+                    "checkin": "15kg"
+                },
+                "pnr": "",
+                "seat": "",
+                "booking": {
+                    "platform": "",
+                    "bookedOn": ""
+                },
+                "timeToAirport": "2 hrs",
+                "notes": "Reach early",
+                "alerts": [],
+                "links": []
+            }
+        ],
+        "rooms": [
+            {
+                "id": 1,
+                "name": "Munnar Hotel",
+                "checkin": "2026-09-10 14:00",
+                "checkout": "2026-09-15 11:00",
+                "price": "₹10000",
+                "location": "Munnar",
+                "links": []
+            }
+        ],
+        "activities": [
+            {
+                "id": 1,
+                "name": "Local Activity",
+                "status": "To Book",
+                "price": "₹1500",
+                "priority": "medium",
+                "notes": "Optional but recommended",
+                "links": []
+            }
+        ]
+    }
+}

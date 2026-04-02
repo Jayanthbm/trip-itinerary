@@ -1,0 +1,411 @@
+{
+    "title": "Bali Island Adventure",
+    "startDate": "5 Oct 2026",
+    "endDate": "11 Oct 2026",
+    "days": [
+        {
+            "day": "Day 1",
+            "title": "Arrival in Bali",
+            "summary": "Fly to Bali and relax",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "12:00 AM",
+                    "title": "Flight from Bengaluru",
+                    "type": "travel",
+                    "description": "Flight from Bengaluru during 12:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "10:00 AM",
+                    "title": "Arrive in Bali",
+                    "type": "travel",
+                    "description": "Arrive in Bali during 10:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "12:00 PM",
+                    "title": "Hotel Check-in (Kuta/Seminyak)",
+                    "type": "stay",
+                    "description": "Hotel Check-in (Kuta/Seminyak) during 12:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-05",
+            "week": "Monday"
+        },
+        {
+            "day": "Day 2",
+            "title": "Ubud Exploration",
+            "summary": "Temples and rice terraces",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Tegallalang Rice Terrace",
+                    "type": "activity",
+                    "description": "Tegallalang Rice Terrace during 9:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "12:00 PM",
+                    "title": "Ubud Monkey Forest",
+                    "type": "activity",
+                    "description": "Ubud Monkey Forest during 12:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "5:00 PM",
+                    "title": "Ubud Market",
+                    "type": "activity",
+                    "description": "Ubud Market during 5:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-06",
+            "week": "Tuesday"
+        },
+        {
+            "day": "Day 3",
+            "title": "Waterfalls Day",
+            "summary": "Explore Bali waterfalls",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "9:00 AM",
+                    "title": "Tegenungan Waterfall",
+                    "type": "activity",
+                    "description": "Tegenungan Waterfall during 9:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "1:00 PM",
+                    "title": "Lunch",
+                    "type": "food",
+                    "description": "Lunch during 1:00 PM.",
+                    "icon": "food",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "3:00 PM",
+                    "title": "Tibumana Waterfall",
+                    "type": "activity",
+                    "description": "Tibumana Waterfall during 3:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-07",
+            "week": "Wednesday"
+        },
+        {
+            "day": "Day 4",
+            "title": "Nusa Penida Day Trip",
+            "summary": "Island exploration",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "7:00 AM",
+                    "title": "Ferry to Nusa Penida",
+                    "type": "travel",
+                    "description": "Ferry to Nusa Penida during 7:00 AM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "10:00 AM",
+                    "title": "Kelingking Beach",
+                    "type": "activity",
+                    "description": "Kelingking Beach during 10:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "3:00 PM",
+                    "title": "Angel’s Billabong",
+                    "type": "activity",
+                    "description": "Angel’s Billabong during 3:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-08",
+            "week": "Thursday"
+        },
+        {
+            "day": "Day 5",
+            "title": "Beach Clubs & Relax",
+            "summary": "Chill day",
+            "type": "relax",
+            "timeline": [
+                {
+                    "time": "11:00 AM",
+                    "title": "Finns Beach Club",
+                    "type": "activity",
+                    "description": "Finns Beach Club during 11:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "5:00 PM",
+                    "title": "Sunset at Tanah Lot",
+                    "type": "activity",
+                    "description": "Sunset at Tanah Lot during 5:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-09",
+            "week": "Friday"
+        },
+        {
+            "day": "Day 6",
+            "title": "Adventure Day",
+            "summary": "Water sports",
+            "type": "explore",
+            "timeline": [
+                {
+                    "time": "10:00 AM",
+                    "title": "Jet Ski & Parasailing",
+                    "type": "activity",
+                    "description": "Jet Ski & Parasailing during 10:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "3:00 PM",
+                    "title": "Spa Session",
+                    "type": "activity",
+                    "description": "Spa Session during 3:00 PM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-10",
+            "week": "Saturday"
+        },
+        {
+            "day": "Day 7",
+            "title": "Departure",
+            "summary": "Return to India",
+            "type": "travel",
+            "timeline": [
+                {
+                    "time": "10:00 AM",
+                    "title": "Checkout",
+                    "type": "stay",
+                    "description": "Checkout during 10:00 AM.",
+                    "icon": "activity",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                },
+                {
+                    "time": "2:00 PM",
+                    "title": "Flight to Bengaluru",
+                    "type": "travel",
+                    "description": "Flight to Bengaluru during 2:00 PM.",
+                    "icon": "cab",
+                    "mapsLink": "https://maps.google.com/?q=Activity%20Central"
+                }
+            ],
+            "checklist": [
+                "Keep ID Ready",
+                "Carry Essentials",
+                "Check Weather Forecast"
+            ],
+            "budget": [
+                {
+                    "item": "Food & Drinks",
+                    "cost": "₹1000"
+                },
+                {
+                    "item": "Local Travel",
+                    "cost": "₹500"
+                },
+                {
+                    "item": "Total",
+                    "cost": "₹1500"
+                }
+            ],
+            "date": "2026-10-11",
+            "week": "Sunday"
+        }
+    ],
+    "prebookingData": {
+        "flights": [
+            {
+                "id": 1,
+                "date": "2026-10-05",
+                "from": "BLR",
+                "to": "Destination",
+                "departure": "09:00 AM",
+                "arrival": "11:00 AM",
+                "airline": "Sample Airlines",
+                "duration": "2h",
+                "durationMinutes": 120,
+                "type": "domestic",
+                "status": "pending",
+                "price": "₹5000",
+                "terminal": {
+                    "departure": "T1",
+                    "arrival": "T1"
+                },
+                "baggage": {
+                    "cabin": "7kg",
+                    "checkin": "15kg"
+                },
+                "pnr": "",
+                "seat": "",
+                "booking": {
+                    "platform": "",
+                    "bookedOn": ""
+                },
+                "timeToAirport": "2 hrs",
+                "notes": "Reach early",
+                "alerts": [],
+                "links": []
+            }
+        ],
+        "rooms": [
+            {
+                "id": 1,
+                "name": "undefined Hotel",
+                "checkin": "2026-10-05 14:00",
+                "checkout": "2026-10-12 11:00",
+                "price": "₹10000",
+                "links": []
+            }
+        ],
+        "activities": [
+            {
+                "id": 1,
+                "name": "Local Activity",
+                "status": "To Book",
+                "price": "₹1500",
+                "priority": "medium",
+                "notes": "Optional but recommended",
+                "links": []
+            }
+        ]
+    }
+}
