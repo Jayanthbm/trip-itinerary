@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
-const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
+const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -18,7 +18,7 @@ const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
     checkScroll();
     window.addEventListener('resize', checkScroll);
     return () => window.removeEventListener('resize', checkScroll);
-  }, [daysCount]);
+  }, [days]);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -32,35 +32,35 @@ const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
   return (
     <div style={{ width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: hasPrebooking ? 'space-between' : 'flex-end', gap: '0.5rem', paddingRight: '1rem', paddingLeft: '1rem', paddingBottom: '0.5rem', marginBottom: '0.5rem', alignItems: 'center', flexWrap: 'wrap', borderBottom: '1px solid var(--border-light)' }}>
-        
+
         {hasPrebooking ? (
           <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <button 
+            <button
               className="tab-btn"
               onClick={() => setActiveTab('prebooking')}
-              style={{ 
-                padding: '0.4rem 1rem', 
-                background: activeTab === 'prebooking' ? 'var(--accent-primary)' : 'var(--bg-secondary)', 
-                border: activeTab === 'prebooking' ? 'none' : '1px solid var(--border-light)', 
-                margin: 0, 
-                color: activeTab === 'prebooking' ? '#fff' : 'var(--text-primary)', 
-                fontSize: '0.9rem', 
+              style={{
+                padding: '0.4rem 1rem',
+                background: activeTab === 'prebooking' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                border: activeTab === 'prebooking' ? 'none' : '1px solid var(--border-light)',
+                margin: 0,
+                color: activeTab === 'prebooking' ? '#fff' : 'var(--text-primary)',
+                fontSize: '0.9rem',
                 boxShadow: 'var(--shadow-md)',
                 cursor: 'pointer'
               }}
             >
               Prebooking
             </button>
-            <button 
+            <button
               className="tab-btn"
               onClick={() => setActiveTab('budget')}
-              style={{ 
-                padding: '0.4rem 1rem', 
-                background: activeTab === 'budget' ? 'var(--accent-primary)' : 'var(--bg-secondary)', 
-                border: activeTab === 'budget' ? 'none' : '1px solid var(--border-light)', 
-                margin: 0, 
-                color: activeTab === 'budget' ? '#fff' : 'var(--text-primary)', 
-                fontSize: '0.9rem', 
+              style={{
+                padding: '0.4rem 1rem',
+                background: activeTab === 'budget' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                border: activeTab === 'budget' ? 'none' : '1px solid var(--border-light)',
+                margin: 0,
+                color: activeTab === 'budget' ? '#fff' : 'var(--text-primary)',
+                fontSize: '0.9rem',
                 boxShadow: 'var(--shadow-md)',
                 cursor: 'pointer'
               }}
@@ -71,9 +71,9 @@ const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
         ) : (
           <div></div>
         )}
-        
+
         <div style={{ display: 'flex', gap: '0.5rem', opacity: (showLeft || showRight) ? 1 : 0, pointerEvents: (showLeft || showRight) ? 'auto' : 'none' }}>
-          <button 
+          <button
             onClick={() => showLeft && scroll('left')}
             style={{
               background: 'var(--bg-secondary)',
@@ -92,7 +92,7 @@ const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
           >
             <ChevronLeftIcon />
           </button>
-          <button 
+          <button
             onClick={() => showRight && scroll('right')}
             style={{
               background: 'var(--bg-secondary)',
@@ -114,18 +114,23 @@ const Tabs = ({ daysCount, activeTab, setActiveTab, hasPrebooking }) => {
         </div>
       </div>
 
-      <div 
-        className="tabs-container" 
-        ref={scrollRef} 
+      {days && days.length > 0 && (
+        <div style={{ padding: '0 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
+          Days
+        </div>
+      )}
+      <div
+        className="tabs-container"
+        ref={scrollRef}
         onScroll={checkScroll}
       >
-        {Array.from({ length: daysCount }).map((_, index) => (
-          <button 
+        {days && days.map((dayObj, index) => (
+          <button
             key={index}
             className={`tab-btn ${activeTab === `day-${index}` ? 'active' : ''}`}
             onClick={() => setActiveTab(`day-${index}`)}
           >
-            Day {index}
+            {dayObj.day ? dayObj.day : `Day ${index}`}
           </button>
         ))}
       </div>

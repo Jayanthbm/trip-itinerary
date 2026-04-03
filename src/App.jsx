@@ -382,7 +382,7 @@ function App() {
 
           <div style={{ paddingBottom: '1rem' }}>
             <Tabs
-              daysCount={appData.days.length}
+              days={appData.days}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               hasPrebooking={hasPrebooking}
