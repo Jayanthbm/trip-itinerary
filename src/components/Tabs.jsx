@@ -29,6 +29,15 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
     }
   };
 
+  const handleTabClick = (index, e) => {
+    setActiveTab(`day-${index}`);
+    
+    if (scrollRef.current && scrollRef.current.scrollWidth > scrollRef.current.clientWidth) {
+      e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      setTimeout(checkScroll, 350);
+    }
+  };
+
   return (
     <div style={{ width: '100%' }}>
       <div style={{ display: 'flex', justifyContent: hasPrebooking ? 'space-between' : 'flex-end', gap: '0.5rem', paddingRight: '1rem', paddingLeft: '1rem', paddingBottom: '0.5rem', marginBottom: '0.5rem', alignItems: 'center', flexWrap: 'wrap', borderBottom: '1px solid var(--border-light)' }}>
@@ -128,7 +137,7 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
           <button
             key={index}
             className={`tab-btn ${activeTab === `day-${index}` ? 'active' : ''}`}
-            onClick={() => setActiveTab(`day-${index}`)}
+            onClick={(e) => handleTabClick(index, e)}
           >
             {dayObj.day ? dayObj.day : `Day ${index}`}
           </button>
