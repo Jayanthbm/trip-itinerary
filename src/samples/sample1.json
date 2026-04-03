@@ -1,1476 +1,1004 @@
 {
-    "title": "Vietnam Adventure",
-    "startDate": "3 July 2026",
-    "endDate": "10 July 2026",
-    "days": [
+  "title": "Vietnam Adventure (5 days)",
+  "startDate": "5 July 2026",
+  "endDate": "10 July 2026",
+  "days": [
+    {
+      "day": "Start",
+      "title": "Departure & Travel to Vietnam",
+      "summary": "Travel from Bangalore to Ho Chi Minh City (overnight flight)",
+      "type": "travel",
+      "city": "Bangalore",
+      "country": "India",
+      "checklist": [
+        "Keep Passport & Tickets Ready",
+        "Carry Forex Card + Some Cash",
+        "Install Grab, Maps, Translate",
+        "Pack essentials in cabin bag"
+      ],
+      "timeline": [
         {
-            "day": "Day 0",
-            "title": "Departure & Travel to Vietnam",
-            "summary": "Travel from Bangalore to Ho Chi Minh City (overnight flight)",
-            "type": "travel",
-            "city": "Bangalore",
-            "country": "India",
-            "checklist": [
-                "Keep Passport & Tickets Ready",
-                "Carry Forex Card + Some Cash",
-                "Install Grab, Maps, Translate",
-                "Pack essentials in cabin bag"
-            ],
-            "timeline": [
-                {
-                    "time": "5:45 PM",
-                    "title": "Leave Home",
-                    "description": "Start early to avoid Bangalore traffic. Travel time ~2.5 hrs."
-                },
-                {
-                    "time": "8:15 PM",
-                    "title": "Reach Airport (BLR)",
-                    "description": "International Terminal. Keep buffer for check-in & immigration.",
-                    "icon": "airport",
-                    "type": "travel",
-                    "transport": "cab",
-                    "duration": "2h 30m",
-                    "location": "Kempegowda International Airport, Bangalore",
-                    "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
-                },
-                {
-                    "time": "8:30 PM - 10:30 PM",
-                    "title": "Check-in + Immigration",
-                    "description": "Complete baggage drop, security, and immigration.",
-                    "icon": "check",
-                    "type": "activity",
-                    "transport": "walking",
-                    "duration": "2h",
-                    "location": "Kempegowda International Airport, Bangalore",
-                    "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
-                },
-                {
-                    "time": "10:30 PM",
-                    "title": "Boarding",
-                    "description": "Reach gate and board flight.",
-                    "icon": "flight",
-                    "type": "activity",
-                    "transport": null,
-                    "location": "Departure Gate, BLR Airport",
-                    "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
-                },
-                {
-                    "time": "11:20 PM",
-                    "title": "Flight Departure",
-                    "description": "Depart from Bangalore to Ho Chi Minh City (~5 hrs flight).",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "duration": "4h 40m",
-                    "location": "Kempegowda International Airport, Bangalore",
-                    "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Airport Travel (Cab)",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Snacks / Water",
-                    "cost": "₹400"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹1400"
-                }
-            ],
-            "date": "2026-07-03",
-            "week": "Friday"
+          "time": "5:45 PM",
+          "title": "Leave Home",
+          "description": "Start early to avoid Bangalore traffic. Travel time ~2.5 hrs."
         },
         {
-            "day": "Day 1",
-            "title": "Arrival + Recovery Day",
-            "summary": "Arrival in Ho Chi Minh City, rest and light exploration",
-            "type": "relax",
-            "city": "Ho Chi Minh City",
-            "country": "Vietnam",
-            "checklist": [
-                "Buy Local SIM at Airport",
-                "Exchange Small Amount of Currency",
-                "Book Grab to Hotel",
-                "Take Proper Rest",
-                "Keep Day Light (No Heavy Travel)"
-            ],
-            "timeline": [
-                {
-                    "time": "6:00 AM",
-                    "title": "Land in Ho Chi Minh City",
-                    "description": "Arrive at Tan Son Nhat International Airport (SGN).",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "location": "Tan Son Nhat International Airport, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "6:30 AM - 7:15 AM",
-                    "title": "Immigration & Exit",
-                    "description": "Complete immigration and collect baggage. Keep passport and hotel address ready.",
-                    "icon": "check",
-                    "type": "activity",
-                    "transport": null,
-                    "duration": "45m",
-                    "location": "Tan Son Nhat International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "6:45 AM - 7:00 AM",
-                    "title": "SIM & Currency Exchange",
-                    "description": "Buy Viettel SIM (₹300–₹600) and exchange ₹3k–₹5k to VND.",
-                    "icon": "wallet",
-                    "type": "activity",
-                    "transport": null,
-                    "duration": "15m",
-                    "location": "Tan Son Nhat Airport Arrival Hall",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "7:15 AM",
-                    "title": "Travel to Hotel",
-                    "description": "Book Grab taxi to District 1 (~30 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30m",
-                    "location": "District 1, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:45 AM",
-                    "title": "Hotel Check-in",
-                    "description": "Check-in (room pre-booked from previous night).",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "transport": null,
-                    "location": "District 1 Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "8:00 AM - 11:30 AM",
-                    "title": "Rest & Sleep",
-                    "description": "Very important recovery sleep after overnight flight.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "duration": "3h 30m",
-                    "location": "Hotel Room"
-                },
-                {
-                    "time": "12:30 PM",
-                    "title": "Lunch",
-                    "description": "Veg-friendly meal (fried rice/noodles or Indian restaurant).",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹600 – ₹1,000",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Vegetarian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "2:00 PM - 4:30 PM",
-                    "title": "Light Walk & Café",
-                    "description": "Explore District 1, relax at a café.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "duration": "2h 30m",
-                    "location": "District 1, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "6:30 PM",
-                    "title": "Rooftop Drinks",
-                    "description": "Enjoy skyline views and relax.",
-                    "icon": "drink",
-                    "type": "activity",
-                    "transport": "grab",
-                    "cost": "₹1,500 – ₹2,500",
-                    "location": "Saigon Rooftop Bar Area",
-                    "mapsLink": "https://maps.google.com/?q=Saigon+Skydeck"
-                },
-                {
-                    "time": "8:30 PM",
-                    "title": "Dinner",
-                    "description": "Veg / Indian / simple local dinner.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Indian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "10:00 PM",
-                    "title": "Back to Hotel & Sleep",
-                    "description": "Sleep early to recover.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Hotel"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "SIM Card",
-                    "cost": "₹400"
-                },
-                {
-                    "item": "Airport Taxi",
-                    "cost": "₹500"
-                },
-                {
-                    "item": "Lunch",
-                    "cost": "₹800"
-                },
-                {
-                    "item": "Rooftop Drinks",
-                    "cost": "₹2000"
-                },
-                {
-                    "item": "Dinner",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹4700"
-                }
-            ],
-            "date": "2026-07-04",
-            "week": "Saturday"
+          "time": "8:15 PM",
+          "title": "Reach Airport (BLR)",
+          "description": "International Terminal. Keep buffer for check-in & immigration.",
+          "icon": "airport",
+          "type": "travel",
+          "transport": "cab",
+          "duration": "2h 30m",
+          "location": "Kempegowda International Airport, Bangalore",
+          "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
         },
         {
-            "day": "Day 2",
-            "title": "Mekong Delta Day Trip (Ben Tre)",
-            "summary": "Full-day Mekong Delta tour with boat rides, village experience and return to city",
-            "type": "explore",
-            "city": "Ben Tre / Ho Chi Minh City",
-            "country": "Vietnam",
-            "checklist": [
-                "Carry small backpack",
-                "Inform tour for vegetarian food",
-                "Keep sunscreen, cap, water",
-                "Be ready in lobby before pickup"
-            ],
-            "timeline": [
-                {
-                    "time": "7:00 AM",
-                    "title": "Wake Up & Breakfast",
-                    "description": "Freshen up and have a light breakfast at hotel.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": null,
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:30 AM",
-                    "title": "Pickup from Hotel",
-                    "description": "Tour van pickup from District 1 hotel.",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "van",
-                    "location": "District 1 Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:30 AM - 9:30 AM",
-                    "title": "Travel to Mekong Delta",
-                    "description": "Drive ~2 hours to Ben Tre. Relax or sleep in van.",
-                    "icon": "travel",
-                    "type": "travel",
-                    "transport": "van",
-                    "duration": "2h",
-                    "location": "Ben Tre, Mekong Delta",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Tre+Vietnam"
-                },
-                {
-                    "time": "10:00 AM",
-                    "title": "Boat Ride Begins",
-                    "description": "Motorboat ride, coconut candy workshop, village visit.",
-                    "icon": "boat",
-                    "type": "activity",
-                    "transport": "boat",
-                    "location": "Mekong River, Ben Tre",
-                    "mapsLink": "https://maps.google.com/?q=Mekong+River+Ben+Tre"
-                },
-                {
-                    "time": "11:30 AM",
-                    "title": "Rowboat Experience",
-                    "description": "Ride through narrow coconut canals (highlight).",
-                    "icon": "boat",
-                    "type": "activity",
-                    "transport": "rowboat",
-                    "duration": "30m",
-                    "location": "Coconut Canals, Ben Tre",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Tre+Coconut+Canals"
-                },
-                {
-                    "time": "1:00 PM",
-                    "title": "Lunch",
-                    "description": "Vegetarian lunch (pre-requested).",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": null,
-                    "cost": "Included",
-                    "location": "Local Mekong Restaurant",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Tre+Restaurant"
-                },
-                {
-                    "time": "2:00 PM",
-                    "title": "Village Walk / Cycling",
-                    "description": "Explore village or short cycling experience.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "duration": "1h",
-                    "location": "Ben Tre Village Area",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Tre+Village"
-                },
-                {
-                    "time": "3:30 PM",
-                    "title": "Relax / Tea Break",
-                    "description": "Light snacks and rest before return.",
-                    "icon": "tea",
-                    "type": "rest",
-                    "transport": null,
-                    "location": "Mekong Local Stop",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Tre"
-                },
-                {
-                    "time": "4:00 PM",
-                    "title": "Return to Ho Chi Minh City",
-                    "description": "Board van and travel back.",
-                    "icon": "travel",
-                    "type": "travel",
-                    "transport": "van",
-                    "duration": "2h",
-                    "location": "District 1, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "6:30 PM - 7:00 PM",
-                    "title": "Reach Hotel",
-                    "description": "Drop at District 1 hotel.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "District 1 Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "8:30 PM",
-                    "title": "Dinner",
-                    "description": "Light dinner near hotel.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Vegetarian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "10:00 PM",
-                    "title": "Rest",
-                    "description": "Relax and sleep after full day trip.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Hotel"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Mekong Day Tour",
-                    "cost": "₹4500"
-                },
-                {
-                    "item": "Dinner",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Snacks / Extras",
-                    "cost": "₹500"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹6000"
-                }
-            ],
-            "date": "2026-07-05",
-            "week": "Sunday"
+          "time": "8:30 PM - 10:30 PM",
+          "title": "Check-in + Immigration",
+          "description": "Complete baggage drop, security, and immigration.",
+          "icon": "check",
+          "type": "activity",
+          "transport": "walking",
+          "duration": "2h",
+          "location": "Kempegowda International Airport, Bangalore",
+          "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
         },
         {
-            "day": "Day 3",
-            "title": "Cu Chi Tunnels + Relax + Spa",
-            "summary": "Half-day Cu Chi exploration followed by relaxation and couple spa",
-            "type": "explore",
-            "city": "Ho Chi Minh City",
-            "country": "Vietnam",
-            "checklist": [
-                "Wear comfortable clothes & shoes",
-                "Carry water & sunscreen",
-                "Keep small cash",
-                "Book Cu Chi half-day tour (hotel pickup)",
-                "Confirm spa booking in evening"
-            ],
-            "timeline": [
-                {
-                    "time": "7:00 AM",
-                    "title": "Wake Up & Breakfast",
-                    "description": "Freshen up and have breakfast at hotel.",
-                    "icon": "food",
-                    "type": "food",
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:30 AM",
-                    "title": "Pickup for Cu Chi Tunnels",
-                    "description": "Tour van pickup from District 1 hotel.",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "van",
-                    "location": "District 1 Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:30 AM - 9:00 AM",
-                    "title": "Travel to Cu Chi",
-                    "description": "Drive ~1.5 hours from city.",
-                    "icon": "travel",
-                    "type": "travel",
-                    "transport": "van",
-                    "duration": "1h 30m",
-                    "location": "Cu Chi Tunnels, Vietnam",
-                    "mapsLink": "https://maps.google.com/?q=Cu+Chi+Tunnels"
-                },
-                {
-                    "time": "9:00 AM - 12:00 PM",
-                    "title": "Explore Cu Chi Tunnels",
-                    "description": "Walk through tunnels, learn history, see traps. Optional crawl.",
-                    "icon": "activity",
-                    "type": "activity",
-                    "transport": "walk",
-                    "duration": "3h",
-                    "location": "Cu Chi Tunnels",
-                    "mapsLink": "https://maps.google.com/?q=Cu+Chi+Tunnels"
-                },
-                {
-                    "time": "12:00 PM - 1:30 PM",
-                    "title": "Return to City",
-                    "description": "Travel back to hotel.",
-                    "icon": "travel",
-                    "type": "travel",
-                    "transport": "van",
-                    "duration": "1h 30m",
-                    "location": "District 1, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "1:30 PM",
-                    "title": "Reach Hotel",
-                    "description": "Return to District 1 hotel.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "2:00 PM - 4:30 PM",
-                    "title": "Rest & Relax",
-                    "description": "Nap / shower after morning trip.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "duration": "2h 30m",
-                    "location": "Hotel"
-                },
-                {
-                    "time": "5:00 PM",
-                    "title": "Evening Walk / Café",
-                    "description": "Light walk or café hopping.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "location": "District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "6:30 PM",
-                    "title": "Couple Spa",
-                    "description": "Relaxing spa session (90–120 mins, e.g., Miu Miu Spa).",
-                    "icon": "spa",
-                    "type": "activity",
-                    "transport": "grab",
-                    "duration": "1h 30m",
-                    "cost": "₹2,500 – ₹4,000",
-                    "location": "Miu Miu Spa, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=Miu+Miu+Spa+Ho+Chi+Minh"
-                },
-                {
-                    "time": "8:30 PM",
-                    "title": "Dinner",
-                    "description": "Veg / Indian / local restaurant.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹1,000 – ₹1,500",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Indian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "9:30 PM",
-                    "title": "Night Walk",
-                    "description": "Relaxed walk around city.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "location": "District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "10:30 PM",
-                    "title": "Back to Hotel",
-                    "description": "Sleep early after full day.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Hotel"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Cu Chi Tour",
-                    "cost": "₹2000"
-                },
-                {
-                    "item": "Spa",
-                    "cost": "₹2,500"
-                },
-                {
-                    "item": "Food",
-                    "cost": "₹1,000"
-                },
-                {
-                    "item": "Local Travel",
-                    "cost": "₹500"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹5,500"
-                }
-            ],
-            "date": "2026-07-06",
-            "week": "Monday"
+          "time": "10:30 PM",
+          "title": "Boarding",
+          "description": "Reach gate and board flight.",
+          "icon": "flight",
+          "type": "activity",
+          "transport": null,
+          "location": "Departure Gate, BLR Airport",
+          "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
         },
         {
-            "day": "Day 4",
-            "title": "Fly to Phu Quoc + Beach Day",
-            "summary": "Travel to Phu Quoc, check-in and relaxed beach day",
-            "type": "travel",
-            "city": "Phu Quoc",
-            "country": "Vietnam",
-            "checklist": [
-                "Pack small bag (leave main luggage at SGN hotel)",
-                "Carry beachwear & essentials",
-                "Keep flight tickets & ID ready",
-                "Prepare for possible late check-in (2 PM)"
-            ],
-            "timeline": [
-                {
-                    "time": "6:30 AM",
-                    "title": "Wake Up & Pack",
-                    "description": "Freshen up and pack essentials for 2 days.",
-                    "icon": "bag",
-                    "type": "activity",
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "7:00 AM",
-                    "title": "Travel to Airport",
-                    "description": "Grab taxi to airport (~30–40 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30–40m",
-                    "cost": "₹400 – ₹600",
-                    "location": "Tan Son Nhat International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "9:00 AM",
-                    "title": "Flight to Phu Quoc",
-                    "description": "Flight duration ~1 hour.",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "duration": "1h",
-                    "location": "SGN Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "10:15 AM",
-                    "title": "Arrive in Phu Quoc",
-                    "description": "Land and proceed to exit.",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "location": "Phu Quoc International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+International+Airport"
-                },
-                {
-                    "time": "10:30 AM",
-                    "title": "Transfer to Resort",
-                    "description": "Taxi to hotel (~20–30 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "20–30m",
-                    "cost": "₹400 – ₹700",
-                    "location": "Phu Quoc Resort Area",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Resort"
-                },
-                {
-                    "time": "11:30 AM",
-                    "title": "Hotel Arrival & Luggage Drop",
-                    "description": "Early check-in may not be available. Leave luggage and use facilities.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Resort, Phu Quoc",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Resort"
-                },
-                {
-                    "time": "12:30 PM",
-                    "title": "Lunch",
-                    "description": "Veg-friendly options near resort.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "Phu Quoc Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Vegetarian+Restaurant+Phu+Quoc"
-                },
-                {
-                    "time": "1:30 PM - 4:30 PM",
-                    "title": "Relax / Beach Time",
-                    "description": "Enjoy beach, pool or rest until room is ready.",
-                    "icon": "beach",
-                    "type": "rest",
-                    "duration": "3h",
-                    "location": "Resort Beach",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Beach"
-                },
-                {
-                    "time": "2:00 PM",
-                    "title": "Hotel Check-in",
-                    "description": "Standard check-in time (if not done earlier).",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Resort"
-                },
-                {
-                    "time": "6:00 PM",
-                    "title": "Sunset Walk",
-                    "description": "Beach walk and photos.",
-                    "icon": "sunset",
-                    "type": "activity",
-                    "transport": "walk",
-                    "location": "Phu Quoc Beach",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Beach"
-                },
-                {
-                    "time": "7:00 PM",
-                    "title": "Dinner",
-                    "description": "Beachside or resort dinner.",
-                    "icon": "food",
-                    "type": "food",
-                    "cost": "₹1,500 – ₹2,500",
-                    "location": "Resort / Beachside Restaurant",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Restaurant"
-                },
-                {
-                    "time": "8:30 PM",
-                    "title": "Optional Night Activity",
-                    "description": "Visit night market or relax at resort.",
-                    "icon": "night",
-                    "type": "activity",
-                    "transport": "grab",
-                    "location": "Phu Quoc Night Market",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Night+Market"
-                },
-                {
-                    "time": "10:30 PM",
-                    "title": "Sleep",
-                    "description": "Rest after travel day.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Resort"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Taxi (both sides)",
-                    "cost": "₹1200"
-                },
-                {
-                    "item": "Food",
-                    "cost": "₹3000"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹4200"
-                }
-            ],
-            "date": "2026-07-07",
-            "week": "Tuesday"
-        },
-        {
-            "day": "Day 5",
-            "title": "Phu Quoc Highlights (Cable Car + Show)",
-            "summary": "Cable car experience, island exploration, evening show and Grand World visit",
-            "type": "explore",
-            "city": "Phu Quoc",
-            "country": "Vietnam",
-            "checklist": [
-                "Start early for cable car (avoid rush)",
-                "Carry sunscreen, water, sunglasses",
-                "Keep tickets ready (book online if possible)",
-                "Wear comfortable clothes & footwear",
-                "Keep evening relaxed (don’t overpack)"
-            ],
-            "timeline": [
-                {
-                    "time": "8:30 AM",
-                    "title": "Wake Up & Breakfast",
-                    "description": "Breakfast at resort.",
-                    "icon": "food",
-                    "type": "food",
-                    "location": "Resort, Phu Quoc",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Resort"
-                },
-                {
-                    "time": "9:30 AM",
-                    "title": "Travel to Cable Car",
-                    "description": "Take Grab taxi (~25–40 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30–40m",
-                    "cost": "₹400 – ₹700",
-                    "location": "Hon Thom Cable Car Station",
-                    "mapsLink": "https://maps.google.com/?q=Hon+Thom+Cable+Car"
-                },
-                {
-                    "time": "10:15 AM",
-                    "title": "Arrive at Hon Thom Cable Car",
-                    "description": "Prepare for cable car ride.",
-                    "icon": "activity",
-                    "type": "activity",
-                    "location": "Hon Thom Cable Car Station",
-                    "mapsLink": "https://maps.google.com/?q=Hon+Thom+Cable+Car"
-                },
-                {
-                    "time": "10:30 AM - 1:30 PM",
-                    "title": "Cable Car & Island Exploration",
-                    "description": "Ride cable car, explore Hon Thom island, beach & photos.",
-                    "icon": "beach",
-                    "type": "activity",
-                    "transport": "cable-car",
-                    "duration": "3h",
-                    "cost": "₹2,500 – ₹3,500",
-                    "location": "Hon Thom Island",
-                    "mapsLink": "https://maps.google.com/?q=Hon+Thom+Island"
-                },
-                {
-                    "time": "2:00 PM",
-                    "title": "Return to Hotel",
-                    "description": "Taxi back to resort.",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30–40m",
-                    "location": "Resort",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Resort"
-                },
-                {
-                    "time": "2:30 PM",
-                    "title": "Lunch",
-                    "description": "Veg-friendly lunch near resort.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "Phu Quoc Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Vegetarian+Restaurant+Phu+Quoc"
-                },
-                {
-                    "time": "3:30 PM - 5:30 PM",
-                    "title": "Relax Time",
-                    "description": "Pool, beach or rest at resort.",
-                    "icon": "relax",
-                    "type": "rest",
-                    "duration": "2h",
-                    "location": "Resort / Beach",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Beach"
-                },
-                {
-                    "time": "6:30 PM",
-                    "title": "Kiss of the Sea Show",
-                    "description": "Light, water and fire show (~30–45 mins).",
-                    "icon": "show",
-                    "type": "activity",
-                    "transport": "grab",
-                    "duration": "45m",
-                    "cost": "₹1,500 – ₹2,500",
-                    "location": "Kiss of the Sea, Phu Quoc",
-                    "mapsLink": "https://maps.google.com/?q=Kiss+of+the+Sea+Phu+Quoc"
-                },
-                {
-                    "time": "7:30 PM",
-                    "title": "Grand World Visit",
-                    "description": "Explore lights, canals and nightlife area.",
-                    "icon": "night",
-                    "type": "activity",
-                    "transport": "grab",
-                    "location": "Grand World Phu Quoc",
-                    "mapsLink": "https://maps.google.com/?q=Grand+World+Phu+Quoc"
-                },
-                {
-                    "time": "8:30 PM",
-                    "title": "Dinner",
-                    "description": "Dinner at Grand World or nearby.",
-                    "icon": "food",
-                    "type": "food",
-                    "cost": "₹1,500 – ₹2,500",
-                    "location": "Grand World Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Grand+World+Phu+Quoc"
-                },
-                {
-                    "time": "10:30 PM",
-                    "title": "Back to Hotel",
-                    "description": "Rest after full day.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Resort"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Cable Car",
-                    "cost": "₹3000"
-                },
-                {
-                    "item": "Show",
-                    "cost": "₹2000"
-                },
-                {
-                    "item": "Taxi",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Food",
-                    "cost": "₹2500"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹8000"
-                }
-            ],
-            "date": "2026-07-08",
-            "week": "Wednesday"
-        },
-        {
-            "day": "Day 6",
-            "title": "Return to SGN + Shopping Day",
-            "summary": "Return from Phu Quoc, luggage drop and shopping in District 1",
-            "type": "travel",
-            "city": "Ho Chi Minh City",
-            "country": "Vietnam",
-            "checklist": [
-                "Pack all belongings before checkout",
-                "Keep flight tickets & ID ready",
-                "Carry cash for shopping",
-                "Be prepared for late check-in (2 PM)",
-                "Leave luggage at hotel before shopping"
-            ],
-            "timeline": [
-                {
-                    "time": "6:30 AM",
-                    "title": "Wake Up & Pack",
-                    "description": "Freshen up and pack all items.",
-                    "icon": "bag",
-                    "type": "activity",
-                    "location": "Resort, Phu Quoc",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+Resort"
-                },
-                {
-                    "time": "7:00 AM",
-                    "title": "Checkout & Travel to Airport",
-                    "description": "Taxi to airport (~20–30 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "20–30m",
-                    "cost": "₹400 – ₹700",
-                    "location": "Phu Quoc International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+International+Airport"
-                },
-                {
-                    "time": "9:00 AM",
-                    "title": "Flight to Ho Chi Minh City",
-                    "description": "Flight duration ~1 hour.",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "duration": "1h",
-                    "location": "Phu Quoc Airport",
-                    "mapsLink": "https://maps.google.com/?q=Phu+Quoc+International+Airport"
-                },
-                {
-                    "time": "10:15 AM",
-                    "title": "Arrive in SGN",
-                    "description": "Land and proceed to exit.",
-                    "icon": "flight",
-                    "type": "travel",
-                    "location": "Tan Son Nhat International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "10:30 AM",
-                    "title": "Travel to Hotel",
-                    "description": "Taxi to District 1 (~30–40 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30–40m",
-                    "cost": "₹400 – ₹600",
-                    "location": "District 1, Ho Chi Minh City",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "11:15 AM",
-                    "title": "Hotel Arrival & Luggage Drop",
-                    "description": "Leave luggage at reception (check-in later after 2 PM).",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "12:30 PM",
-                    "title": "Saigon Square Shopping",
-                    "description": "Shop clothes, shoes, bags and souvenirs.",
-                    "icon": "shopping",
-                    "type": "activity",
-                    "transport": "walk",
-                    "location": "Saigon Square",
-                    "mapsLink": "https://maps.google.com/?q=Saigon+Square+Ho+Chi+Minh"
-                },
-                {
-                    "time": "2:30 PM",
-                    "title": "Lunch",
-                    "description": "Veg / Indian restaurant nearby.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Indian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "3:30 PM - 6:00 PM",
-                    "title": "Continue Shopping",
-                    "description": "Visit Ben Thanh Market or nearby shops.",
-                    "icon": "shopping",
-                    "type": "activity",
-                    "transport": "walk",
-                    "duration": "2h 30m",
-                    "location": "Ben Thanh Market",
-                    "mapsLink": "https://maps.google.com/?q=Ben+Thanh+Market"
-                },
-                {
-                    "time": "After 2:00 PM",
-                    "title": "Hotel Check-in",
-                    "description": "Return anytime to complete check-in.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Hotel"
-                },
-                {
-                    "time": "6:30 PM",
-                    "title": "Café / Relax",
-                    "description": "Relax after shopping.",
-                    "icon": "coffee",
-                    "type": "rest",
-                    "transport": "walk",
-                    "location": "District 1 Café",
-                    "mapsLink": "https://maps.google.com/?q=Cafe+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "8:00 PM",
-                    "title": "Dinner",
-                    "description": "Final dinner in the city.",
-                    "icon": "food",
-                    "type": "food",
-                    "cost": "₹1,000 – ₹1,500",
-                    "location": "District 1 Restaurant",
-                    "mapsLink": "https://maps.google.com/?q=Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "9:30 PM",
-                    "title": "Night Walk",
-                    "description": "Walk around District 1.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "location": "District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "10:30 PM",
-                    "title": "Back to Hotel",
-                    "description": "Rest after full day.",
-                    "icon": "sleep",
-                    "type": "rest",
-                    "location": "Hotel"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Taxi",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Food",
-                    "cost": "₹2500"
-                },
-                {
-                    "item": "Shopping",
-                    "cost": "₹5000"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹8000"
-                }
-            ],
-            "date": "2026-07-09",
-            "week": "Thursday"
-        },
-        {
-            "day": "Day 7",
-            "title": "Departure Day",
-            "summary": "Relaxed morning, last-minute exploration and departure from Ho Chi Minh City",
-            "type": "travel",
-            "city": "Ho Chi Minh City",
-            "country": "Vietnam",
-            "checklist": [
-                "Pack all belongings",
-                "Check passport, tickets, cards",
-                "Keep some cash for last expenses",
-                "Confirm flight timing",
-                "Keep luggage ready before checkout"
-            ],
-            "timeline": [
-                {
-                    "time": "8:30 AM",
-                    "title": "Wake Up",
-                    "description": "Relaxed start, no rush.",
-                    "icon": "sun",
-                    "type": "rest",
-                    "location": "Hotel, District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "9:00 AM",
-                    "title": "Breakfast",
-                    "description": "Breakfast near hotel.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹500 – ₹800",
-                    "location": "District 1 Cafes",
-                    "mapsLink": "https://maps.google.com/?q=Cafe+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "10:00 AM - 11:30 AM",
-                    "title": "Free Time",
-                    "description": "Café, short walk or quick shopping.",
-                    "icon": "walk",
-                    "type": "activity",
-                    "transport": "walk",
-                    "duration": "1h 30m",
-                    "location": "District 1",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "12:00 PM",
-                    "title": "Hotel Check-out",
-                    "description": "Standard checkout time.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "12:00 PM - 5:30 PM",
-                    "title": "Luggage Storage & Free Time",
-                    "description": "Leave luggage at hotel and explore nearby areas.",
-                    "icon": "bag",
-                    "type": "activity",
-                    "location": "Hotel Reception",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "12:30 PM",
-                    "title": "Lunch",
-                    "description": "Veg / Indian lunch.",
-                    "icon": "food",
-                    "type": "food",
-                    "transport": "walk",
-                    "cost": "₹800 – ₹1,200",
-                    "location": "District 1 Restaurants",
-                    "mapsLink": "https://maps.google.com/?q=Indian+Restaurant+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "1:30 PM - 4:30 PM",
-                    "title": "Relax / Café Time",
-                    "description": "Keep it light – café, mall or rest.",
-                    "icon": "coffee",
-                    "type": "rest",
-                    "duration": "3h",
-                    "location": "District 1 Cafes / Mall",
-                    "mapsLink": "https://maps.google.com/?q=Shopping+Mall+District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "5:30 PM",
-                    "title": "Return to Hotel",
-                    "description": "Collect luggage and freshen up if possible.",
-                    "icon": "hotel",
-                    "type": "stay",
-                    "location": "Hotel",
-                    "mapsLink": "https://maps.google.com/?q=District+1+Ho+Chi+Minh"
-                },
-                {
-                    "time": "6:00 PM",
-                    "title": "Travel to Airport",
-                    "description": "Grab taxi (~30–40 mins).",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "grab",
-                    "duration": "30–40m",
-                    "cost": "₹400 – ₹600",
-                    "location": "Tan Son Nhat International Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "6:45 PM - 7:00 PM",
-                    "title": "Reach Airport",
-                    "description": "Arrive with enough buffer for check-in & immigration.",
-                    "icon": "airport",
-                    "type": "travel",
-                    "location": "Tan Son Nhat Airport",
-                    "mapsLink": "https://maps.google.com/?q=Tan+Son+Nhat+International+Airport"
-                },
-                {
-                    "time": "Night",
-                    "title": "Flight to India",
-                    "description": "Departure from Ho Chi Minh City.",
-                    "icon": "flight",
-                    "type": "travel",
-                    "transport": "flight",
-                    "location": "SGN Airport"
-                },
-                {
-                    "time": "Night",
-                    "title": "Back to Home",
-                    "description": "Back to home",
-                    "icon": "cab",
-                    "type": "travel",
-                    "transport": "cab",
-                    "duration": "2h 30m",
-                    "cost": "₹1500",
-                    "mapsLink": "https://maps.app.goo.gl/BQfhUDVsuA5GisiaA"
-                }
-            ],
-            "budget": [
-                {
-                    "item": "Food",
-                    "cost": "₹2000"
-                },
-                {
-                    "item": "Taxi",
-                    "cost": "₹1000"
-                },
-                {
-                    "item": "Misc",
-                    "cost": "₹500"
-                },
-                {
-                    "item": "Return Taxi",
-                    "cost": "₹1500"
-                },
-                {
-                    "item": "Total",
-                    "cost": "₹5500"
-                }
-            ],
-            "date": "2026-07-10",
-            "week": "Friday"
+          "time": "11:20 PM",
+          "title": "Flight Departure",
+          "description": "Depart from Bangalore to Ho Chi Minh City (~5 hrs flight).",
+          "icon": "flight",
+          "type": "travel",
+          "transport": "flight",
+          "duration": "4h 40m",
+          "location": "Kempegowda International Airport, Bangalore",
+          "mapsLink": "https://maps.google.com/?q=Kempegowda+International+Airport"
         }
-    ],
-    "prebookingData": {
-        "flights": [
-            {
-                "id": 1,
-                "date": "2026-07-03",
-                "from": "BLR",
-                "to": "SGN",
-                "departure": "11:20 PM",
-                "arrival": "06:00 AM (+1)",
-                "airline": "VietJet",
-                "duration": "4h 40m",
-                "durationMinutes": 280,
-                "type": "international",
-                "status": "pending",
-                "price": "₹25000",
-                "terminal": {
-                    "departure": "T2",
-                    "arrival": "T2"
-                },
-                "baggage": {
-                    "cabin": "7kg",
-                    "checkin": "15kg"
-                },
-                "pnr": "",
-                "seat": "",
-                "booking": {
-                    "platform": "",
-                    "bookedOn": ""
-                },
-                "checkinLink": "",
-                "timeToAirport": "2.5 hrs from Kengeri",
-                "notes": "Leave home by 5:45 PM to reach airport by ~8:15 PM",
-                "alerts": [
-                    "Reach airport 3 hours early",
-                    "Keep passport & visa ready"
-                ],
-                "links": []
-            },
-            {
-                "id": 2,
-                "date": "2026-07-07",
-                "from": "SGN",
-                "to": "PQC",
-                "departure": "09:00 AM",
-                "arrival": "10:15 AM",
-                "airline": "VietJet / Vietnam Airlines",
-                "duration": "1h 15m",
-                "durationMinutes": 75,
-                "type": "domestic",
-                "status": "pending",
-                "price": "₹6000",
-                "terminal": {
-                    "departure": "Domestic Terminal",
-                    "arrival": "Phu Quoc Airport"
-                },
-                "baggage": {
-                    "cabin": "7kg",
-                    "checkin": "15kg"
-                },
-                "pnr": "",
-                "seat": "",
-                "booking": {
-                    "platform": "",
-                    "bookedOn": ""
-                },
-                "checkinLink": "",
-                "timeToAirport": "30–40 mins from District 1",
-                "notes": "Leave hotel by 7:00 AM to reach airport on time",
-                "alerts": [
-                    "Reach airport 2 hours early",
-                    "Carry ID (passport preferred)"
-                ],
-                "links": []
-            },
-            {
-                "id": 3,
-                "date": "2026-07-09",
-                "from": "PQC",
-                "to": "SGN",
-                "departure": "09:00 AM",
-                "arrival": "10:15 AM",
-                "airline": "VietJet / Vietnam Airlines",
-                "duration": "1h 15m",
-                "durationMinutes": 75,
-                "type": "domestic",
-                "status": "pending",
-                "price": "₹6000",
-                "terminal": {
-                    "departure": "Phu Quoc Airport",
-                    "arrival": "Domestic Terminal"
-                },
-                "baggage": {
-                    "cabin": "7kg",
-                    "checkin": "15kg"
-                },
-                "pnr": "",
-                "seat": "",
-                "booking": {
-                    "platform": "",
-                    "bookedOn": ""
-                },
-                "checkinLink": "",
-                "timeToAirport": "20–30 mins from resort",
-                "notes": "Leave hotel by 7:00 AM",
-                "alerts": [
-                    "Reach airport 2 hours early",
-                    "Keep boarding pass ready"
-                ],
-                "links": []
-            },
-            {
-                "id": 4,
-                "date": "2026-07-10",
-                "from": "SGN",
-                "to": "BLR",
-                "departure": "Evening",
-                "arrival": "Night",
-                "airline": "IndiGo / VietJet",
-                "duration": "5h",
-                "durationMinutes": 300,
-                "type": "international",
-                "status": "pending",
-                "price": "₹40000",
-                "terminal": {
-                    "departure": "T2",
-                    "arrival": "T2"
-                },
-                "baggage": {
-                    "cabin": "7kg",
-                    "checkin": "15kg"
-                },
-                "pnr": "",
-                "seat": "",
-                "booking": {
-                    "platform": "",
-                    "bookedOn": ""
-                },
-                "checkinLink": "",
-                "timeToAirport": "30–40 mins from District 1",
-                "notes": "Leave hotel by ~6:00 PM (depends on flight timing)",
-                "alerts": [
-                    "Reach airport 3 hours early",
-                    "Keep passport & visa ready"
-                ],
-                "links": []
-            }
-        ],
-        "rooms": [
-            {
-                "id": 1,
-                "name": "District 1 Hotel (Saigon Europe / Vien Dong)",
-                "checkin": "2026-07-03 14:00",
-                "checkout": "2026-07-11 12:00",
-                "price": "₹20000",
-                "location": "District 1, Ho Chi Minh City",
-                "links": [
-                    "https://www.agoda.com/en-in/saigon-europe-hotel-h35412483/hotel/ho-chi-minh-city-vn.html"
-                ]
-            },
-            {
-                "id": 2,
-                "name": "Phu Quoc Resort (Coral Bay / similar)",
-                "checkin": "2026-07-07 14:00",
-                "checkout": "2026-07-09 12:00",
-                "price": "₹15000",
-                "location": "Phu Quoc",
-                "links": []
-            }
-        ],
-        "activities": [
-            {
-                "id": 1,
-                "name": "Vietnam E-Visa",
-                "status": "Required",
-                "price": "₹2,000 – ₹3,000",
-                "priority": "high",
-                "duration": null,
-                "notes": "Apply at least 5–7 days before travel. Carry printed copy.",
-                "links": []
-            },
-            {
-                "id": 2,
-                "name": "Travel Insurance",
-                "status": "Recommended",
-                "price": "₹1,000 – ₹1,500",
-                "priority": "medium",
-                "duration": null,
-                "notes": "Covers medical + delays. Useful but not mandatory.",
-                "links": []
-            },
-            {
-                "id": 3,
-                "name": "Forex / Cash (VND)",
-                "status": "Pending",
-                "price": "₹10,000 – ₹15,000",
-                "priority": "high",
-                "duration": null,
-                "notes": "Exchange small amount at airport, rest in District 1 for better rates.",
-                "links": []
-            },
-            {
-                "id": 4,
-                "name": "Mekong Delta Day Tour (Ben Tre)",
-                "status": "To Book",
-                "price": "₹2,500 – ₹5,000 (2 pax)",
-                "priority": "high",
-                "duration": "10–12 hours",
-                "notes": "Choose Ben Tre + hotel pickup + veg food request. Start ~7:30 AM.",
-                "links": [
-                    "https://www.klook.com/en-IN/activity/29967-mekong-delta-river-day-tour-hochiminh/"
-                ]
-            },
-            {
-                "id": 5,
-                "name": "Cu Chi Tunnels Half Day Tour",
-                "status": "To Book",
-                "price": "₹1,500 – ₹3,000 (2 pax)",
-                "priority": "medium",
-                "duration": "5–6 hours",
-                "notes": "Prefer morning tour. Wear comfortable clothes. Optional tunnel crawl.",
-                "links": []
-            },
-            {
-                "id": 6,
-                "name": "Hon Thom Cable Car",
-                "status": "Optional",
-                "price": "₹2,500 – ₹3,500 (2 pax)",
-                "priority": "high",
-                "duration": "3–4 hours",
-                "notes": "Book morning slot. Avoid peak hours. Carry sunscreen.",
-                "links": []
-            },
-            {
-                "id": 7,
-                "name": "Kiss of the Sea Show",
-                "status": "Optional",
-                "price": "₹1,500 – ₹2,500 (2 pax)",
-                "priority": "medium",
-                "duration": "45 minutes",
-                "notes": "Evening show. Can combine with Grand World visit.",
-                "links": []
-            },
-            {
-                "id": 8,
-                "name": "Local SIM Card",
-                "status": "Buy at Airport",
-                "price": "₹300 – ₹600",
-                "priority": "high",
-                "duration": "10–15 mins",
-                "notes": "Buy Viettel SIM at airport after arrival. Needed for Grab & maps.",
-                "links": []
-            }
-        ]
+      ],
+      "budget": [
+        {
+          "item": "Airport Travel (Cab)",
+          "cost": "₹1500"
+        },
+        {
+          "item": "Snacks / Water",
+          "cost": "₹500"
+        },
+        {
+          "item": "Total",
+          "cost": "₹2000"
+        }
+      ],
+      "date": "2026-07-05",
+      "week": "Sunday"
+    },
+    {
+      "day": "Day 1",
+      "title": "Arrival + Fly to Phu Quoc",
+      "summary": "Arrive in Ho Chi Minh City and take afternoon flight to Phu Quoc",
+      "type": "travel",
+      "city": "Phu Quoc",
+      "country": "Vietnam",
+      "checklist": [
+        "Buy Local SIM at Airport",
+        "Exchange Small Amount of Currency",
+        "Keep passport ready for domestic flight",
+        "Pack light (if leaving luggage at SGN hotel)",
+        "Reach airport 2 hours before flight"
+      ],
+      "timeline": [
+        {
+          "time": "6:00 AM",
+          "title": "Land in Ho Chi Minh City",
+          "description": "Arrive at Tan Son Nhat International Airport (SGN).",
+          "icon": "flight",
+          "type": "travel",
+          "transport": "flight",
+          "location": "Tan Son Nhat International Airport, Ho Chi Minh City"
+        },
+        {
+          "time": "6:15 AM - 7:30 AM",
+          "title": "Immigration & Baggage",
+          "description": "Complete immigration and collect baggage.",
+          "icon": "check",
+          "type": "activity",
+          "duration": "1h 15m",
+          "location": "Tan Son Nhat International Airport"
+        },
+        {
+          "time": "7:30 AM - 8:00 AM",
+          "title": "SIM & Currency Exchange",
+          "description": "Buy SIM and exchange small amount.",
+          "icon": "wallet",
+          "type": "activity",
+          "duration": "30m",
+          "location": "Airport Arrival Hall"
+        },
+        {
+          "time": "8:00 AM - 8:40 AM",
+          "title": "Travel to Hotel",
+          "description": "Grab taxi to District 1.",
+          "icon": "cab",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m",
+          "location": "District 1, Ho Chi Minh City"
+        },
+        {
+          "time": "9:00 AM - 11:00 AM",
+          "title": "Rest & Freshen Up",
+          "description": "Short rest after flight. Avoid deep sleep.",
+          "icon": "rest",
+          "type": "rest",
+          "duration": "2h",
+          "location": "Hotel"
+        },
+        {
+          "time": "11:30 AM",
+          "title": "Travel to Airport",
+          "description": "Leave for airport for domestic flight.",
+          "icon": "cab",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m",
+          "cost": "₹500",
+          "location": "Tan Son Nhat Airport (Domestic)"
+        },
+        {
+          "time": "12:00 PM - 1:45 PM",
+          "title": "Check-in & Security",
+          "description": "Domestic flight formalities.",
+          "icon": "check",
+          "type": "activity",
+          "duration": "1h 45m"
+        },
+        {
+          "time": "2:25 PM",
+          "title": "Flight to Phu Quoc",
+          "description": "Flight duration ~1h 10m.",
+          "icon": "flight",
+          "type": "travel",
+          "transport": "flight"
+        },
+        {
+          "time": "3:35 PM",
+          "title": "Arrive in Phu Quoc",
+          "description": "Land and exit airport.",
+          "icon": "flight",
+          "type": "travel",
+          "transport": "flight",
+          "location": "Phu Quoc Airport"
+        },
+        {
+          "time": "3:45 PM - 4:15 PM",
+          "title": "Transfer to Hotel",
+          "description": "Taxi to resort (~20–30 mins).",
+          "icon": "cab",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "30m",
+          "cost": "₹600"
+        },
+        {
+          "time": "4:30 PM",
+          "title": "Hotel Check-in",
+          "description": "Check-in and relax.",
+          "icon": "hotel",
+          "type": "stay"
+        },
+        {
+          "time": "6:30 PM",
+          "title": "Beach Walk",
+          "description": "Relaxed sunset walk.",
+          "icon": "walk",
+          "type": "activity"
+        },
+        {
+          "time": "8:00 PM",
+          "title": "Dinner",
+          "description": "Dinner near resort.",
+          "icon": "food",
+          "type": "food",
+          "cost": "₹2000"
+        },
+        {
+          "time": "10:00 PM",
+          "title": "Sleep",
+          "description": "Rest after travel-heavy day.",
+          "icon": "sleep",
+          "type": "rest"
+        }
+      ],
+      "budget": [
+        {
+          "item": "SIM Card",
+          "cost": "₹1000"
+        },
+        {
+          "item": "Airport Taxi (SGN)",
+          "cost": "₹500"
+        },
+        {
+          "item": "Taxi (Phu Quoc)",
+          "cost": "₹600"
+        },
+        {
+          "item": "Food",
+          "cost": "₹2000"
+        },
+        {
+          "item": "Total",
+          "cost": "₹4100"
+        }
+      ],
+      "date": "2026-07-06",
+      "week": "Monday"
+    },
+    {
+      "day": "Day 2",
+      "title": "Phu Quoc Highlights (Cable Car + Show)",
+      "summary": "Cable car experience, island exploration, evening show and Grand World visit",
+      "type": "explore",
+      "city": "Phu Quoc",
+      "country": "Vietnam",
+      "checklist": [
+        "Start early for cable car (avoid rush)",
+        "Carry sunscreen, water, sunglasses",
+        "Keep tickets ready (book online)",
+        "Wear comfortable clothes & footwear",
+        "Carry swimwear for island beach",
+        "Keep evening flexible"
+      ],
+      "timeline": [
+        {
+          "time": "8:00 AM",
+          "title": "Wake Up & Breakfast",
+          "description": "Breakfast at resort.",
+          "type": "food",
+          "location": "Resort, Phu Quoc"
+        },
+        {
+          "time": "9:00 AM",
+          "title": "Travel to Cable Car",
+          "description": "Grab taxi to Hon Thom cable car station (~30–40 mins).",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m",
+          "cost": "₹600"
+        },
+        {
+          "time": "9:45 AM",
+          "title": "Arrive Early",
+          "description": "Reach before peak hours to avoid queues.",
+          "type": "activity"
+        },
+        {
+          "time": "10:00 AM - 1:30 PM",
+          "title": "Cable Car & Island Exploration",
+          "description": "Ride cable car, explore Hon Thom island, beach & photos.",
+          "type": "activity",
+          "transport": "cable-car",
+          "duration": "3h 30m",
+          "cost": "₹3000"
+        },
+        {
+          "time": "1:30 PM - 2:00 PM",
+          "title": "Return Journey",
+          "description": "Cable car return to mainland.",
+          "type": "activity",
+          "transport": "cable-car"
+        },
+        {
+          "time": "2:30 PM",
+          "title": "Lunch",
+          "description": "Lunch near cable car area.",
+          "type": "food",
+          "cost": "₹1000"
+        },
+        {
+          "time": "3:30 PM",
+          "title": "Return to Hotel",
+          "description": "Taxi back to resort.",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m"
+        },
+        {
+          "time": "4:30 PM - 5:30 PM",
+          "title": "Rest / Freshen Up",
+          "description": "Relax after daytime activity.",
+          "type": "rest",
+          "duration": "1h"
+        },
+        {
+          "time": "5:45 PM",
+          "title": "Travel to Show Area",
+          "description": "Leave early for evening show.",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "30m",
+          "cost": "₹600"
+        },
+        {
+          "time": "6:30 PM",
+          "title": "Kiss of the Sea Show",
+          "description": "Light, water and fire show.",
+          "type": "activity",
+          "duration": "45m",
+          "cost": "₹2000"
+        },
+        {
+          "time": "7:30 PM",
+          "title": "Grand World Visit",
+          "description": "Explore lights, canals and nightlife area.",
+          "type": "activity"
+        },
+        {
+          "time": "8:30 PM",
+          "title": "Dinner",
+          "description": "Dinner at Grand World or nearby.",
+          "type": "food",
+          "cost": "₹1500"
+        },
+        {
+          "time": "10:00 PM",
+          "title": "Return to Hotel",
+          "description": "Travel back and rest.",
+          "type": "travel",
+          "transport": "grab",
+          "cost": "₹600"
+        }
+      ],
+      "budget": [
+        {
+          "item": "Cable Car",
+          "cost": "₹3000"
+        },
+        {
+          "item": "Show",
+          "cost": "₹2000"
+        },
+        {
+          "item": "Transport",
+          "cost": "₹1800"
+        },
+        {
+          "item": "Food",
+          "cost": "₹2500"
+        },
+        {
+          "item": "Total",
+          "cost": "₹9300"
+        }
+      ],
+      "date": "2026-07-07",
+      "week": "Tuesday"
+    },
+    {
+      "day": "Day 3",
+      "title": "Return to SGN + Shopping Day",
+      "summary": "Fly back to Ho Chi Minh City, hotel check-in and shopping in District 1",
+      "type": "travel",
+      "city": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "checklist": [
+        "Pack all belongings before checkout",
+        "Keep flight tickets & ID ready",
+        "Carry cash for shopping",
+        "Keep shopping list ready",
+        "Reach airport 2 hours before departure"
+      ],
+      "timeline": [
+        {
+          "time": "7:30 AM",
+          "title": "Wake Up & Pack",
+          "description": "Pack and prepare for checkout.",
+          "type": "activity",
+          "location": "Resort, Phu Quoc"
+        },
+        {
+          "time": "8:00 AM",
+          "title": "Checkout & Travel to Airport",
+          "description": "Grab taxi to airport (~20–30 mins).",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "30m",
+          "cost": "₹600"
+        },
+        {
+          "time": "8:30 AM - 10:00 AM",
+          "title": "Check-in & Security",
+          "description": "Domestic departure formalities.",
+          "type": "activity",
+          "duration": "1h 30m"
+        },
+        {
+          "time": "10:50 AM",
+          "title": "Flight to Ho Chi Minh City",
+          "description": "Flight duration ~1 hour.",
+          "type": "travel",
+          "transport": "flight"
+        },
+        {
+          "time": "11:55 AM",
+          "title": "Arrive in SGN",
+          "description": "Land and proceed to exit.",
+          "type": "travel",
+          "transport": "flight"
+        },
+        {
+          "time": "12:15 PM - 1:00 PM",
+          "title": "Travel to Hotel",
+          "description": "Taxi to District 1 (~30–40 mins).",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m",
+          "cost": "₹500"
+        },
+        {
+          "time": "1:00 PM",
+          "title": "Hotel Check-in",
+          "description": "Check-in and freshen up.",
+          "type": "stay"
+        },
+        {
+          "time": "1:30 PM",
+          "title": "Lunch",
+          "description": "Veg / Indian restaurant nearby.",
+          "type": "food",
+          "cost": "₹1000"
+        },
+        {
+          "time": "2:30 PM - 5:00 PM",
+          "title": "Saigon Square Shopping",
+          "description": "Clothes, shoes, bags and souvenirs.",
+          "type": "activity",
+          "transport": "walk"
+        },
+        {
+          "time": "5:15 PM - 6:30 PM",
+          "title": "Ben Thanh Market",
+          "description": "Local market shopping (bargain properly).",
+          "type": "activity",
+          "transport": "walk"
+        },
+        {
+          "time": "6:45 PM",
+          "title": "Café / Relax",
+          "description": "Take a break after shopping.",
+          "type": "rest"
+        },
+        {
+          "time": "8:00 PM",
+          "title": "Dinner",
+          "description": "Dinner near hotel.",
+          "type": "food",
+          "cost": "₹1200"
+        },
+        {
+          "time": "9:30 PM",
+          "title": "Optional Walk",
+          "description": "Relaxed walk around District 1.",
+          "type": "activity"
+        },
+        {
+          "time": "10:30 PM",
+          "title": "Back to Hotel",
+          "description": "Rest after travel + shopping day.",
+          "type": "rest"
+        }
+      ],
+      "budget": [
+        {
+          "item": "Taxi (both sides)",
+          "cost": "₹1100"
+        },
+        {
+          "item": "Food",
+          "cost": "₹2200"
+        },
+        {
+          "item": "Shopping",
+          "cost": "₹5000"
+        },
+        {
+          "item": "Total",
+          "cost": "₹8300"
+        }
+      ],
+      "date": "2026-07-08",
+      "week": "Wednesday"
+    },
+    {
+      "day": "Day 4",
+      "title": "Mekong Delta Day Trip + Couple Spa",
+      "summary": "Authentic Ben Tre Mekong Delta experience followed by relaxing couple spa in the evening",
+      "type": "explore",
+      "city": "Ben Tre / Ho Chi Minh City",
+      "country": "Vietnam",
+      "checklist": [
+        "Carry small backpack",
+        "Confirm strict vegetarian meal (no fish sauce, no egg)",
+        "Carry small cash (₹1000–₹2000 equivalent VND)",
+        "Keep sunscreen, cap, water",
+        "Wear comfortable footwear",
+        "Be ready before pickup (7:30 AM)",
+        "Pre-book couple spa (evening slot)"
+      ],
+      "timeline": [
+        {
+          "time": "7:00 AM",
+          "title": "Wake Up & Breakfast",
+          "description": "Light breakfast at hotel.",
+          "type": "food",
+          "location": "Hotel, District 1"
+        },
+        {
+          "time": "7:30 AM",
+          "title": "Pickup from Hotel",
+          "description": "Premier small-group tour pickup.",
+          "type": "travel",
+          "transport": "van"
+        },
+        {
+          "time": "7:30 AM - 9:30 AM",
+          "title": "Travel to Ben Tre",
+          "description": "Drive ~2 hours.",
+          "type": "travel",
+          "transport": "van",
+          "duration": "2h"
+        },
+        {
+          "time": "10:00 AM - 3:30 PM",
+          "title": "Mekong Activities",
+          "description": "Boat rides, village exploration, lunch, cycling.",
+          "type": "activity"
+        },
+        {
+          "time": "4:00 PM - 6:30 PM",
+          "title": "Return to City",
+          "description": "Travel back to Ho Chi Minh City.",
+          "type": "travel",
+          "transport": "van"
+        },
+        {
+          "time": "7:00 PM",
+          "title": "Rest / Freshen Up",
+          "description": "Short break after full day.",
+          "type": "rest"
+        },
+        {
+          "time": "8:00 PM",
+          "title": "Couple Spa",
+          "description": "Relaxing spa session (90–120 mins).",
+          "type": "activity",
+          "duration": "1h 30m",
+          "cost": "₹3000"
+        },
+        {
+          "time": "9:45 PM",
+          "title": "Dinner",
+          "description": "Light dinner near hotel.",
+          "type": "food",
+          "cost": "₹1200"
+        },
+        {
+          "time": "11:00 PM",
+          "title": "Sleep",
+          "description": "Rest before departure day.",
+          "type": "rest"
+        }
+      ],
+      "budget": [
+        {
+          "item": "Mekong Premium Tour (2 pax)",
+          "cost": "₹11000"
+        },
+        {
+          "item": "Couple Spa",
+          "cost": "₹3000"
+        },
+        {
+          "item": "Dinner",
+          "cost": "₹1200"
+        },
+        {
+          "item": "Extras / Tips",
+          "cost": "₹1000"
+        },
+        {
+          "item": "Total",
+          "cost": "₹16200"
+        }
+      ],
+      "date": "2026-07-09",
+      "week": "Thursday"
+    },
+    {
+      "day": "End",
+      "title": "Departure Day",
+      "summary": "Relaxed morning and departure from Ho Chi Minh City",
+      "type": "travel",
+      "city": "Ho Chi Minh City",
+      "country": "Vietnam",
+      "checklist": [
+        "Pack all belongings",
+        "Check passport, tickets, cards",
+        "Keep some cash for last expenses",
+        "Confirm flight timing",
+        "Keep luggage ready before checkout"
+      ],
+      "timeline": [
+        {
+          "time": "8:30 AM",
+          "title": "Wake Up",
+          "description": "Relaxed start, no rush.",
+          "type": "rest",
+          "location": "Hotel, District 1"
+        },
+        {
+          "time": "9:00 AM",
+          "title": "Breakfast",
+          "description": "Breakfast near hotel.",
+          "type": "food",
+          "transport": "walk",
+          "cost": "₹600"
+        },
+        {
+          "time": "10:00 AM - 11:30 AM",
+          "title": "Free Time",
+          "description": "Short café visit or quick last-minute shopping.",
+          "type": "activity",
+          "transport": "walk",
+          "duration": "1h 30m"
+        },
+        {
+          "time": "12:00 PM",
+          "title": "Hotel Check-out",
+          "description": "Standard checkout time.",
+          "type": "stay"
+        },
+        {
+          "time": "12:30 PM",
+          "title": "Lunch",
+          "description": "Veg / Indian lunch nearby.",
+          "type": "food",
+          "transport": "walk",
+          "cost": "₹1000"
+        },
+        {
+          "time": "1:30 PM - 4:00 PM",
+          "title": "Relax / Café Time",
+          "description": "Light café time or mall visit. Keep it relaxed.",
+          "type": "rest",
+          "duration": "2h 30m"
+        },
+        {
+          "time": "4:15 PM",
+          "title": "Return to Hotel",
+          "description": "Collect luggage and prepare to leave.",
+          "type": "stay"
+        },
+        {
+          "time": "4:30 PM",
+          "title": "Travel to Airport",
+          "description": "Book Grab taxi (~30–40 mins).",
+          "type": "travel",
+          "transport": "grab",
+          "duration": "40m",
+          "cost": "₹500"
+        },
+        {
+          "time": "5:15 PM",
+          "title": "Reach Airport",
+          "description": "Arrive with sufficient buffer for check-in & immigration.",
+          "type": "travel",
+          "location": "Tan Son Nhat International Airport"
+        },
+        {
+          "time": "7:20 PM",
+          "title": "Flight to India",
+          "description": "Departure from Ho Chi Minh City.",
+          "type": "travel",
+          "transport": "flight"
+        },
+        {
+          "time": "10:35 PM",
+          "title": "Arrive in Bangalore",
+          "description": "Land at BLR airport.",
+          "type": "travel",
+          "transport": "flight"
+        },
+        {
+          "time": "11:30 PM",
+          "title": "Travel Back Home",
+          "description": "Cab back home (~2–2.5 hrs).",
+          "type": "travel",
+          "transport": "cab",
+          "cost": "₹1500"
+        }
+      ],
+      "budget": [
+        {
+          "item": "Food",
+          "cost": "₹1600"
+        },
+        {
+          "item": "Taxi (SGN)",
+          "cost": "₹500"
+        },
+        {
+          "item": "Return Taxi (BLR)",
+          "cost": "₹1500"
+        },
+        {
+          "item": "Misc",
+          "cost": "₹500"
+        },
+        {
+          "item": "Total",
+          "cost": "₹4100"
+        }
+      ],
+      "date": "2026-07-10",
+      "week": "Friday"
     }
+  ],
+  "prebookingData": {
+    "flights": [
+      {
+        "id": 1,
+        "date": "2026-07-05",
+        "from": "BLR",
+        "to": "SGN",
+        "departure": "11:20 PM",
+        "arrival": "06:00 AM (+1)",
+        "airline": "VietJet",
+        "duration": "4h 40m",
+        "durationMinutes": 280,
+        "type": "international",
+        "status": "Pending",
+        "price": "₹30000",
+        "terminal": {
+          "departure": "T2",
+          "arrival": "T2"
+        },
+        "baggage": {
+          "cabin": "7kg",
+          "checkin": "20kg"
+        },
+        "pnr": "",
+        "seat": "",
+        "booking": {
+          "platform": "",
+          "bookedOn": ""
+        },
+        "checkinLink": "",
+        "timeToAirport": "2.5 hrs from Kengeri",
+        "notes": "Leave home by 5:45 PM to reach airport by ~8:15 PM",
+        "alerts": ["Reach airport 3 hours early", "Keep passport & visa ready"],
+        "links": [
+          "https://www.google.com/travel/flights/booking?tfs=CBwQAhpAEgoyMDI2LTA3LTAzIiAKA0JMUhIKMjAyNi0wNy0wMxoDU0dOKgJWSjIEMTgwMmoHCAESA0JMUnIHCAESA1NHTkABQAFIAXABggELCP___________wGYAQI"
+        ]
+      },
+      {
+        "id": 2,
+        "date": "2026-07-06",
+        "from": "SGN",
+        "to": "PQC",
+        "departure": "2:25 PM",
+        "arrival": "3:35 PM",
+        "airline": "Vietnam Airlines",
+        "duration": "1h 10m",
+        "durationMinutes": 70,
+        "type": "domestic",
+        "status": "Pending",
+        "price": "₹12000",
+        "terminal": {
+          "departure": "Domestic Terminal",
+          "arrival": "Phu Quoc Airport"
+        },
+        "baggage": {
+          "cabin": "7kg",
+          "checkin": "0kg"
+        },
+        "pnr": "",
+        "seat": "",
+        "booking": {
+          "platform": "",
+          "bookedOn": ""
+        },
+        "checkinLink": "",
+        "timeToAirport": "30–40 mins from District 1",
+        "notes": "Leave hotel by ~11:30 AM to reach airport comfortably",
+        "alerts": [
+          "Reach airport 2 hours early",
+          "Carry ID (passport preferred)"
+        ],
+        "links": ["https://www.google.com/travel/flights/"]
+      },
+      {
+        "id": 3,
+        "date": "2026-07-08",
+        "from": "PQC",
+        "to": "SGN",
+        "departure": "10:50 AM",
+        "arrival": "11:55 AM",
+        "airline": "Vietnam Airlines",
+        "duration": "1h 15m",
+        "durationMinutes": 75,
+        "type": "domestic",
+        "status": "Pending",
+        "price": "₹12000",
+        "terminal": {
+          "departure": "Phu Quoc Airport",
+          "arrival": "Domestic Terminal"
+        },
+        "baggage": {
+          "cabin": "7kg",
+          "checkin": "0kg"
+        },
+        "pnr": "",
+        "seat": "",
+        "booking": {
+          "platform": "",
+          "bookedOn": ""
+        },
+        "checkinLink": "",
+        "timeToAirport": "20–30 mins from resort",
+        "notes": "Leave hotel by 7:30 AM",
+        "alerts": ["Reach airport 2 hours early", "Keep boarding pass ready"],
+        "links": ["https://www.google.com/travel/flights/"]
+      },
+      {
+        "id": 4,
+        "date": "2026-07-10",
+        "from": "SGN",
+        "to": "BLR",
+        "departure": "7:20 PM",
+        "arrival": "10:35 PM",
+        "airline": "IndiGo / VietJet",
+        "duration": "5h",
+        "durationMinutes": 300,
+        "type": "international",
+        "status": "Pending",
+        "price": "₹30000",
+        "terminal": {
+          "departure": "T2",
+          "arrival": "T2"
+        },
+        "baggage": {
+          "cabin": "7kg",
+          "checkin": "20kg"
+        },
+        "pnr": "",
+        "seat": "",
+        "booking": {
+          "platform": "",
+          "bookedOn": ""
+        },
+        "checkinLink": "",
+        "timeToAirport": "30–40 mins from District 1",
+        "notes": "Leave hotel by ~4:30–5:00 PM",
+        "alerts": ["Reach airport 3 hours early", "Keep passport & visa ready"],
+        "links": ["https://www.google.com/travel/flights/"]
+      }
+    ],
+    "rooms": [
+      {
+        "id": 1,
+        "name": "District 1 Hotel (Saigon Europe / Vien Dong)",
+        "checkin": "2026-07-05 14:00",
+        "checkout": "2026-07-10 12:00",
+        "price": "₹9400",
+        "status": "Pending",
+        "location": "District 1, Ho Chi Minh City",
+        "links": ["https://l1nq.com/zf37kzk", "https://l1nk.dev/4v1omav"]
+      },
+      {
+        "id": 2,
+        "name": "Phu Quoc Resort (Coral Bay / similar)",
+        "checkin": "2026-07-06 14:00",
+        "checkout": "2026-07-08 12:00",
+        "price": "₹10000",
+        "status": "Pending",
+        "location": "Phu Quoc",
+        "links": [
+          "https://l1nq.com/l4yd9tg",
+          "https://sl1nk.com/s6zxz7l",
+          "https://sl1nk.com/ahfwy9e",
+          "https://l1nq.com/07bmf5j"
+        ]
+      }
+    ],
+    "activities": [
+      {
+        "id": 1,
+        "name": "Vietnam E-Visa",
+        "status": "Pending",
+        "price": "₹2500",
+        "priority": "high",
+        "duration": null,
+        "notes": "Apply at least 5–7 days before travel. Carry printed copy.",
+        "links": ["https://www.atlys.com/en-IN/visa/vietnam-visa"]
+      },
+      {
+        "id": 2,
+        "name": "Travel Insurance",
+        "status": "Pending",
+        "price": "₹1200",
+        "priority": "medium",
+        "duration": null,
+        "notes": "Covers medical + delays. Optional but recommended.",
+        "links": []
+      },
+      {
+        "id": 3,
+        "name": "Forex / Cash (VND)",
+        "status": "Pending",
+        "price": "₹12000",
+        "priority": "high",
+        "duration": null,
+        "notes": "Exchange small amount at airport, rest in District 1.",
+        "links": []
+      },
+      {
+        "id": 4,
+        "name": "Local SIM Card",
+        "status": "Pending",
+        "price": "₹500",
+        "priority": "high",
+        "duration": "10–15 mins",
+        "notes": "Buy Viettel SIM at airport after arrival.",
+        "links": []
+      },
+      {
+        "id": 5,
+        "name": "Mekong Delta Day Tour (Ben Tre)",
+        "status": "Pending",
+        "price": "₹11000",
+        "priority": "high",
+        "duration": "10–12 hours",
+        "notes": "Plan on Day 4. Hotel pickup. Request vegetarian meal.",
+        "links": [
+          "https://joyjourneys.com.vn/tours/ben-tre-mekong-delta-one-day-tour/"
+        ]
+      },
+      {
+        "id": 6,
+        "name": "Hon Thom Cable Car",
+        "status": "Pending",
+        "price": "₹3000",
+        "priority": "high",
+        "duration": "3–4 hours",
+        "notes": "Plan on Day 2 morning. Start early to avoid crowd.",
+        "links": [
+          "https://www.klook.com/activity/20750-sun-world-hon-thom-cable-car-ticket/"
+        ]
+      },
+      {
+        "id": 7,
+        "name": "Kiss of the Sea Show",
+        "status": "Pending",
+        "price": "₹2000",
+        "priority": "medium",
+        "duration": "45 minutes",
+        "notes": "Plan on Day 2 evening. Combine with Grand World visit.",
+        "links": [
+          "https://www.klook.com/en-IN/activity/81479-kiss-the-star-show-ticket/"
+        ]
+      }
+    ]
+  }
 }
