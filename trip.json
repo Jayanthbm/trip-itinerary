@@ -69,15 +69,15 @@
       "budget": [
         {
           "item": "Airport Travel (Cab)",
-          "cost": "₹1000"
+          "cost": "₹1500"
         },
         {
           "item": "Snacks / Water",
-          "cost": "₹400"
+          "cost": "₹500"
         },
         {
           "item": "Total",
-          "cost": "₹1400"
+          "cost": "₹2000"
         }
       ],
       "date": "2026-07-03",
@@ -210,7 +210,7 @@
       "budget": [
         {
           "item": "SIM Card",
-          "cost": "₹400"
+          "cost": "₹1000"
         },
         {
           "item": "Airport Taxi",
@@ -230,7 +230,7 @@
         },
         {
           "item": "Total",
-          "cost": "₹4700"
+          "cost": "₹5300"
         }
       ],
       "date": "2026-07-04",
@@ -629,7 +629,7 @@
         },
         {
           "item": "Transport",
-          "cost": "₹1800"
+          "cost": "₹2000"
         },
         {
           "item": "Food",
@@ -637,7 +637,7 @@
         },
         {
           "item": "Total",
-          "cost": "₹9300"
+          "cost": "₹9500"
         }
       ],
       "date": "2026-07-07",
@@ -760,11 +760,11 @@
       "budget": [
         {
           "item": "Taxi (both sides)",
-          "cost": "₹1100"
+          "cost": "₹1500"
         },
         {
           "item": "Food",
-          "cost": "₹2200"
+          "cost": "₹2500"
         },
         {
           "item": "Shopping",
@@ -772,7 +772,7 @@
         },
         {
           "item": "Total",
-          "cost": "₹8300"
+          "cost": "₹9000"
         }
       ],
       "date": "2026-07-08",
@@ -882,7 +882,7 @@
         },
         {
           "item": "Food",
-          "cost": "₹1200"
+          "cost": "₹1500"
         },
         {
           "item": "Local Travel",
@@ -890,7 +890,7 @@
         },
         {
           "item": "Total",
-          "cost": "₹8200"
+          "cost": "₹8500"
         }
       ],
       "date": "2026-07-09",
@@ -1003,7 +1003,7 @@
       "budget": [
         {
           "item": "Food",
-          "cost": "₹1600"
+          "cost": "₹2000"
         },
         {
           "item": "Taxi (SGN)",
@@ -1011,7 +1011,7 @@
         },
         {
           "item": "Return Taxi (BLR)",
-          "cost": "₹1500"
+          "cost": "₹2000"
         },
         {
           "item": "Misc",
@@ -1019,7 +1019,7 @@
         },
         {
           "item": "Total",
-          "cost": "₹4100"
+          "cost": "₹5000"
         }
       ],
       "date": "2026-07-10",
@@ -1040,14 +1040,14 @@
         "durationMinutes": 280,
         "type": "international",
         "status": "pending",
-        "price": "₹25000",
+        "price": "₹30000",
         "terminal": {
           "departure": "T2",
           "arrival": "T2"
         },
         "baggage": {
           "cabin": "7kg",
-          "checkin": "15kg"
+          "checkin": "20kg"
         },
         "pnr": "",
         "seat": "",
@@ -1076,14 +1076,14 @@
         "durationMinutes": 75,
         "type": "domestic",
         "status": "pending",
-        "price": "₹10,330",
+        "price": "₹12000",
         "terminal": {
           "departure": "Domestic Terminal",
           "arrival": "Phu Quoc Airport"
         },
         "baggage": {
           "cabin": "7kg",
-          "checkin": "15kg"
+          "checkin": "0kg"
         },
         "pnr": "",
         "seat": "",
@@ -1112,14 +1112,14 @@
         "durationMinutes": 75,
         "type": "domestic",
         "status": "pending",
-        "price": "₹10,330",
+        "price": "₹12000",
         "terminal": {
           "departure": "Phu Quoc Airport",
           "arrival": "Domestic Terminal"
         },
         "baggage": {
           "cabin": "7kg",
-          "checkin": "15kg"
+          "checkin": "0kg"
         },
         "pnr": "",
         "seat": "",
@@ -1148,14 +1148,14 @@
         "durationMinutes": 300,
         "type": "international",
         "status": "pending",
-        "price": "₹20000",
+        "price": "₹30000",
         "terminal": {
           "departure": "T2",
           "arrival": "T2"
         },
         "baggage": {
           "cabin": "7kg",
-          "checkin": "15kg"
+          "checkin": "20kg"
         },
         "pnr": "",
         "seat": "",
@@ -1210,7 +1210,7 @@
         "priority": "high",
         "duration": null,
         "notes": "Apply at least 5–7 days before travel. Carry printed copy.",
-        "links": []
+        "links": ["https://www.atlys.com/en-IN/visa/vietnam-visa"]
       },
       {
         "id": 2,
@@ -1272,7 +1272,7 @@
         "priority": "medium",
         "duration": "45 minutes",
         "notes": "Evening show. Can combine with Grand World visit.",
-        "links": []
+        "links": ["https://www.klook.com/en-IN/activity/81479-kiss-the-star-show-ticket/"]
       },
       {
         "id": 8,
@@ -1284,7 +1284,6 @@
         "notes": "Prefer morning tour. Wear comfortable clothes. Optional tunnel crawl.",
         "links": ["https://www.klook.com/en-IN/activity/1471-cu-chi-tunnels-experience-ho-chi-minh-city/"]
       }
-
     ]
   }
 }
