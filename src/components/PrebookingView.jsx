@@ -1,10 +1,87 @@
 import React, { useState } from 'react';
 import { PlaneIcon, BuildingIcon, CheckIcon, ChevronDownIcon } from './Icons';
 
-const PrebookingView = ({ data }) => {
+const PrebookingView = ({ data, itineraryKey }) => {
   const [isFlightsOpen, setIsFlightsOpen] = useState(true);
   const [isRoomsOpen, setIsRoomsOpen] = useState(true);
   const [isActivitiesOpen, setIsActivitiesOpen] = useState(true);
+
+  const getInitialStatus = (category, items) => {
+    const initialState = {};
+    items.forEach(item => {
+      if (itineraryKey !== undefined && item.id) {
+        const key = `${itineraryKey}_prebook_${category}_${item.id}`;
+        const saved = localStorage.getItem(key);
+        if (saved !== null) {
+          initialState[item.id] = saved;
+        } else {
+          initialState[item.id] = item.status || 'Pending';
+        }
+      } else {
+        initialState[item.id] = item.status || 'Pending';
+      }
+    });
+    return initialState;
+  };
+
+  const [flightStatuses, setFlightStatuses] = useState(() => getInitialStatus('flight', data?.flights || []));
+  const [roomStatuses, setRoomStatuses] = useState(() => getInitialStatus('room', data?.rooms || []));
+  const [activityStatuses, setActivityStatuses] = useState(() => getInitialStatus('activity', data?.activities || []));
+
+  const toggleStatus = (category, id, currentState, setStatusState) => {
+    const newStatus = currentState.toLowerCase() === 'booked' || currentState.toLowerCase() === 'done' ? 'Pending' : 'Booked';
+    setStatusState(prev => ({ ...prev, [id]: newStatus }));
+    
+    if (itineraryKey !== undefined) {
+      const key = `${itineraryKey}_prebook_${category}_${id}`;
+      localStorage.setItem(key, newStatus);
+    }
+  };
+
+  const renderStatusBadge = (category, id, status, setStatusState) => {
+    const statusLower = status ? status.toLowerCase() : '';
+    const isBooked = ['booked', 'done', 'completed'].includes(statusLower);
+    
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', alignSelf: 'flex-start' }}>
+        <span className={`badge ${isBooked ? 'done' : 'pending'}`} style={{ margin: 0 }}>
+          {status}
+        </span>
+        <button 
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleStatus(category, id, status || 'Pending', setStatusState);
+          }}
+          title={isBooked ? "Mark as Pending" : "Mark as Booked"}
+          style={{
+            background: 'var(--bg-secondary)',
+            border: `1px solid ${isBooked ? 'var(--border-light)' : '#22c55e'}`,
+            cursor: 'pointer',
+            padding: '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: isBooked ? 'var(--text-secondary)' : '#22c55e',
+            borderRadius: '50%',
+            transition: 'all 0.2s ease',
+            outline: 'none'
+          }}
+          onMouseOver={(e) => {
+             e.currentTarget.style.transform = 'scale(1.1)';
+          }}
+          onMouseOut={(e) => {
+             e.currentTarget.style.transform = 'scale(1)';
+          }}
+        >
+          {isBooked ? (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          ) : (
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          )}
+        </button>
+      </div>
+    );
+  };
 
   const renderLinks = (links) => {
     if (!links || links.length === 0) return null;
@@ -57,11 +134,7 @@ const PrebookingView = ({ data }) => {
                  </div>
                )}
             </div>
-            {flight.status && (
-              <span className={`badge ${flight.status === 'booked' ? 'done' : 'pending'}`} style={{ alignSelf: 'flex-start' }}>
-                {flight.status}
-              </span>
-            )}
+            {renderStatusBadge('flight', flight.id, flightStatuses[flight.id], setFlightStatuses)}
           </div>
 
           <div className="detail-row">
@@ -166,9 +239,11 @@ const PrebookingView = ({ data }) => {
 
       {isRoomsOpen && data.rooms.map(room => (
         <div key={room.id} className="card">
-          <div className="detail-row">
-            <span className="detail-label">Name</span>
-            <span className="detail-value highlight">{room.name}</span>
+          <div className="flex justify-between items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
+             <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+               {room.name}
+             </div>
+             {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
           </div>
           <div className="detail-row">
             <span className="detail-label">Location</span>
@@ -209,18 +284,24 @@ const PrebookingView = ({ data }) => {
 
       {isActivitiesOpen && data.activities.map(activity => (
         <div key={activity.id} className="card">
-          <div className="detail-row">
-            <span className="detail-label">Name</span>
-            <span className="detail-value highlight">{activity.name}</span>
+          <div className="flex justify-between items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
+             <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
+               {activity.name}
+             </div>
+             {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
           </div>
-          <div className="detail-row">
-            <span className="detail-label">Status</span>
-            <span className="detail-value">
-              <span className={`badge ${activity.status === 'Required' ? 'required' : ['Done', 'Recommended'].includes(activity.status) ? 'done' : 'pending'}`}>
-                {activity.status}
-              </span>
-            </span>
-          </div>
+          {activity.duration && (
+            <div className="detail-row">
+              <span className="detail-label">Duration</span>
+              <span className="detail-value">{activity.duration}</span>
+            </div>
+          )}
+          {activity.price && (
+            <div className="detail-row">
+              <span className="detail-label">Price</span>
+              <span className="price-tag">{activity.price}</span>
+            </div>
+          )}
           {activity.priority && (
             <div className="detail-row">
               <span className="detail-label">Priority</span>
@@ -231,16 +312,6 @@ const PrebookingView = ({ data }) => {
               </span>
             </div>
           )}
-          {activity.duration && (
-            <div className="detail-row">
-              <span className="detail-label">Duration</span>
-              <span className="detail-value">{activity.duration}</span>
-            </div>
-          )}
-          <div className="detail-row mt-4">
-            <span className="detail-label">Price</span>
-            <span className="price-tag">{activity.price}</span>
-          </div>
           {activity.notes && (
             <div className="mt-3 pt-3" style={{ borderTop: '1px dashed var(--border-light)', color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem', lineHeight: '1.4' }}>
               {activity.notes}

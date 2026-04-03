@@ -227,7 +227,8 @@ function App() {
     if (!appData) return null;
 
     if (activeTab === 'prebooking' && hasPrebooking) {
-      return <PrebookingView data={appData.prebookingData} />;
+      const itineraryKey = `${appData.title}_${appData.startDate}_${appData.endDate}`.replace(/\s+/g, '_');
+      return <PrebookingView data={appData.prebookingData} itineraryKey={itineraryKey} />;
     }
 
     if (activeTab === 'budget' && hasPrebooking) {
