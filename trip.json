@@ -4,7 +4,7 @@
   "endDate": "10 July 2026",
   "days": [
     {
-      "day": "Day 0",
+      "day": "Start",
       "title": "Departure & Travel to Vietnam",
       "summary": "Travel from Bangalore to Ho Chi Minh City (overnight flight)",
       "type": "travel",
@@ -1039,7 +1039,7 @@
         "duration": "4h 40m",
         "durationMinutes": 280,
         "type": "international",
-        "status": "pending",
+        "status": "Pending",
         "price": "₹30000",
         "terminal": {
           "departure": "T2",
@@ -1075,7 +1075,7 @@
         "duration": "1h 15m",
         "durationMinutes": 75,
         "type": "domestic",
-        "status": "pending",
+        "status": "Pending",
         "price": "₹12000",
         "terminal": {
           "departure": "Domestic Terminal",
@@ -1111,7 +1111,7 @@
         "duration": "1h 15m",
         "durationMinutes": 75,
         "type": "domestic",
-        "status": "pending",
+        "status": "Pending",
         "price": "₹12000",
         "terminal": {
           "departure": "Phu Quoc Airport",
@@ -1147,7 +1147,7 @@
         "duration": "5h",
         "durationMinutes": 300,
         "type": "international",
-        "status": "pending",
+        "status": "Pending",
         "price": "₹30000",
         "terminal": {
           "departure": "T2",
@@ -1180,6 +1180,7 @@
         "checkin": "2026-07-03 14:00",
         "checkout": "2026-07-11 12:00",
         "price": "₹15000",
+        "status": "Pending",
         "location": "District 1, Ho Chi Minh City",
         "links": [
           "https://www.agoda.com/en-in/saigon-europe-hotel-h35412483/hotel/ho-chi-minh-city-vn.html",
@@ -1192,6 +1193,7 @@
         "checkin": "2026-07-06 14:00",
         "checkout": "2026-07-08 12:00",
         "price": "₹10000",
+        "status": "Pending",
         "location": "Phu Quoc",
         "links": [
           "https://www.agoda.com/en-in/vinpearl-resort-spa-phu-qu-c/hotel/phu-quoc-island-vn.html?countryId=38&finalPriceView=1&isShowMobileAppPrice=false&cid=-999&numberOfBedrooms=&familyMode=false&adults=2&children=0&rooms=1&maxRooms=0&checkIn=2026-07-6&isCalendarCallout=false&childAges=&numberOfGuest=0&missingChildAges=false&travellerType=1&showReviewSubmissionEntry=false&currencyCode=INR&isFreeOccSearch=false&tspTypes=8&los=2&searchrequestid=fc8c41b8-f1e5-40fd-92ae-5e170980887c&ds=DJwf9LY4tOhyzWZq",
@@ -1205,7 +1207,7 @@
       {
         "id": 1,
         "name": "Vietnam E-Visa",
-        "status": "Required",
+        "status": "Pending",
         "price": "₹2,000 – ₹3,000",
         "priority": "high",
         "duration": null,
@@ -1215,7 +1217,7 @@
       {
         "id": 2,
         "name": "Travel Insurance",
-        "status": "Recommended",
+        "status": "Pending",
         "price": "₹1,000 – ₹1,500",
         "priority": "medium",
         "duration": null,
@@ -1235,7 +1237,7 @@
       {
         "id": 4,
         "name": "Local SIM Card",
-        "status": "Buy at Airport",
+        "status": "Pending",
         "price": "₹300 – ₹600",
         "priority": "high",
         "duration": "10–15 mins",
@@ -1245,7 +1247,7 @@
       {
         "id": 5,
         "name": "Mekong Delta Day Tour (Ben Tre)",
-        "status": "To Book",
+        "status": "Pending",
         "price": "₹11000",
         "priority": "high",
         "duration": "10–12 hours",
@@ -1257,7 +1259,7 @@
       {
         "id": 6,
         "name": "Hon Thom Cable Car",
-        "status": "Optional",
+        "status": "Pending",
         "price": "₹2,500 – ₹3,500 (2 pax)",
         "priority": "high",
         "duration": "3–4 hours",
@@ -1267,7 +1269,7 @@
       {
         "id": 7,
         "name": "Kiss of the Sea Show",
-        "status": "Optional",
+        "status": "Pending",
         "price": "₹1,500 – ₹2,500 (2 pax)",
         "priority": "medium",
         "duration": "45 minutes",
@@ -1277,9 +1279,9 @@
       {
         "id": 8,
         "name": "Cu Chi Tunnels Half Day Tour",
-        "status": "To Book",
+        "status": "Pending",
         "price": "₹3500",
-        "priority": "medium",
+        "priority": "Low",
         "duration": "5–6 hours",
         "notes": "Prefer morning tour. Wear comfortable clothes. Optional tunnel crawl.",
         "links": ["https://www.klook.com/en-IN/activity/1471-cu-chi-tunnels-experience-ho-chi-minh-city/"]
