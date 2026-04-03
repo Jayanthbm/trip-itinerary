@@ -237,7 +237,8 @@ function App() {
     if (activeTab.startsWith('day-')) {
       const dayIndex = parseInt(activeTab.split('-')[1], 10);
       const dayData = appData.days[dayIndex];
-      if (dayData) return <DayView dayData={dayData} />;
+      const itineraryKey = `${appData.title}_${appData.startDate}_${appData.endDate}`.replace(/\s+/g, '_');
+      if (dayData) return <DayView dayData={dayData} itineraryKey={itineraryKey} dayIndex={dayIndex} />;
     }
 
     return <div style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '2rem' }}>Please select a valid tab.</div>;

@@ -1,10 +1,34 @@
 import React, { useState } from 'react';
 import { getIconElement, CheckIcon, WalletIcon, ChevronDownIcon, getEmoji } from './Icons';
 
-const DayView = ({ dayData }) => {
+const DayView = ({ dayData, itineraryKey, dayIndex }) => {
   // defaults based on user feedback
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(true);
+
+  const [checkedItems, setCheckedItems] = useState(() => {
+    const initialState = {};
+    dayData?.checklist?.forEach((_, idx) => {
+      if (itineraryKey !== undefined && dayIndex !== undefined) {
+        const key = `${itineraryKey}_day_${dayIndex}_checklist_${idx}`;
+        const saved = localStorage.getItem(key);
+        if (saved !== null) {
+          initialState[idx] = saved === 'true';
+        }
+      }
+    });
+    return initialState;
+  });
+
+  const toggleChecklistItem = (idx) => {
+    const newState = !checkedItems[idx];
+    setCheckedItems(prev => ({ ...prev, [idx]: newState }));
+    
+    if (itineraryKey !== undefined && dayIndex !== undefined) {
+      const key = `${itineraryKey}_day_${dayIndex}_checklist_${idx}`;
+      localStorage.setItem(key, newState.toString());
+    }
+  };
 
   return (
     <div className="content-area">
@@ -42,14 +66,61 @@ const DayView = ({ dayData }) => {
           </span>
         </div>
 
-        {isChecklistOpen && (
-          <ul className="checklist mt-4" style={{ marginBottom: 0 }}>
-            {dayData.checklist.map((item, idx) => (
-              <li key={idx} className="checklist-item">
-                <span className="checklist-icon"><CheckIcon /></span>
-                {item}
-              </li>
-            ))}
+        {isChecklistOpen && dayData.checklist && (
+          <ul className="checklist mt-4" style={{ marginBottom: 0, paddingLeft: 0, listStyle: 'none' }}>
+            {dayData.checklist.map((item, idx) => {
+              const isChecked = checkedItems[idx] || false;
+              return (
+                <li 
+                  key={idx} 
+                  className="checklist-item" 
+                  onClick={() => toggleChecklistItem(idx)}
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.8rem', 
+                    padding: '0.8rem', 
+                    borderBottom: '1px solid var(--border-light)', 
+                    cursor: 'pointer',
+                    background: isChecked ? 'rgba(34, 197, 94, 0.05)' : 'transparent',
+                    transition: 'all 0.2s',
+                    borderRadius: '4px',
+                    margin: 0
+                  }}
+                  onMouseOver={(e) => {
+                    if (!isChecked) e.currentTarget.style.background = 'var(--bg-secondary)';
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.background = isChecked ? 'rgba(34, 197, 94, 0.05)' : 'transparent';
+                  }}
+                >
+                  <div style={{
+                    width: '24px', 
+                    height: '24px', 
+                    borderRadius: '50%', 
+                    border: isChecked ? '2px solid #22c55e' : '2px solid var(--text-secondary)', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    background: isChecked ? '#22c55e' : 'transparent',
+                    color: '#fff',
+                    flexShrink: 0,
+                    transition: 'all 0.2s'
+                  }}>
+                    {isChecked && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                  </div>
+                  <span style={{ 
+                    color: isChecked ? 'var(--text-secondary)' : 'var(--text-primary)',
+                    textDecoration: 'none',
+                    flex: 1,
+                    transition: 'all 0.2s',
+                    fontSize: '0.95rem'
+                  }}>
+                    {item}
+                  </span>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
