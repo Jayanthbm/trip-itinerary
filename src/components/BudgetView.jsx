@@ -48,7 +48,7 @@ const BudgetView = ({ prebookingData, daysData, currencySymbol = '₹' }) => {
   // ---- Daily Costs ----
   const daysCostData = (daysData || []).map((day) => {
     const timelineItems = (day.timeline || [])
-      .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '')
+      .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0)
       .map(e => ({ title: e.title, cost: parseCost(e.cost) }));
     const additionalItems = (day.additionalBudget || [])
       .map(b => ({ title: b.title, cost: parseCost(b.cost) }));

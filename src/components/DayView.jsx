@@ -190,7 +190,7 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
               </tr>
             </thead>
             <tbody>
-              {allBudgetItems.map((item, idx) => (
+              {allBudgetItems.filter(item => item?.cost > 0).map((item, idx) => (
                 <tr key={idx}>
                   <td>{item.title}</td>
                   <td>{currencySymbol}{item.cost.toLocaleString('en-IN')}</td>
