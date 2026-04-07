@@ -40,11 +40,60 @@ npm install
 npm run dev
 ```
 
-### JSON Schema
-If you are generating custom JSON models or connecting RESTful APIs to the system, the underlying generic data boundary validates strictly to ensuring it provides:
-- A `title` property (String)
-- A `startDate` & `endDate` property (String)
-- A nested `days` array (Objects mapping your timeline, checklists, and day-to-day budgets)
+## 📄 JSON Schema Documentation
 
-Optional attributes expand functionality vastly (refer to the offline `src/samples/` elements directly out-of-the-box for architecture inspirations):
-- `prebookingData` (containing arrays for `flights`, `rooms`, `activities`)
+The application relies on a specific JSON structure to render itineraries correctly. Below is the detailed breakdown of the required schema.
+
+### Root Element
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `title` | String | The main title of your trip (e.g., "Vietnam Adventure 2026") |
+| `startDate` | String | Trip start date in "D Month YYYY" format (e.g., "3 July 2026") |
+| `currency` | String | Currency code (e.g., "INR", "USD", "VND") |
+| `days` | Array | List of daily itinerary objects (see Day Object) |
+| `prebookingData` | Object | Global reservations (see Pre-booking Section) |
+
+### Day Object (`days[]`)
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `day` | String | Label for the day (e.g., "Day 1", "Start", "Travel Day") |
+| `title` | String | Subtitle describing the day's focus |
+| `summary` | String | Brief narrative of the day's plan |
+| `checklist` | Array | Simple strings for daily tasks/reminders |
+| `timeline` | Array | Hourly schedule objects (see Timeline Item) |
+| `additionalBudget` | Array | Extra costs not captured in the timeline (see Budget Item) |
+
+#### Timeline Item
+`{ "time": "9:00 AM", "title": "Breakfast", "description": "Local food", "duration": "1h", "cost": 500, "location": "Cafe", "mapsLink": "URL" }`
+
+#### Budget Item
+`{ "title": "Tips", "cost": 500 }`
+
+### Pre-booking Section (`prebookingData`)
+Contains specialized arrays for major reservations. All items require an `id` (Number) and `status` ("Pending" or "Booked").
+
+- **`flights`**: `date` (YYYY-MM-DD), `from`/`to` (Codes), `departure`/`arrival`, `airline`, `durationMinutes` (Number), `cost` (Number), `terminal: { departure, arrival }`, `links[]`.
+- **`trains`**: `date`, `from`/`to`, `name`, `departure`/`arrival`, `durationMinutes` (Number), `cost`, `links[]`.
+- **`bus`**: `date`, `from`/`to`, `departure`/`arrival`, `provider`, `durationMinutes` (Number), `cost`, `points: { pickup, drop }`, `links[]`.
+- **`rooms`**: `name`, `checkin`/`checkout` (YYYY-MM-DD HH:mm), `cost`, `location`, `mapsLink`, `links[]`.
+- **`activities`**: `name`, `cost`, `notes`, `links[]`, `excludeFromBudget` (Boolean).
+
+---
+
+## 🤖 AI Prompt
+
+Use the following prompt to generate a compatible JSON file using an LLM (Claude, GPT-4, etc.):
+
+> **System Prompt**: Act as a professional travel itinerary architect. Output **ONLY** raw JSON.
+>
+> **Task**: Create a [NUMBER] day itinerary for [LOCATION] starting on [DATE]. Use [CURRENCY] as the currency.
+>
+> **Schema Rules**:
+> 1. **Root**: `title`, `startDate` (e.g. "3 July 2026"), `currency` (3-letter code), `days` (Array), `prebookingData` (Object).
+> 2. **Days**: Each day needs `day`, `title`, `summary`, `checklist` (Array), `timeline` (Array), and `additionalBudget` (Array).
+> 3. **Timeline**: Each item must have `time`, `title`, `description`, `duration` (e.g. "2h 30m"), `cost` (Number), `location`, and `mapsLink`.
+> 4. **Pre-booking**: Must include arrays for `flights`, `trains`, `bus`, `rooms`, and `activities`.
+>    - Routes (Flights/Trains/Bus) MUST include `durationMinutes` as a Number.
+>    - Rooms MUST include `checkin` and `checkout` in `YYYY-MM-DD HH:mm` format.
+>    - Activities SHOULD include `excludeFromBudget`: false.
+> 5. **Numbers**: All `cost` fields MUST be raw Numbers (e.g., 500), NOT strings (e.g., "500" or "₹500").

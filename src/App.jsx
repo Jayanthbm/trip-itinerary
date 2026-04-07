@@ -4,15 +4,38 @@ import PrebookingView from './components/PrebookingView';
 import DayView from './components/DayView';
 import BudgetView from './components/BudgetView';
 
-import sample2 from './samples/sample2.json';
-import sample3 from './samples/sample3.json';
-import sample4 from './samples/sample4.json';
+const calculateEndDate = (startDate, daysCount) => {
+  if (!startDate || !daysCount) return "";
+  const date = new Date(startDate);
+  if (isNaN(date.getTime())) return startDate;
+  date.setDate(date.getDate() + daysCount - 1);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+};
+
+const getCurrencySymbol = (currency) => {
+  if (!currency) return "₹";
+  const map = { INR: "₹", USD: "$", EUR: "€", GBP: "£", VND: "₫" };
+  return map[currency.toUpperCase()] || currency;
+};
 
 const validateData = (data) => {
   if (!data) return "Data is empty";
   if (!data.title) return "Missing 'title'";
   if (!data.startDate) return "Missing 'startDate'";
-  if (!data.endDate) return "Missing 'endDate'";
   if (!Array.isArray(data.days)) return "'days' must be an array";
   return null;
 };
@@ -21,22 +44,6 @@ const sampleItinerary = [
   {
     name: "Benglore- Vietnam (7 days)",
     url: "https://www.jsonkeeper.com/b/J1XIS",
-  },
-  {
-    name: "Benglore- Vietnam (5 days)",
-    url: "https://www.jsonkeeper.com/b/S65IY",
-  },
-  {
-    name: "Benglore-Kerala (5 days)",
-    data: sample2,
-  },
-  {
-    name: "Benglore-Coorg (3days)",
-    data: sample3,
-  },
-  {
-    name: "Benglore-Baali (7days)",
-    data: sample4,
   },
 ];
 
@@ -226,24 +233,53 @@ function App() {
   };
 
   const hasPrebooking = appData && !!appData.prebookingData;
+  const calculatedEndDate = appData
+    ? calculateEndDate(appData.startDate, appData.days.length)
+    : "";
+  const currencySymbol = appData ? getCurrencySymbol(appData.currency) : "₹";
 
   const renderContent = () => {
     if (!appData) return null;
 
+    const itineraryKey =
+      `${appData.title}_${appData.startDate}_${calculatedEndDate}`.replace(
+        /\s+/g,
+        "_",
+      );
+
     if (activeTab === 'prebooking' && hasPrebooking) {
-      const itineraryKey = `${appData.title}_${appData.startDate}_${appData.endDate}`.replace(/\s+/g, '_');
-      return <PrebookingView data={appData.prebookingData} itineraryKey={itineraryKey} />;
+      return (
+        <PrebookingView
+          data={appData.prebookingData}
+          itineraryKey={itineraryKey}
+          currencySymbol={currencySymbol}
+        />
+      );
     }
 
     if (activeTab === 'budget' && hasPrebooking) {
-      return <BudgetView prebookingData={appData.prebookingData} daysData={appData.days} />;
+      return (
+        <BudgetView
+          prebookingData={appData.prebookingData}
+          daysData={appData.days}
+          currencySymbol={currencySymbol}
+        />
+      );
     }
 
     if (activeTab.startsWith('day-')) {
       const dayIndex = parseInt(activeTab.split('-')[1], 10);
       const dayData = appData.days[dayIndex];
-      const itineraryKey = `${appData.title}_${appData.startDate}_${appData.endDate}`.replace(/\s+/g, '_');
-      if (dayData) return <DayView dayData={dayData} itineraryKey={itineraryKey} dayIndex={dayIndex} />;
+      if (dayData)
+        return (
+          <DayView
+            dayData={dayData}
+            itineraryKey={itineraryKey}
+            dayIndex={dayIndex}
+            startDate={appData.startDate}
+            currencySymbol={currencySymbol}
+          />
+        );
     }
 
     return <div style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '2rem' }}>Please select a valid tab.</div>;
@@ -344,35 +380,155 @@ function App() {
 
   return (
     <div className="app-container">
-      <div style={{ background: 'var(--bg-secondary)', padding: '1rem', borderBottom: '1px solid var(--border-light)', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-        <form onSubmit={handleUrlLoad} style={{ display: 'flex', flex: '1 1 100%', gap: '0.5rem', flexWrap: 'wrap', width: '100%' }}>
+      <div
+        style={{
+          background: "var(--bg-secondary)",
+          padding: "1rem",
+          borderBottom: "1px solid var(--border-light)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <form
+          onSubmit={handleUrlLoad}
+          style={{
+            display: "flex",
+            flex: "1 1 100%",
+            gap: "0.5rem",
+            flexWrap: "wrap",
+            width: "100%",
+          }}
+        >
           <input
             type="url"
             placeholder="Enter JSON URL to load external itinerary..."
             value={urlInput}
             onChange={(e) => setUrlInput(e.target.value)}
-            style={{ flex: '1 1 200px', minWidth: '0', padding: '0.6rem 1rem', borderRadius: '4px', border: '1px solid var(--border-light)', background: 'var(--bg-color)', color: 'var(--text-primary)' }}
+            style={{
+              flex: "1 1 200px",
+              minWidth: "0",
+              padding: "0.6rem 1rem",
+              borderRadius: "4px",
+              border: "1px solid var(--border-light)",
+              background: "var(--bg-color)",
+              color: "var(--text-primary)",
+            }}
           />
-          <button type="submit" disabled={isLoading} className="tab-btn" style={{ flex: '0 0 auto', margin: 0, padding: '0.6rem 1.5rem', background: 'var(--accent-primary)', border: 'none', color: '#fff', cursor: isLoading ? 'default' : 'pointer', opacity: isLoading ? 0.7 : 1, borderRadius: '4px' }}>
-            {isLoading ? 'Loading...' : 'Load'}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="tab-btn"
+            style={{
+              flex: "0 0 auto",
+              margin: 0,
+              padding: "0.6rem 1.5rem",
+              background: "var(--accent-primary)",
+              border: "none",
+              color: "#fff",
+              cursor: isLoading ? "default" : "pointer",
+              opacity: isLoading ? 0.7 : 1,
+              borderRadius: "4px",
+            }}
+          >
+            {isLoading ? "Loading..." : "Load"}
           </button>
         </form>
-        <div style={{ display: 'flex', gap: '0.8rem', flexWrap: 'wrap', alignItems: 'center' }}>
-          <label className="tab-btn" style={{ margin: 0, padding: '0.4rem 1rem', background: 'var(--bg-color)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', cursor: 'pointer', transition: 'border-color 0.2s', borderRadius: '4px' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.8rem",
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
+          <label
+            className="tab-btn"
+            style={{
+              margin: 0,
+              padding: "0.4rem 1rem",
+              background: "var(--bg-color)",
+              border: "1px solid var(--border-light)",
+              color: "var(--text-primary)",
+              cursor: "pointer",
+              transition: "border-color 0.2s",
+              borderRadius: "4px",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.borderColor = "var(--accent-primary)")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.borderColor = "var(--border-light)")
+            }
+          >
             Upload
-            <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
+            <input
+              type="file"
+              accept=".json"
+              onChange={handleFileUpload}
+              style={{ display: "none" }}
+            />
           </label>
-          <button onClick={handleDownload} className="tab-btn" style={{ margin: 0, padding: '0.4rem 1rem', background: 'var(--bg-color)', border: '1px solid var(--border-light)', color: 'var(--text-primary)', cursor: 'pointer', transition: 'border-color 0.2s', borderRadius: '4px' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
+          <button
+            onClick={handleDownload}
+            className="tab-btn"
+            style={{
+              margin: 0,
+              padding: "0.4rem 1rem",
+              background: "var(--bg-color)",
+              border: "1px solid var(--border-light)",
+              color: "var(--text-primary)",
+              cursor: "pointer",
+              transition: "border-color 0.2s",
+              borderRadius: "4px",
+            }}
+            onMouseOver={(e) =>
+              (e.currentTarget.style.borderColor = "var(--accent-primary)")
+            }
+            onMouseOut={(e) =>
+              (e.currentTarget.style.borderColor = "var(--border-light)")
+            }
+          >
             Download
           </button>
-          <button onClick={handleClose} className="tab-btn" style={{ margin: '0 0 0 auto', padding: '0.4rem 1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', cursor: 'pointer', transition: 'all 0.2s', borderRadius: '4px' }} onMouseOver={(e) => { e.currentTarget.style.background = '#ef4444'; e.currentTarget.style.color = '#fff'; }} onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'; e.currentTarget.style.color = '#ef4444'; }}>
+          <button
+            onClick={handleClose}
+            className="tab-btn"
+            style={{
+              margin: "0 0 0 auto",
+              padding: "0.4rem 1rem",
+              background: "rgba(239, 68, 68, 0.1)",
+              border: "1px solid #ef4444",
+              color: "#ef4444",
+              cursor: "pointer",
+              transition: "all 0.2s",
+              borderRadius: "4px",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = "#ef4444";
+              e.currentTarget.style.color = "#fff";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)";
+              e.currentTarget.style.color = "#ef4444";
+            }}
+          >
             Close Itinerary
           </button>
         </div>
       </div>
 
       {error && (
-        <div style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444', color: '#ef4444', padding: '0.75rem 1rem', margin: '1rem', borderRadius: '6px' }}>
+        <div
+          style={{
+            background: "rgba(239, 68, 68, 0.1)",
+            border: "1px solid #ef4444",
+            color: "#ef4444",
+            padding: "0.75rem 1rem",
+            margin: "1rem",
+            borderRadius: "6px",
+          }}
+        >
           Error: {error}
         </div>
       )}
@@ -381,10 +537,12 @@ function App() {
         <>
           <header className="app-header">
             <h1>{appData.title}</h1>
-            <p>{appData.startDate} - {appData.endDate}</p>
+            <p>
+              {appData.startDate} - {calculatedEndDate}
+            </p>
           </header>
 
-          <div style={{ paddingBottom: '1rem' }}>
+          <div style={{ paddingBottom: "1rem" }}>
             <Tabs
               days={appData.days}
               activeTab={activeTab}
@@ -393,9 +551,7 @@ function App() {
             />
           </div>
 
-          <main>
-            {renderContent()}
-          </main>
+          <main>{renderContent()}</main>
         </>
       )}
 
@@ -403,26 +559,26 @@ function App() {
         <button
           onClick={scrollToTop}
           style={{
-            position: 'fixed',
-            bottom: '2rem',
-            right: '2rem',
-            background: 'var(--accent-primary)',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '50%',
-            width: '3rem',
-            height: '3rem',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            position: "fixed",
+            bottom: "2rem",
+            right: "2rem",
+            background: "var(--accent-primary)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "50%",
+            width: "3rem",
+            height: "3rem",
+            fontSize: "1.5rem",
+            cursor: "pointer",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.3)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             zIndex: 1000,
-            transition: 'transform 0.2s'
+            transition: "transform 0.2s",
           }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
           title="Scroll to Top"
         >
           ↑

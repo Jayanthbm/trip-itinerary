@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import { PlaneIcon, BuildingIcon, CheckIcon, ChevronDownIcon } from './Icons';
+import { PlaneIcon, TrainIcon, BusIcon, BuildingIcon, CheckIcon, ChevronDownIcon } from './Icons';
 
-const PrebookingView = ({ data, itineraryKey }) => {
-  const [isFlightsOpen, setIsFlightsOpen] = useState(true);
-  const [isRoomsOpen, setIsRoomsOpen] = useState(true);
-  const [isActivitiesOpen, setIsActivitiesOpen] = useState(true);
+const parseCost = (val) => {
+  if (val === undefined || val === null || val === '') return 0;
+  if (typeof val === 'number') return val;
+  // Handle strings like "₹30,000", "30000", etc.
+  const numStr = String(val).replace(/[^\d.]/g, '');
+  return parseFloat(numStr) || 0;
+};
+
+const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
+  const [openSections, setOpenSections] = useState({
+    flights: true, trains: true, bus: true, rooms: true, activities: true
+  });
+
+  const toggleSection = (key) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
 
   const getInitialStatus = (category, items) => {
     const initialState = {};
@@ -12,11 +22,7 @@ const PrebookingView = ({ data, itineraryKey }) => {
       if (itineraryKey !== undefined && item.id) {
         const key = `${itineraryKey}_prebook_${category}_${item.id}`;
         const saved = localStorage.getItem(key);
-        if (saved !== null) {
-          initialState[item.id] = saved;
-        } else {
-          initialState[item.id] = item.status || 'Pending';
-        }
+        initialState[item.id] = saved !== null ? saved : (item.status || 'Pending');
       } else {
         initialState[item.id] = item.status || 'Pending';
       }
@@ -25,301 +31,317 @@ const PrebookingView = ({ data, itineraryKey }) => {
   };
 
   const [flightStatuses, setFlightStatuses] = useState(() => getInitialStatus('flight', data?.flights || []));
+  const [trainStatuses, setTrainStatuses] = useState(() => getInitialStatus('train', data?.trains || []));
+  const [busStatuses, setBusStatuses] = useState(() => getInitialStatus('bus', data?.bus || []));
   const [roomStatuses, setRoomStatuses] = useState(() => getInitialStatus('room', data?.rooms || []));
   const [activityStatuses, setActivityStatuses] = useState(() => getInitialStatus('activity', data?.activities || []));
 
   const toggleStatus = (category, id, currentState, setStatusState) => {
-    const newStatus = currentState.toLowerCase() === 'booked' || currentState.toLowerCase() === 'done' ? 'Pending' : 'Booked';
+    const isBooked = ['booked', 'done', 'completed'].includes(currentState?.toLowerCase());
+    const newStatus = isBooked ? 'Pending' : 'Booked';
     setStatusState(prev => ({ ...prev, [id]: newStatus }));
-    
     if (itineraryKey !== undefined) {
-      const key = `${itineraryKey}_prebook_${category}_${id}`;
-      localStorage.setItem(key, newStatus);
+      localStorage.setItem(`${itineraryKey}_prebook_${category}_${id}`, newStatus);
     }
   };
 
   const renderStatusBadge = (category, id, status, setStatusState) => {
-    const statusLower = status ? status.toLowerCase() : '';
-    const isBooked = ['booked', 'done', 'completed'].includes(statusLower);
-    
+    const isBooked = ['booked', 'done', 'completed'].includes(status?.toLowerCase());
     return (
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', alignSelf: 'flex-start' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
         <span className={`badge ${isBooked ? 'done' : 'pending'}`} style={{ margin: 0 }}>
           {status}
         </span>
-        <button 
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleStatus(category, id, status || 'Pending', setStatusState);
-          }}
-          title={isBooked ? "Mark as Pending" : "Mark as Booked"}
-          style={{
-            background: 'var(--bg-secondary)',
-            border: `1px solid ${isBooked ? 'var(--border-light)' : '#22c55e'}`,
-            cursor: 'pointer',
-            padding: '4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: isBooked ? 'var(--text-secondary)' : '#22c55e',
-            borderRadius: '50%',
-            transition: 'all 0.2s ease',
-            outline: 'none'
-          }}
-          onMouseOver={(e) => {
-             e.currentTarget.style.transform = 'scale(1.1)';
-          }}
-          onMouseOut={(e) => {
-             e.currentTarget.style.transform = 'scale(1)';
-          }}
+        <button
+          onClick={(e) => { e.stopPropagation(); toggleStatus(category, id, status, setStatusState); }}
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.75rem', padding: '0.1rem 0.3rem' }}
+          title="Toggle status"
         >
-          {isBooked ? (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-          ) : (
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          )}
+          ↻
         </button>
+      </div>
+    );
+  };
+
+  const renderSectionHeader = (title, icon, sectionKey, count) => {
+    const isOpen = openSections[sectionKey];
+    return (
+      <div
+        onClick={() => toggleSection(sectionKey)}
+        style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', marginTop: '1.5rem' }}
+      >
+        <h2 className="section-title" style={{ fontSize: '1.2rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {icon} {title}
+          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>({count})</span>
+        </h2>
+        <span style={{ transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.3s ease' }}>
+          <ChevronDownIcon />
+        </span>
       </div>
     );
   };
 
   const renderLinks = (links) => {
     if (!links || links.length === 0) return null;
+    const validLinks = links.filter(l => l && l.trim());
+    if (validLinks.length === 0) return null;
     return (
-      <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--border-light)' }}>
-        <div className="detail-label" style={{ marginBottom: '0.25rem' }}>Useful Links</div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-          {links.map((link, idx) => (
-            <span key={idx}>
-              <a href={link} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>
-                Link {idx + 1}
-              </a>
-              {idx < links.length - 1 && <span style={{ color: 'var(--text-secondary)', marginRight: '0.5rem' }}>,</span>}
-            </span>
-          ))}
+      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.75rem' }}>
+        {validLinks.map((link, i) => (
+          <a key={i} href={link} target="_blank" rel="noopener noreferrer"
+            style={{ fontSize: '0.8rem', color: 'var(--accent-primary)', textDecoration: 'none', border: '1px solid var(--accent-primary)', padding: '0.2rem 0.6rem', borderRadius: '4px' }}>
+            Link {i + 1} ↗
+          </a>
+        ))}
+      </div>
+    );
+  };
+
+  const formatMinutes = (mins) => {
+    if (!mins) return null;
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    return h > 0 ? `${h}h ${m > 0 ? m + 'm' : ''}`.trim() : `${m}m`;
+  };
+
+  const renderRouteCard = ({ id, emoji, headerTitle, date, from, to, departure, arrival, terminalFrom, terminalTo, durationMinutes, cost, links, statusBadge, extraInfo }) => (
+    <div key={id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
+      <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
+        <div style={{ fontWeight: '600', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          {emoji} {headerTitle}
+          {date && <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>— {date}</span>}
         </div>
+        {statusBadge}
+      </div>
+
+      <div style={{ padding: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', gap: '0.5rem' }}>
+          <div style={{ textAlign: 'center', minWidth: '70px' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{from}</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{departure}</div>
+            {terminalFrom && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalFrom}</div>}
+          </div>
+
+          <div style={{ flex: 1, textAlign: 'center', padding: '0 1rem' }}>
+            <div style={{ position: 'relative', margin: '0.5rem 0' }}>
+              <div style={{ borderTop: '1px dashed var(--border-light)' }} />
+              <span style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                background: 'var(--bg-color)',
+                padding: '0 8px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                lineHeight: 1
+              }}>
+                {emoji}
+              </span>
+            </div>
+            {durationMinutes && (
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '0.4rem' }}>
+                {formatMinutes(durationMinutes)}
+              </div>
+            )}
+          </div>
+
+          <div style={{ textAlign: 'center', minWidth: '70px' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{to}</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{arrival}</div>
+            {terminalTo && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalTo}</div>}
+          </div>
+        </div>
+
+        {cost && (
+          <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
+            <span className="price-tag" style={{ fontSize: '1.2rem' }}>
+              {currencySymbol}{parseCost(cost).toLocaleString('en-IN')}
+            </span>
+          </div>
+        )}
+
+        {extraInfo}
+        {renderLinks(links)}
+      </div>
+    </div>
+  );
+
+  const renderFlights = () => {
+    const flights = data?.flights || [];
+    if (flights.length === 0) return null;
+    return (
+      <div>
+        {renderSectionHeader('Flights', <PlaneIcon size={18} />, 'flights', flights.length)}
+        {openSections.flights && flights.map(f => renderRouteCard({
+          id: f.id,
+          emoji: <PlaneIcon size={16} />,
+          headerTitle: f.airline,
+          date: f.date,
+          from: f.from,
+          to: f.to,
+          departure: f.departure,
+          arrival: f.arrival,
+          terminalFrom: f.terminal?.departure,
+          terminalTo: f.terminal?.arrival,
+          durationMinutes: f.durationMinutes,
+          cost: f.cost,
+          links: f.links,
+          statusBadge: renderStatusBadge('flight', f.id, flightStatuses[f.id], setFlightStatuses)
+        }))}
+      </div>
+    );
+  };
+
+  const renderTrains = () => {
+    const trains = data?.trains || [];
+    if (trains.length === 0) return null;
+    return (
+      <div>
+        {renderSectionHeader('Trains', <TrainIcon size={18} />, 'trains', trains.length)}
+        {openSections.trains && trains.map(t => renderRouteCard({
+          id: t.id,
+          emoji: <TrainIcon size={16} />,
+          headerTitle: t.name || `Train ${t.id}`,
+          date: t.date,
+          from: t.from,
+          to: t.to,
+          departure: t.departure,
+          arrival: t.arrival,
+          durationMinutes: t.durationMinutes,
+          cost: t.cost,
+          links: t.links,
+          statusBadge: renderStatusBadge('train', t.id, trainStatuses[t.id], setTrainStatuses)
+        }))}
+      </div>
+    );
+  };
+
+  const renderBus = () => {
+    const buses = data?.bus || [];
+    if (buses.length === 0) return null;
+    return (
+      <div style={{ marginBottom: '1.5rem' }}>
+        {renderSectionHeader('Bus', <BusIcon size={18} />, 'bus', buses.length)}
+        {openSections.bus && buses.map(b => renderRouteCard({
+          id: b.id,
+          emoji: <BusIcon size={16} />,
+          headerTitle: b.provider || `Bus ${b.id}`,
+          date: b.date,
+          from: b.from,
+          to: b.to,
+          departure: b.departure,
+          arrival: b.arrival,
+          terminalFrom: b.points?.pickup,
+          terminalTo: b.points?.drop,
+          durationMinutes: b.durationMinutes,
+          cost: b.cost,
+          links: b.links,
+          statusBadge: renderStatusBadge('bus', b.id, busStatuses[b.id], setBusStatuses)
+        }))}
+      </div>
+    );
+  };
+
+  const renderRooms = () => {
+    const rooms = data?.rooms || [];
+    if (rooms.length === 0) return null;
+    return (
+      <div>
+        {renderSectionHeader('Accommodations', <BuildingIcon size={18} />, 'rooms', rooms.length)}
+        {openSections.rooms && rooms.map(room => (
+          <div key={room.id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
+            <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
+              <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <BuildingIcon size={18} /> {room.name}
+              </div>
+              {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
+            </div>
+            <div style={{ padding: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '0.75rem' }}>
+                {room.checkin && (
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-in</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{room.checkin}</div>
+                  </div>
+                )}
+                {room.checkout && (
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-out</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{room.checkout}</div>
+                  </div>
+                )}
+                {room.cost && (
+                  <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Cost</div>
+                    <div className="price-tag">{currencySymbol}{parseCost(room.cost).toLocaleString('en-IN')}</div>
+                  </div>
+                )}
+              </div>
+              {room.location && (
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                  📍 {room.mapsLink ? (
+                    <a href={room.mapsLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>{room.location} ↗</a>
+                  ) : room.location}
+                </div>
+              )}
+              {renderLinks(room.links)}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const renderActivities = () => {
+    const activities = data?.activities || [];
+    if (activities.length === 0) return null;
+    return (
+      <div>
+        {renderSectionHeader('Activities & Requirements', <CheckIcon size={18} />, 'activities', activities.length)}
+        {openSections.activities && activities.map(activity => (
+          <div key={activity.id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
+            <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
+              <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <CheckIcon size={18} /> {activity.name}
+              </div>
+              {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
+            </div>
+            <div style={{ padding: '1.25rem' }}>
+              {activity.cost !== undefined && (
+                <div style={{ textAlign: 'center', marginBottom: '0.75rem' }}>
+                  <span className="price-tag" style={{ fontSize: '1.1rem' }}>
+                    {currencySymbol}{parseCost(activity.cost).toLocaleString('en-IN')}
+                  </span>
+                </div>
+              )}
+              {activity.notes && (
+                <blockquote style={{
+                  margin: '0 0 0.5rem 0',
+                  padding: '0.6rem 1rem',
+                  borderLeft: '3px solid var(--accent-primary)',
+                  background: 'rgba(99, 102, 241, 0.07)',
+                  borderRadius: '0 6px 6px 0',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.85rem',
+                  fontStyle: 'italic',
+                  lineHeight: '1.6'
+                }}>
+                  {activity.notes}
+                </blockquote>
+              )}
+              {renderLinks(activity.links)}
+            </div>
+          </div>
+        ))}
       </div>
     );
   };
 
   return (
     <div className="content-area">
-      <div 
-        className="flex justify-between items-center cursor-pointer mb-2 mt-4" 
-        onClick={() => setIsFlightsOpen(!isFlightsOpen)}
-        style={{ cursor: 'pointer' }}
-      >
-        <h2 className="section-title" style={{ margin: 0 }}>
-          <PlaneIcon /> Flights
-        </h2>
-        <span style={{ 
-          transform: isFlightsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s ease',
-          color: 'var(--text-secondary)'
-        }}>
-          <ChevronDownIcon />
-        </span>
-      </div>
-
-      {isFlightsOpen && data.flights.map(flight => (
-        <div key={flight.id} className="card">
-          <div className="flex justify-between items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
-            <div>
-               <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-                 {flight.from} → {flight.to}
-               </div>
-               {flight.type && (
-                 <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
-                   {flight.type} Flight
-                 </div>
-               )}
-            </div>
-            {renderStatusBadge('flight', flight.id, flightStatuses[flight.id], setFlightStatuses)}
-          </div>
-
-          <div className="detail-row">
-            <span className="detail-label">Date</span>
-            <span className="detail-value highlight">{flight.date}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">Airline</span>
-            <span className="detail-value">{flight.airline}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">Time</span>
-            <span className="detail-value">{flight.departure} - {flight.arrival} ({flight.duration})</span>
-          </div>
-
-          {flight.terminal && (flight.terminal.departure || flight.terminal.arrival) && (
-            <div className="detail-row">
-              <span className="detail-label">Terminals</span>
-              <span className="detail-value">
-                Dep: {flight.terminal.departure || '-'} | Arr: {flight.terminal.arrival || '-'}
-              </span>
-            </div>
-          )}
-
-          {flight.baggage && (flight.baggage.cabin || flight.baggage.checkin) && (
-            <div className="detail-row">
-              <span className="detail-label">Baggage</span>
-              <span className="detail-value">
-                Cabin: {flight.baggage.cabin || '-'} | Check-in: {flight.baggage.checkin || '-'}
-              </span>
-            </div>
-          )}
-
-          {(flight.pnr || flight.seat) && (
-            <div className="detail-row">
-              <span className="detail-label">Booking Info</span>
-              <span className="detail-value">
-                {flight.pnr && `PNR: ${flight.pnr}`} {flight.pnr && flight.seat && '| '} {flight.seat && `Seat: ${flight.seat}`}
-              </span>
-            </div>
-          )}
-
-          {flight.booking && flight.booking.platform && (
-            <div className="detail-row">
-              <span className="detail-label">Booked Via</span>
-              <span className="detail-value">
-                {flight.booking.platform} {flight.booking.bookedOn && `(${flight.booking.bookedOn})`}
-              </span>
-            </div>
-          )}
-
-          <div className="detail-row mt-4 mb-2">
-            <span className="detail-label">Price</span>
-            <span className="price-tag">{flight.price}</span>
-          </div>
-
-          {(flight.timeToAirport || flight.notes) && (
-            <div className="pt-2" style={{ borderTop: '1px dashed var(--border-light)' }}>
-              {flight.timeToAirport && (
-                <div style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                  <strong style={{ color: 'var(--text-primary)' }}>To Airport:</strong> {flight.timeToAirport}
-                </div>
-              )}
-              {flight.notes && (
-                <div style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem' }}>
-                  {flight.notes}
-                </div>
-              )}
-            </div>
-          )}
-
-          {flight.alerts && flight.alerts.length > 0 && (
-             <div className="mt-2 pt-2" style={{ borderTop: flight.timeToAirport || flight.notes ? 'none' : '1px dashed var(--border-light)' }}>
-               {flight.alerts.map((alert, idx) => (
-                 <div key={idx} style={{ color: 'var(--accent-warning)', fontSize: '0.85rem', marginBottom: '0.25rem' }}>
-                   ⚠️ {alert}
-                 </div>
-               ))}
-             </div>
-          )}
-
-          {renderLinks(flight.links)}
-        </div>
-      ))}
-
-      <div 
-        className="flex justify-between items-center cursor-pointer mb-2 mt-4" 
-        onClick={() => setIsRoomsOpen(!isRoomsOpen)}
-        style={{ cursor: 'pointer' }}
-      >
-        <h2 className="section-title" style={{ margin: 0 }}>
-          <BuildingIcon /> Accommodations
-        </h2>
-        <span style={{ 
-          transform: isRoomsOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s ease',
-          color: 'var(--text-secondary)'
-        }}>
-          <ChevronDownIcon />
-        </span>
-      </div>
-
-      {isRoomsOpen && data.rooms.map(room => (
-        <div key={room.id} className="card">
-          <div className="flex justify-between items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
-             <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-               {room.name}
-             </div>
-             {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">Location</span>
-            <span className="detail-value">{room.location}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">Check-in</span>
-            <span className="detail-value">{room.checkin}</span>
-          </div>
-          <div className="detail-row">
-            <span className="detail-label">Check-out</span>
-            <span className="detail-value">{room.checkout}</span>
-          </div>
-          <div className="detail-row mt-4">
-            <span className="detail-label">Price</span>
-            <span className="price-tag">{room.price}</span>
-          </div>
-          {renderLinks(room.links)}
-        </div>
-      ))}
-
-      <div 
-        className="flex justify-between items-center cursor-pointer mb-2 mt-4" 
-        onClick={() => setIsActivitiesOpen(!isActivitiesOpen)}
-        style={{ cursor: 'pointer' }}
-      >
-        <h2 className="section-title" style={{ margin: 0 }}>
-          <CheckIcon /> Activities & Requirements
-        </h2>
-        <span style={{ 
-          transform: isActivitiesOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-          transition: 'transform 0.3s ease',
-          color: 'var(--text-secondary)'
-        }}>
-          <ChevronDownIcon />
-        </span>
-      </div>
-
-      {isActivitiesOpen && data.activities.map(activity => (
-        <div key={activity.id} className="card">
-          <div className="flex justify-between items-center mb-3 pb-2" style={{ borderBottom: '1px solid var(--border-light)' }}>
-             <div style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-               {activity.name}
-             </div>
-             {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
-          </div>
-          {activity.duration && (
-            <div className="detail-row">
-              <span className="detail-label">Duration</span>
-              <span className="detail-value">{activity.duration}</span>
-            </div>
-          )}
-          {activity.price && (
-            <div className="detail-row">
-              <span className="detail-label">Price</span>
-              <span className="price-tag">{activity.price}</span>
-            </div>
-          )}
-          {activity.priority && (
-            <div className="detail-row">
-              <span className="detail-label">Priority</span>
-              <span className="detail-value">
-                <span className={`badge ${activity.priority === 'high' ? 'required' : activity.priority === 'medium' ? 'pending' : 'done'}`}>
-                  {activity.priority}
-                </span>
-              </span>
-            </div>
-          )}
-          {activity.notes && (
-            <div className="mt-3 pt-3" style={{ borderTop: '1px dashed var(--border-light)', color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.9rem', lineHeight: '1.4' }}>
-              {activity.notes}
-            </div>
-          )}
-          {renderLinks(activity.links)}
-        </div>
-      ))}
+      {renderFlights()}
+      {renderTrains()}
+      {renderBus()}
+      {renderRooms()}
+      {renderActivities()}
     </div>
   );
 };

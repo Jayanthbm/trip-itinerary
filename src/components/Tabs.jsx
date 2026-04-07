@@ -139,7 +139,7 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
             className={`tab-btn ${activeTab === `day-${index}` ? 'active' : ''}`}
             onClick={(e) => handleTabClick(index, e)}
           >
-            {dayObj.day ? dayObj.day : `Day ${index}`}
+            {dayObj.day && dayObj.day.length < 8 ? dayObj.day : `Day ${index + 1}`}
           </button>
         ))}
       </div>
