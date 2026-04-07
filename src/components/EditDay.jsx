@@ -77,7 +77,7 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
   };
 
   return (
-    <div className="edit-day-container" style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+    <div className="edit-day-container" style={{ padding: '1.25rem', paddingBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       {confirmDelete.show && (
         <ConfirmPopover 
           message={`Are you sure you want to remove this ${confirmDelete.type === 'timeline' ? 'schedule item' : confirmDelete.type === 'checklist' ? 'task' : 'cost'}?`}
@@ -86,10 +86,10 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
         />
       )}
       {/* Basic Info */}
-      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem' }}>
-        <h3 className="mb-4" style={{ color: 'var(--accent-primary)' }}>General Info - {dayData.day}</h3>
+      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.25rem' }}>
+        <h3 className="mb-4" style={{ color: 'var(--accent-primary)', fontSize: '1.1rem' }}>General Info - {dayData.day}</h3>
         <div className="form-group mb-4">
-          <label>Day Title</label>
+          <label style={{ fontSize: '0.8rem' }}>Day Title</label>
           <input
             type="text"
             className="form-input"
@@ -99,7 +99,7 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
           />
         </div>
         <div className="form-group">
-          <label>Summary / Narrative</label>
+          <label style={{ fontSize: '0.8rem' }}>Summary / Narrative</label>
           <textarea
             className="form-input"
             style={{ minHeight: '80px' }}
@@ -111,9 +111,9 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
       </section>
 
       {/* Checklist */}
-      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem' }}>
+      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h3 style={{ color: 'var(--accent-secondary)' }}>Daily Checklist</h3>
+          <h3 style={{ color: 'var(--accent-secondary)', fontSize: '1.1rem' }}>Daily Checklist</h3>
           <button className="tab-btn" onClick={handleAddChecklist} style={{ background: 'var(--accent-secondary)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem' }}>
             <PlusIcon size={14} /> Add Task
           </button>
@@ -142,21 +142,28 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem' }}>
+      {/* Timeline Section -> Redesigned to Card View */}
+      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h3 style={{ color: 'var(--accent-primary)' }}>Daily Timeline</h3>
+          <h3 style={{ color: 'var(--accent-primary)', fontSize: '1.1rem' }}>Daily Timeline</h3>
           <button className="tab-btn" onClick={handleAddTimeline} style={{ background: 'var(--accent-primary)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem' }}>
             <PlusIcon size={14} /> Add Schedule
           </button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
           {dayData.timeline.map((item, idx) => (
-            <div key={idx} ref={idx === dayData.timeline.length - 1 ? lastTimelineRef : null} className="timeline-item" style={{ marginBottom: 0, paddingLeft: '3rem' }}>
-              <div className="timeline-icon" style={{ left: 0, top: '10px' }}>{idx + 1}</div>
-              <div className="timeline-content" style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.75rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div 
+              key={idx} 
+              ref={idx === dayData.timeline.length - 1 ? lastTimelineRef : null} 
+              className="card" 
+              style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--border-light)' }}
+            >
+              {/* Card Header with Number and Actions */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.5rem' }}>
+                <span style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>item {idx + 1}</span>
+                <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', gap: '0.4rem' }}>
                     <button
                       disabled={idx === 0}
                       onClick={() => handleMoveTimeline(idx, -1)}
@@ -176,16 +183,36 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
                     <TrashIcon size={18} />
                   </button>
                 </div>
+              </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem' }}>
-                  <div className="form-group flex-1">
-                    <label style={{ fontSize: '0.75rem' }}>Time</label>
-                    <input type="text" className="form-input" value={item.time} onChange={(e) => handleUpdateTimeline(idx, { time: e.target.value })} placeholder="9:00 AM" />
-                  </div>
-                  <div className="form-group flex-1" style={{ flex: '2 1 200px' }}>
-                    <label style={{ fontSize: '0.75rem' }}>Title</label>
-                    <input type="text" className="form-input" value={item.title} onChange={(e) => handleUpdateTimeline(idx, { title: e.target.value })} placeholder="Activity name" />
-                  </div>
+              {/* Multi-Row Card Layout */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {/* Row 1: Time */}
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem' }}>Time</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    value={item.time} 
+                    onChange={(e) => handleUpdateTimeline(idx, { time: e.target.value })} 
+                    placeholder="e.g., 09:00 AM" 
+                  />
+                </div>
+
+                {/* Row 2: Title */}
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem' }}>Title</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    value={item.title} 
+                    onChange={(e) => handleUpdateTimeline(idx, { title: e.target.value })} 
+                    placeholder="Activity name" 
+                  />
+                </div>
+
+                {/* Row 3: Duration, Cost */}
+                <div style={{ display: 'flex', gap: '1rem' }}>
                   <div className="form-group flex-1">
                     <label style={{ fontSize: '0.75rem' }}>Duration</label>
                     <input type="text" className="form-input" value={item.duration} onChange={(e) => handleUpdateTimeline(idx, { duration: e.target.value })} placeholder="2h" />
@@ -194,26 +221,39 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
                     <label style={{ fontSize: '0.75rem' }}>Cost ({currencySymbol})</label>
                     <input type="number" className="form-input" value={item.cost} onChange={(e) => handleUpdateTimeline(idx, { cost: parseFloat(e.target.value) || 0 })} />
                   </div>
-                  <div className="form-group flex-1">
-                    <label style={{ fontSize: '0.75rem' }}>Location</label>
-                    <input type="text" className="form-input" value={item.location} onChange={(e) => handleUpdateTimeline(idx, { location: e.target.value })} />
-                  </div>
-                  <div className="form-group flex-1">
-                    <label style={{ fontSize: '0.75rem' }}>Maps Link</label>
-                    <input type="url" className="form-input" value={item.mapsLink} onChange={(e) => handleUpdateTimeline(idx, { mapsLink: e.target.value })} />
-                  </div>
-                  <div className="form-group flex-1" style={{ minWidth: '100%', gridColumn: 'span 2' }}>
-                    <label style={{ fontSize: '0.75rem' }}>Description</label>
-                    <textarea className="form-input" style={{ minHeight: '60px' }} value={item.description} onChange={(e) => handleUpdateTimeline(idx, { description: e.target.value })} />
-                  </div>
+                </div>
+
+                {/* Row 4: Location */}
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem' }}>Location</label>
+                  <input type="text" className="form-input" value={item.location} onChange={(e) => handleUpdateTimeline(idx, { location: e.target.value })} />
+                </div>
+
+                {/* Row 5: Maps Link */}
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem' }}>Maps Link</label>
+                  <input type="url" className="form-input" value={item.mapsLink} onChange={(e) => handleUpdateTimeline(idx, { mapsLink: e.target.value })} />
+                </div>
+
+                {/* Row 6: Description */}
+                <div className="form-group">
+                  <label style={{ fontSize: '0.75rem' }}>Description</label>
+                  <textarea 
+                    className="form-input" 
+                    style={{ minHeight: '80px' }} 
+                    value={item.description} 
+                    onChange={(e) => handleUpdateTimeline(idx, { description: e.target.value })} 
+                    placeholder="Describe the activity..."
+                  />
                 </div>
               </div>
             </div>
           ))}
+
           {dayData.timeline.length > 3 && (
-            <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center' }}>
               <button className="tab-btn" onClick={handleAddTimeline} style={{ background: 'var(--accent-primary)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.6rem 1.2rem' }}>
-                <PlusIcon size={14} /> Add Schedule at End
+                <PlusIcon size={14} /> Add Schedule
               </button>
             </div>
           )}
@@ -222,16 +262,16 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
       </section>
 
       {/* Additional Budget */}
-      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.5rem' }}>
+      <section className="card" style={{ background: 'rgba(255,255,255,0.02)', padding: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h3 style={{ color: 'var(--accent-warning)' }}>Additional Daily Budget</h3>
+          <h3 style={{ color: 'var(--accent-warning)', fontSize: '1.1rem' }}>Additional Daily Budget</h3>
           <button className="tab-btn" onClick={handleAddBudget} style={{ background: 'var(--accent-warning)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem' }}>
             <PlusIcon size={14} /> Add Cost
           </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {dayData.additionalBudget.map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', gap: '1rem', alignItems: 'flex-end' }}>
+            <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-end' }}>
               <div className="form-group" style={{ flex: 2 }}>
                 <label style={{ fontSize: '0.75rem' }}>Reason</label>
                 <input

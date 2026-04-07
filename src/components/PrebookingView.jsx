@@ -104,6 +104,19 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
     return h > 0 ? `${h}h ${m > 0 ? m + 'm' : ''}`.trim() : `${m}m`;
   };
 
+  const formatTime12h = (timeStr) => {
+    if (!timeStr || typeof timeStr !== 'string') return timeStr;
+    const timeMatch = timeStr.match(/^(\d{1,2}):(\d{2})(.*)$/);
+    if (!timeMatch) return timeStr;
+
+    let [_, hoursStr, minutes, suffix] = timeMatch;
+    let hours = parseInt(hoursStr, 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+    return `${hours}:${minutes} ${ampm}${suffix || ''}`;
+  };
+
   const renderRouteCard = ({ id, emoji, headerTitle, date, from, to, departure, arrival, terminalFrom, terminalTo, durationMinutes, cost, links, statusBadge, extraInfo }) => (
     <div key={id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
       <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
@@ -118,7 +131,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', gap: '0.5rem' }}>
           <div style={{ textAlign: 'center', minWidth: '70px' }}>
             <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{from}</div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{departure}</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{formatTime12h(departure)}</div>
             {terminalFrom && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalFrom}</div>}
           </div>
 
@@ -145,10 +158,11 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
 
           <div style={{ textAlign: 'center', minWidth: '70px' }}>
             <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{to}</div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{arrival}</div>
+            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{formatTime12h(arrival)}</div>
             {terminalTo && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalTo}</div>}
           </div>
         </div>
+
 
         {cost && (
           <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
@@ -259,13 +273,13 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
                 {room.checkin && (
                   <div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-in</div>
-                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{room.checkin}</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{formatTime12h(room.checkin)}</div>
                   </div>
                 )}
                 {room.checkout && (
                   <div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-out</div>
-                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{room.checkout}</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{formatTime12h(room.checkout)}</div>
                   </div>
                 )}
                 {room.cost && (

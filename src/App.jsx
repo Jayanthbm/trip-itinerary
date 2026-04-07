@@ -6,6 +6,7 @@ import BudgetView from './components/BudgetView';
 import CreateItineraryModal from './components/CreateItineraryModal';
 import EditView from './components/EditView';
 import ConfirmPopover from './components/ConfirmPopover';
+import vietnamSample from './samples/benagluru_vietnam_7.json';
 
 const calculateEndDate = (startDate, daysCount) => {
   if (!startDate || !daysCount) return "";
@@ -36,7 +37,7 @@ const validateData = (data) => {
 const sampleItinerary = [
   {
     name: "Bengaluru - Vietnam (7 days)",
-    url: "https://www.jsonkeeper.com/b/J1XIS",
+    data: vietnamSample,
   },
 ];
 
@@ -157,10 +158,23 @@ function App() {
     localStorage.setItem('edits_made', 'true');
   };
 
+  const handleLoadLocalData = (data) => {
+    if (validateData(data)) {
+      setError("Invalid itinerary data");
+      return;
+    }
+    setAppData(data);
+    setActiveTab('day-0');
+    localStorage.setItem('it_loaded', JSON.stringify(data));
+    localStorage.removeItem('it_url');
+    localStorage.removeItem('last_fetch');
+    setEditsMade(false);
+    localStorage.removeItem('edits_made');
+    setError(null);
+  };
+
   const handleCreateNew = (formData) => {
     const { title, startDate, endDate, currency } = formData;
-
-    // Generate days
     const start = new Date(startDate);
     const end = new Date(endDate);
     const days = [];
@@ -180,15 +194,7 @@ function App() {
       index++;
     }
 
-    // PrebookingData shell
-    const prebookingData = {
-      flights: [],
-      trains: [],
-      bus: [],
-      rooms: [],
-      activities: []
-    };
-
+    const prebookingData = { flights: [], trains: [], bus: [], rooms: [], activities: [] };
     const newItinerary = {
       title,
       startDate: new Date(startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
@@ -205,7 +211,7 @@ function App() {
     setEditsMade(true);
     localStorage.setItem('edits_made', 'true');
     setShowCreateModal(false);
-    setIsEditing(true); // Enter edit mode immediately
+    setIsEditing(true);
   };
 
   const handleFileUpload = (e) => {
@@ -243,9 +249,6 @@ function App() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-
-    // If we've made edits and downloaded, maybe clear edits flag?
-    // Not necessarily, but user might expect it.
   };
 
   const handleUrlLoad = async (e) => {
@@ -277,7 +280,6 @@ function App() {
     setEditsMade(false);
     setIsEditing(false);
     setShowCloseConfirm(false);
-
     const url = new URL(window.location);
     if (url.searchParams.has('it')) {
       url.searchParams.delete('it');
@@ -319,6 +321,13 @@ function App() {
   };
 
   if (!appData) {
+    if (showCreateModal) {
+      return (
+        <div className="app-container">
+          <CreateItineraryModal onSave={handleCreateNew} onCancel={() => setShowCreateModal(false)} />
+        </div>
+      );
+    }
     return (
       <div className="app-container" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
         <h1 style={{ color: '#fff', textAlign: 'center', marginBottom: '2rem' }}>Welcome to Itinerary Viewer</h1>
@@ -357,13 +366,11 @@ function App() {
         <h2 style={{ color: 'var(--text-primary)', marginBottom: '1rem' }}>Sample Itineraries</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
           {sampleItinerary.map((item, index) => (
-            <button key={index} onClick={() => fetchData(item.url)} style={{ padding: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.5rem', transition: 'border-color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
+            <button key={index} onClick={() => item.data ? handleLoadLocalData(item.data) : fetchData(item.url)} style={{ padding: '1rem', background: 'var(--bg-secondary)', border: '1px solid var(--border-light)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '0.5rem', transition: 'border-color 0.2s' }} onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'} onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}>
               <span style={{ fontWeight: 'bold' }}>{item.name}</span>
             </button>
           ))}
         </div>
-
-        {showCreateModal && <CreateItineraryModal onSave={handleCreateNew} onCancel={() => setShowCreateModal(false)} />}
       </div>
     );
   }
@@ -419,9 +426,8 @@ function App() {
         </button>
       )}
 
-      {showCreateModal && <CreateItineraryModal onSave={handleCreateNew} onCancel={() => setShowCreateModal(false)} />}
       {showCloseConfirm && (
-        <ConfirmPopover 
+        <ConfirmPopover
           message="You have unsaved changes! Are you sure you want to close? Download your itinerary to save permanently."
           confirmText="Close & Lose Edits"
           onConfirm={executeClose}
