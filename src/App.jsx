@@ -42,7 +42,7 @@ const validateData = (data) => {
 
 const sampleItinerary = [
   {
-    name: "Benglore- Vietnam (7 days)",
+    name: "Bengaluru - Vietnam (7 days)",
     url: "https://www.jsonkeeper.com/b/J1XIS",
   },
 ];
