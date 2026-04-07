@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
-const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
+const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -61,8 +61,10 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
               Prebooking
             </button>
             <button
-              className="tab-btn"
-              onClick={() => setActiveTab('budget')}
+              className={`tab-btn ${isEditing ? 'disabled' : ''}`}
+              onClick={() => !isEditing && setActiveTab('budget')}
+              disabled={isEditing}
+              title={isEditing ? "Budget view is disabled during editing" : ""}
               style={{
                 padding: '0.4rem 1rem',
                 background: activeTab === 'budget' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
@@ -71,7 +73,8 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking }) => {
                 color: activeTab === 'budget' ? '#fff' : 'var(--text-primary)',
                 fontSize: '0.9rem',
                 boxShadow: 'var(--shadow-md)',
-                cursor: 'pointer'
+                cursor: isEditing ? 'not-allowed' : 'pointer',
+                opacity: isEditing ? 0.5 : 1
               }}
             >
               Total Budget
