@@ -141,12 +141,12 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
                   <h4 className="timeline-title">{event.title}</h4>
                   <p className="timeline-desc">{event.description}</p>
 
-                  {(event.duration || event.cost) && (
+                  {(event.duration || event.cost) ? (
                     <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                      {event.duration && <span>⏱️ {event.duration}</span>}
-                      {event.cost && <span>💰 {currencySymbol}{Number(event.cost).toLocaleString('en-IN')}</span>}
+                      {event.duration ? <span>⏱️ {event.duration}</span> : null}
+                      {event.cost ? <span>💰 {currencySymbol}{Number(event.cost).toLocaleString('en-IN')}</span> : null}
                     </div>
-                  )}
+                  ) : null}
 
                   {event.location && (
                     <div style={{ marginTop: '0.35rem', fontSize: '0.85rem' }}>

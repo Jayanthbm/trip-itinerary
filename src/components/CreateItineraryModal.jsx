@@ -106,15 +106,25 @@ const CreateItineraryModal = ({ onSave, onCancel }) => {
             </select>
           </div>
 
-          <div style={{ marginTop: '1rem' }}>
+          <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <button 
               type="submit" 
               className="tab-btn" 
-              style={{ width: '100%', background: 'var(--accent-primary)', border: 'none', color: '#fff', padding: '1rem', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', transition: 'transform 0.2s' }}
+              style={{ width: '100%', background: 'var(--accent-primary)', border: 'none', color: '#fff', padding: '1rem', fontSize: '1.1rem', fontWeight: 'bold', borderRadius: '8px', cursor: 'pointer', transition: 'transform 0.2s', margin: 0 }}
               onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
               onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
             >
               Start Planning Trip
+            </button>
+            <button 
+              type="button"
+              onClick={onCancel}
+              className="tab-btn" 
+              style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-light)', color: 'var(--text-secondary)', padding: '1rem', fontSize: '1rem', borderRadius: '8px', cursor: 'pointer', transition: 'all 0.2s', margin: 0 }}
+              onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+              onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
+              Cancel
             </button>
           </div>
         </form>

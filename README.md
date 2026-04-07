@@ -10,7 +10,7 @@ Trip Itinerary Viewer serves as an elegant, robust UI shell that can ingest arbi
 
 ### **Dynamic Data Loading**
 - **Query Parameter Linking:** Launch exactly where you want by injecting a `?it=URL` property directly into the web address bar. The app will immediately intercept this, download the JSON, and map the UI.
-- **URL Importer:** A simple input box to natively fetch external JSON endpoints on the fly. 
+- **URL Importer:** A simple input box to natively fetch external JSON endpoints on the fly.
 - **Offline File Uploads:** Direct `<input type="file" />` integration allowing you to load `*.json` documents locally without network requests.
 - **JSON Exporter:** Hit "Download" at any time to dump the currently active itinerary scope back into a formatted `*.json` file on disk.
 
@@ -72,11 +72,11 @@ The application relies on a specific JSON structure to render itineraries correc
 ### Pre-booking Section (`prebookingData`)
 Contains specialized arrays for major reservations. All items require an `id` (Number) and `status` ("Pending" or "Booked").
 
-- **`flights`**: `date` (YYYY-MM-DD), `from`/`to` (Codes), `departure`/`arrival`, `airline`, `durationMinutes` (Number), `cost` (Number), `terminal: { departure, arrival }`, `links[]`.
+- **`flights`**: `date` (YYYY-MM-DD), `from`/`to` (Codes), `departure`/`arrival`, `airline`, `durationMinutes` (Number), `cost` (Number), `terminal: { departure, arrival }`,`status` (Pending), `links[]`.
 - **`trains`**: `date`, `from`/`to`, `name`, `departure`/`arrival`, `durationMinutes` (Number), `cost`, `links[]`.
-- **`bus`**: `date`, `from`/`to`, `departure`/`arrival`, `provider`, `durationMinutes` (Number), `cost`, `points: { pickup, drop }`, `links[]`.
-- **`rooms`**: `name`, `checkin`/`checkout` (YYYY-MM-DD HH:mm), `cost`, `location`, `mapsLink`, `links[]`.
-- **`activities`**: `name`, `cost`, `notes`, `links[]`, `excludeFromBudget` (Boolean).
+- **`bus`**: `date`, `from`/`to`, `departure`/`arrival`, `provider`, `durationMinutes` (Number), `cost`, `points: { pickup, drop }`,`status` (Pending), `links[]`.
+- **`rooms`**: `name`, `checkin`/`checkout` (YYYY-MM-DD HH:mm), `cost`, `location`, `mapsLink`,`status` (Pending), `links[]`.
+- **`activities`**: `name`, `cost`, `notes`, `links[]`, `status` (Pending),`excludeFromBudget` (Boolean).
 
 ---
 

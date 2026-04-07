@@ -6,7 +6,7 @@ const EditPrebooking = ({ data, onSave, currencySymbol }) => {
   const [activeSubTab, setActiveSubTab] = useState('flight');
   const [confirmDelete, setConfirmDelete] = useState({ show: false, itemId: null });
   const lastItemRef = useRef(null);
-  
+
   // Normalized singular IDs for consistency and proper "Add [Type]" labels
   const categories = [
     { id: 'flight', label: 'Flights', icon: <PlaneIcon size={18} /> },
@@ -191,7 +191,7 @@ const EditPrebooking = ({ data, onSave, currencySymbol }) => {
               <div key={item.id} ref={index === items.length - 1 ? lastItemRef : null} className="card" style={{ marginBottom: 0, padding: '1.25rem', background: 'rgba(255,255,255,0.02)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.75rem' }}>
                   <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                    <span style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>ID: {item.id.toString().slice(-4)}</span>
+                    <span style={{ fontWeight: 'bold', color: 'var(--accent-primary)' }}>ID: {item?.id?.toString().slice(-4)}</span>
                     <select
                       className="form-input"
                       style={{ padding: '0.2rem 0.5rem', fontSize: '0.8rem', width: 'auto', height: '28px' }}
