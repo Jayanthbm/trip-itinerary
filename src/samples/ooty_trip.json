@@ -1,0 +1,446 @@
+{
+  "title": "Trip to Ooty",
+  "startDate": "2026-07-04",
+  "currency": "INR",
+  "numPeople": 2,
+  "days": [
+    {
+      "day": "Start",
+      "title": "Departure from Home",
+      "summary": "Travel from home to bus boarding point via cab and begin honeymoon journey comfortably.",
+      "checklist": [
+        "Travel bag",
+        "Umbrella / raincoat",
+        "Snacks & water",
+        "Light jacket / shawl",
+        "Neck pillow (optional)",
+        "Headphones / offline music",
+        "Phone charger / power bank",
+        "Tickets / ID proof"
+      ],
+      "timeline": [
+        {
+          "time": "09:15 PM",
+          "title": "Cab from Home",
+          "description": "Take cab from home to bus boarding point in Bengaluru. Leave slightly early to account for traffic.",
+          "duration": "1h",
+          "location": "Bus Pickup Point",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "10:15 PM",
+          "title": "Reach Boarding Point",
+          "description": "Arrive early, locate bus, confirm seat, and settle in without rush.",
+          "duration": "45m",
+          "location": "Bus Pickup Point",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "11:00 PM",
+          "title": "Board Night Bus",
+          "description": "Overnight bus to Ooty. Relax, enjoy music, and start the honeymoon journey.",
+          "duration": "8h",
+          "location": "Bus Pickup Point",
+          "mapsLink": "",
+          "cost": 0
+        }
+      ],
+      "additionalBudget": [
+        {
+          "title": "Snacks",
+          "cost": 200
+        },
+        {
+          "title": "Dinner before boarding",
+          "cost": 400
+        }
+      ]
+    },
+    {
+      "day": "Day 1",
+      "title": "Arrival and Orientation",
+      "summary": "Arrive Ooty early morning, settle in, and enjoy a relaxed first day with light sightseeing.",
+      "checklist": [
+        "Comfortable shoes",
+        "Umbrella / raincoat",
+        "Light jacket",
+        "Extra socks (rain backup)",
+        "Snacks",
+        "Phone charger / power bank"
+      ],
+      "additionalBudget": [
+        { "title": "Early check-in (if charged)", "cost": 1000 }
+      ],
+      "timeline": [
+        {
+          "time": "07:30 AM",
+          "title": "Arrive Ooty",
+          "description": "Bus reaches Ooty early morning. Freshen up at nearby restroom if needed.",
+          "duration": "",
+          "location": "Ooty Bus Stand",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "08:00 AM",
+          "title": "Breakfast nearby",
+          "description": "Have a relaxed breakfast at a nearby café. Avoid rushing since you'll be tired from travel.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "09:15 AM",
+          "title": "Travel to Hotel",
+          "description": "Hire cab to Reflections Guest House. Roads may be slow due to fog/rain.",
+          "duration": "30m",
+          "location": "Ooty Bus Stand → Reflections Guest House",
+          "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
+          "cost": 500
+        },
+        {
+          "time": "10:00 AM",
+          "title": "Hotel Check-in / Rest",
+          "description": "Check-in if available or leave luggage. Rest well after overnight journey.",
+          "duration": "2h",
+          "location": "Reflections Guest House, Ooty",
+          "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
+          "cost": 0
+        },
+        {
+          "time": "12:30 PM",
+          "title": "Ooty Lake Visit",
+          "description": "Visit  for boating and a relaxed walk. Skip if heavy rain.",
+          "duration": "1.5h",
+          "location": "Ooty Lake, Ooty",
+          "mapsLink": "https://goo.gl/maps/3y9GZqj7QXt",
+          "cost": 300
+        },
+        {
+          "time": "02:00 PM",
+          "title": "Lunch",
+          "description": "Lunch at a nearby restaurant. Choose a cozy indoor place due to weather.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 800
+        },
+        {
+          "time": "03:30 PM",
+          "title": "Afternoon Rest / Hotel Relax",
+          "description": "Relax at hotel, enjoy misty views, or nap. Important to recover energy.",
+          "duration": "2h",
+          "location": "Reflections Guest House",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "05:30 PM",
+          "title": "Evening Stroll / Café Time",
+          "description": "Short walk nearby or visit a cozy café if weather permits.",
+          "duration": "1h",
+          "location": "Near Reflections Guest House",
+          "mapsLink": "",
+          "cost": 300
+        },
+        {
+          "time": "08:00 PM",
+          "title": "Dinner",
+          "description": "Relaxed dinner at hotel or nearby restaurant. Keep it light and cozy.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 1000
+        }
+      ]
+    },
+    {
+      "day": "Day 2",
+      "title": "Coonoor Day Trip & Scenic Experiences",
+      "summary": "Relaxed day trip to Coonoor with toy train (if available), scenic views, and café time.",
+      "checklist": [
+        "Comfortable walking shoes",
+        "Rain protection (umbrella / poncho)",
+        "Light jacket",
+        "Camera",
+        "Cash for small shops"
+      ],
+      "additionalBudget": [
+        { "title": "Cab backup (Coonoor travel)", "cost": 1500 }
+      ],
+      "timeline": [
+        {
+          "time": "08:00 AM",
+          "title": "Breakfast",
+          "description": "Relaxed breakfast at hotel. Keep the morning flexible based on weather.",
+          "duration": "1h",
+          "location": "Reflections Guest House",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "09:30 AM",
+          "title": "Travel to Station",
+          "description": "Head to station for toy train. If train is delayed/cancelled, switch to cab to .",
+          "duration": "30m",
+          "location": "Ooty Railway Station",
+          "mapsLink": "",
+          "cost": 300
+        },
+        {
+          "time": "10:30 AM",
+          "title": "Toy Train to Coonoor (or Cab)",
+          "description": "Board  for scenic ride OR take cab if unavailable.",
+          "duration": "1h 15m",
+          "location": "Ooty → Coonoor",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "12:00 PM",
+          "title": "Explore Coonoor",
+          "description": "Visit tea estates, viewpoints, and enjoy the peaceful vibe. Keep it unhurried.",
+          "duration": "2h",
+          "location": "Coonoor",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "02:00 PM",
+          "title": "Lunch with View",
+          "description": "Lunch at a scenic café (tea estate view preferred). Take your time.",
+          "duration": "1h",
+          "location": "Coonoor",
+          "mapsLink": "",
+          "cost": 800
+        },
+        {
+          "time": "03:30 PM",
+          "title": "Relaxed Café / Walk",
+          "description": "Short walk or café time. Avoid rushing multiple spots.",
+          "duration": "1h",
+          "location": "Coonoor",
+          "mapsLink": "",
+          "cost": 300
+        },
+        {
+          "time": "04:30 PM",
+          "title": "Return to Ooty (Cab Preferred)",
+          "description": "Return by cab for flexibility and comfort (better than depending on return train).",
+          "duration": "1h",
+          "location": "Coonoor → Ooty",
+          "mapsLink": "",
+          "cost": 1000
+        },
+        {
+          "time": "06:00 PM",
+          "title": "Rest at Hotel",
+          "description": "Relax and freshen up after the day.",
+          "duration": "1h",
+          "location": "Reflections Guest House",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "07:30 PM",
+          "title": "Dinner",
+          "description": "Cozy dinner at hotel or nearby restaurant.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 1000
+        }
+      ]
+    },
+    {
+      "day": "Day 3",
+      "title": "Leisure Day & Return",
+      "summary": "Relaxed final day with optional sunrise viewpoint, light exploration, café time, and comfortable departure to Bengaluru.",
+      "checklist": [
+        "Souvenirs",
+        "Packed luggage",
+        "Camera / phone",
+        "Rain protection",
+        "Phone charger / power bank"
+      ],
+      "additionalBudget": [
+        { "title": "Evening café / snacks", "cost": 400 }
+      ],
+      "timeline": [
+        {
+          "time": "07:30 AM",
+          "title": "Optional: Doddabetta Peak",
+          "description": "Visit Doddabetta Peak early morning ONLY if weather is clear. Skip if foggy or rainy.",
+          "duration": "1.5h",
+          "location": "Doddabetta Peak, Ooty",
+          "mapsLink": "https://goo.gl/maps/FgzP6wYP1S62",
+          "cost": 500
+        },
+        {
+          "time": "09:00 AM",
+          "title": "Breakfast",
+          "description": "Relaxed breakfast at hotel after returning (or skip Doddabetta and start here).",
+          "duration": "1h",
+          "location": "Reflections Guest House",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "10:30 AM",
+          "title": "Tea Estate Walk / Botanical Garden",
+          "description": "Visit tea estates or  if weather is clear.",
+          "duration": "2h",
+          "location": "Ooty",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "01:00 PM",
+          "title": "Chocolate Factory / Local Shopping",
+          "description": "Buy homemade chocolates and souvenirs from local shops.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 2000
+        },
+        {
+          "time": "02:00 PM",
+          "title": "Lunch",
+          "description": "Lunch at a cozy café or restaurant.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 800
+        },
+        {
+          "time": "03:30 PM",
+          "title": "Relax / Pack at Hotel",
+          "description": "Return to hotel, pack luggage, and relax before checkout.",
+          "duration": "2h",
+          "location": "Reflections Guest House",
+          "mapsLink": "",
+          "cost": 0
+        },
+        {
+          "time": "05:30 PM",
+          "title": "Evening Café / Viewpoint",
+          "description": "Visit a scenic café or viewpoint for a final relaxing moment in Ooty.",
+          "duration": "1.5h",
+          "location": "Ooty",
+          "mapsLink": "",
+          "cost": 500
+        },
+        {
+          "time": "07:30 PM",
+          "title": "Dinner",
+          "description": "Early dinner at a good restaurant before departure.",
+          "duration": "1h",
+          "location": "Ooty Town",
+          "mapsLink": "",
+          "cost": 1000
+        },
+        {
+          "time": "09:30 PM",
+          "title": "Travel to Bus Stand",
+          "description": "Take cab to bus stand with buffer time.",
+          "duration": "30m",
+          "location": "Reflections Guest House → Ooty Bus Stand",
+          "mapsLink": "",
+          "cost": 400
+        },
+        {
+          "time": "10:30 PM",
+          "title": "Bus to Bengaluru",
+          "description": "Board night bus back to Bengaluru.",
+          "duration": "8h",
+          "location": "Ooty Bus Stand",
+          "mapsLink": "",
+          "cost": 0
+        }
+      ]
+    }
+  ],
+  "prebookingData": {
+    "flights": [],
+    "trains": [
+      {
+        "id": 1,
+        "date": "2026-07-06",
+        "name": "Nilgiri Mountain Railway",
+        "from": "Ooty",
+        "to": "Coonoor",
+        "departure": "11:30",
+        "arrival": "12:45",
+        "durationMinutes": 75,
+        "status": "Pending",
+        "cost": 300,
+        "links": []
+      },
+      {
+        "id": 2,
+        "date": "2026-07-06",
+        "name": "Nilgiri Mountain Railway Return",
+        "from": "Coonoor",
+        "to": "Ooty",
+        "departure": "16:00",
+        "arrival": "17:15",
+        "durationMinutes": 75,
+        "status": "Pending",
+        "cost": 300,
+        "links": []
+      }
+    ],
+    "bus": [
+      {
+        "id": 1,
+        "date": "2026-07-04",
+        "from": "Bengaluru",
+        "to": "Ooty",
+        "departure": "23:00",
+        "arrival": "07:30",
+        "provider": "Overnight Bus",
+        "durationMinutes": 510,
+        "status": "Pending",
+        "cost": 1800,
+        "points": {
+          "pickup": "Bus Boarding Point, Bengaluru",
+          "drop": "Ooty Bus Stand"
+        },
+        "links": []
+      },
+      {
+        "id": 2,
+        "date": "2026-07-07",
+        "from": "Ooty",
+        "to": "Bengaluru",
+        "departure": "20:30",
+        "arrival": "06:30",
+        "provider": "Luxury Bus",
+        "durationMinutes": 480,
+        "status": "Pending",
+        "cost": 1800,
+        "points": { "pickup": "Ooty Bus Stand", "drop": "Bengaluru Central" },
+        "links": []
+      }
+    ],
+    "rooms": [
+      {
+        "id": 1,
+        "name": "Reflections Guest House",
+        "checkin": "2026-07-04 12:00",
+        "checkout": "2026-07-07 11:00",
+        "cost": 15000,
+        "status": "Pending",
+        "location": "N Lake Rd, Mani Vihar, Kathadimattam, Ooty",
+        "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
+        "links": [
+          "https://bit.ly/4sko2WA"
+        ]
+      }
+    ],
+    "activities": []
+  }
+}

@@ -32,10 +32,12 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
     if (isNaN(date.getTime())) return { dateStr: '', weekDay: '' };
     date.setDate(date.getDate() + index);
     const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    return { dateStr: `${yyyy}-${mm}-${dd}`, weekDay: weekDays[date.getDay()] };
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const dateStr = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+    return { dateStr, weekDay: weekDays[date.getDay()] };
   };
   const { dateStr, weekDay } = calculateDateInfo(startDate, dayIndex);
 

@@ -31,7 +31,7 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
 
   const handleTabClick = (index, e) => {
     setActiveTab(`day-${index}`);
-    
+
     if (scrollRef.current && scrollRef.current.scrollWidth > scrollRef.current.clientWidth) {
       e.currentTarget.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
       setTimeout(checkScroll, 350);

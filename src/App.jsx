@@ -7,18 +7,26 @@ import CreateItineraryModal from './components/CreateItineraryModal';
 import PromptGenerator from './components/PromptGenerator';
 import EditView from './components/EditView';
 import ConfirmPopover from './components/ConfirmPopover';
+import ootySample from './samples/ooty_trip.json';
 import vietnamSample from './samples/benagluru_vietnam_7.json';
+
+const formatDate = (dateInput) => {
+  if (!dateInput) return "";
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  if (isNaN(date.getTime())) return dateInput;
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+};
 
 const calculateEndDate = (startDate, daysCount) => {
   if (!startDate || !daysCount) return "";
   const date = new Date(startDate);
   if (isNaN(date.getTime())) return startDate;
   date.setDate(date.getDate() + daysCount - 1);
-  const months = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
-  ];
-  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+  return formatDate(date);
 };
 
 const getCurrencySymbol = (currency) => {
@@ -39,14 +47,14 @@ const normalizeData = (data) => {
   if (!data) return null;
   const startDate = data.startDate || "";
   const currency = data.currency || "INR";
-  
+
   return {
     ...data,
     title: data.title || "Untitled Itinerary",
     startDate: startDate,
     currency: currency,
     days: (data.days || []).map((day, index) => ({
-      day: index + 1,
+      day: day.day ? day.day : index + 1,
       title: day.title || "",
       summary: day.summary || "",
       checklist: Array.isArray(day.checklist) ? day.checklist : [],
@@ -104,6 +112,10 @@ const normalizeData = (data) => {
 };
 
 const sampleItinerary = [
+  {
+    name: "Ooty Trip (3 Days)",
+    data: ootySample,
+  },
   {
     name: "Bengaluru - Vietnam (7 days)",
     data: vietnamSample,
@@ -423,8 +435,8 @@ function App() {
       {showPromptGen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'var(--bg-primary)', padding: '1rem', overflowY: 'auto' }}>
           <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <PromptGenerator 
-              onCancel={() => setShowPromptGen(false)} 
+            <PromptGenerator
+              onCancel={() => setShowPromptGen(false)}
               onPaste={() => {
                 setShowPromptGen(false);
                 setShowPasteModal(true);
@@ -601,7 +613,7 @@ function App() {
               <>
                 <header className="app-header">
                   <h1>{appData.title}</h1>
-                  <p>{appData.startDate} - {calculatedEndDate} {editsMade && <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>(Unsaved Edits)</span>}</p>
+                  <p>{formatDate(appData.startDate)} - {calculatedEndDate} {editsMade && <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>(Unsaved Edits)</span>}</p>
                 </header>
                 <div style={{ paddingBottom: "1rem" }}>
                   <Tabs days={appData.days} activeTab={activeTab} setActiveTab={setActiveTab} hasPrebooking={hasPrebooking} isEditing={isEditing} />
