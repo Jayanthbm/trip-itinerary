@@ -288,6 +288,22 @@ function App() {
   const [recentTrips, setRecentTrips] = useState([]);
   const [tripToDelete, setTripToDelete] = useState(null);
   const [showArchived, setShowArchived] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortBy, setSortBy] = useState('modified');
+  const [activeTripsPage, setActiveTripsPage] = useState(1);
+  const [archivedTripsPage, setArchivedTripsPage] = useState(1);
+  const [sampleTripsPage, setSampleTripsPage] = useState(1);
+
+  useEffect(() => {
+    if (recentTrips.length <= 3) {
+      setSearchQuery('');
+    }
+  }, [recentTrips]);
+
+  useEffect(() => {
+    setActiveTripsPage(1);
+    setArchivedTripsPage(1);
+  }, [searchQuery, sortBy]);
 
   const loadRecentTrips = async () => {
     try {
@@ -813,86 +829,8 @@ function App() {
           <h1 style={{ color: '#fff', textAlign: 'center', marginBottom: '0.2rem' }}>J-itinerary</h1>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
-            {/* Section 1: Create, Upload, Paste Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-              <button onClick={() => setShowCreateModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-secondary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-                <span style={{ fontSize: '1.2rem' }}>➕</span>
-                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Create</span>
-              </button>
-
-              <label className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-                <span style={{ fontSize: '1.2rem' }}>📁</span>
-                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Upload</span>
-                <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
-              </label>
-
-              <button onClick={() => setShowPasteModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-                <span style={{ fontSize: '1.2rem' }}>📋</span>
-                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Paste</span>
-              </button>
-            </div>
-
-            {/* Section 2: URL Load */}
-            <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
-              <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Load from URL</h3>
-              <form onSubmit={handleUrlLoad} style={{ display: 'flex', gap: '0.5rem', width: '100%', flexWrap: 'wrap' }}>
-                <input
-                  type="url"
-                  placeholder="https://example.com/itinerary.json"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  style={{ flex: '1 1 200px', minWidth: '0', padding: '0.8rem 1rem', borderRadius: '6px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: '1rem' }}
-                />
-                <button type="submit" disabled={isLoading} className="tab-btn" style={{ flex: '0 0 auto', margin: 0, padding: '0.8rem 1.5rem', background: 'var(--accent-primary)', border: 'none', color: '#fff', cursor: isLoading ? 'default' : 'pointer', opacity: isLoading ? 0.7 : 1, fontSize: '1rem', borderRadius: '6px' }}>
-                  {isLoading ? 'Loading...' : 'Load'}
-                </button>
-              </form>
-            </div>
-
-            {/* Library Backup */}
-            <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
-              <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Library Backup</h3>
-              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <button 
-                  onClick={handleExportBackup} 
-                  disabled={recentTrips.length === 0} 
-                  className="tab-btn" 
-                  style={{ 
-                    flex: '1 1 180px', 
-                    margin: 0, 
-                    padding: '0.8rem 1rem', 
-                    background: 'var(--accent-primary)', 
-                    border: 'none', 
-                    color: '#fff', 
-                    opacity: recentTrips.length === 0 ? 0.5 : 1,
-                    cursor: recentTrips.length === 0 ? 'default' : 'pointer'
-                  }}
-                >
-                  📥 Export Backup ({recentTrips.length} Trips)
-                </button>
-                <label 
-                  className="tab-btn" 
-                  style={{ 
-                    flex: '1 1 180px', 
-                    margin: 0, 
-                    padding: '0.8rem 1rem', 
-                    background: 'rgba(255,255,255,0.05)', 
-                    border: '1px solid var(--border-light)', 
-                    color: 'var(--text-primary)', 
-                    textAlign: 'center', 
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}
-                >
-                  📤 Import Backup
-                  <input type="file" accept=".json" onChange={handleImportBackup} style={{ display: 'none' }} />
-                </label>
-              </div>
-            </div>
-
-            {/* Section 3: AI Prompt Generator (Compact & Creative) */}
+            
+            {/* 1. Generate with AI */}
             <div
               onClick={() => setShowPromptGen(true)}
               className="card"
@@ -930,25 +868,194 @@ function App() {
 
             <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
 
+            {/* 2. Recent Trips / Sample Itineraries */}
             {recentTrips.length > 0 && (() => {
-              const activeTrips = recentTrips.filter(t => !t.archived);
-              const archivedTrips = recentTrips.filter(t => t.archived);
+              // 1. Filter trips based on searchQuery
+              const filterTrips = (tripsList) => {
+                if (recentTrips.length <= 3 || !searchQuery.trim()) return tripsList;
+                const query = searchQuery.toLowerCase().trim();
+                return tripsList.filter(trip => 
+                  trip.title && trip.title.toLowerCase().includes(query)
+                );
+              };
 
-              // Sort activeTrips: pinned first, then by updatedAt desc
-              const sortedActiveTrips = [...activeTrips].sort((a, b) => {
-                if (a.pinned && !b.pinned) return -1;
-                if (!a.pinned && b.pinned) return 1;
-                return (b.updatedAt || 0) - (a.updatedAt || 0);
-              });
+              const filteredActiveTrips = filterTrips(recentTrips.filter(t => !t.archived));
+              const filteredArchivedTrips = filterTrips(recentTrips.filter(t => t.archived));
+
+              // 2. Sort trips function
+              const sortTrips = (tripsList) => {
+                return [...tripsList].sort((a, b) => {
+                  if (sortBy === 'name') {
+                    return (a.title || '').localeCompare(b.title || '');
+                  } else if (sortBy === 'date') {
+                    const dateA = new Date(a.startDate || 0);
+                    const dateB = new Date(b.startDate || 0);
+                    return dateA - dateB;
+                  } else {
+                    // Default to 'modified'
+                    return (b.updatedAt || 0) - (a.updatedAt || 0);
+                  }
+                });
+              };
+
+              // Active trips: pinned first, sorted within each partition
+              const pinnedActive = filteredActiveTrips.filter(t => t.pinned);
+              const unpinnedActive = filteredActiveTrips.filter(t => !t.pinned);
+              const sortedActiveTrips = [
+                ...sortTrips(pinnedActive),
+                ...sortTrips(unpinnedActive)
+              ];
+
+              const sortedArchivedTrips = sortTrips(filteredArchivedTrips);
+
+              // 3. Paginate Active Trips (Max 3)
+              const itemsPerPage = 3;
+              const totalActivePages = Math.ceil(sortedActiveTrips.length / itemsPerPage);
+              const currentActivePage = Math.min(activeTripsPage, totalActivePages || 1);
+              const paginatedActiveTrips = sortedActiveTrips.slice((currentActivePage - 1) * itemsPerPage, currentActivePage * itemsPerPage);
+
+              // 4. Paginate Archived Trips (Max 3)
+              const totalArchivedPages = Math.ceil(sortedArchivedTrips.length / itemsPerPage);
+              const currentArchivedPage = Math.min(archivedTripsPage, totalArchivedPages || 1);
+              const paginatedArchivedTrips = sortedArchivedTrips.slice((currentArchivedPage - 1) * itemsPerPage, currentArchivedPage * itemsPerPage);
 
               return (
                 <>
+                  {/* Search and Sort Controls Bar */}
+                  {recentTrips.length > 3 && (
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      gap: '0.75rem',
+                      marginBottom: '1.25rem',
+                      alignItems: 'center',
+                      justifyContent: 'space-between'
+                    }}>
+                      {/* Search Field */}
+                      <div style={{
+                        position: 'relative',
+                        flex: '1 1 280px',
+                        display: 'flex',
+                        alignItems: 'center'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          left: '0.75rem',
+                          color: 'var(--text-secondary)',
+                          fontSize: '0.9rem',
+                          pointerEvents: 'none'
+                        }}>🔍</span>
+                        <input
+                          type="text"
+                          placeholder="Search trips by title..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '0.6rem 2.2rem 0.6rem 2.2rem',
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid var(--border-light)',
+                            borderRadius: '8px',
+                            color: 'var(--text-primary)',
+                            fontSize: '0.9rem',
+                            outline: 'none',
+                            transition: 'border-color 0.2s, box-shadow 0.2s',
+                            fontFamily: 'inherit'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = 'var(--accent-primary)';
+                            e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.15)';
+                            e.target.style.background = 'rgba(255, 255, 255, 0.06)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = 'var(--border-light)';
+                            e.target.style.boxShadow = 'none';
+                            e.target.style.background = 'rgba(255, 255, 255, 0.03)';
+                          }}
+                        />
+                        {searchQuery && (
+                          <button
+                            onClick={() => setSearchQuery('')}
+                            style={{
+                              position: 'absolute',
+                              right: '0.75rem',
+                              background: 'none',
+                              border: 'none',
+                              color: 'var(--text-secondary)',
+                              cursor: 'pointer',
+                              fontSize: '0.85rem',
+                              padding: '0.2rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: '50%',
+                              transition: 'color 0.2s'
+                            }}
+                            onMouseOver={(e) => e.target.style.color = 'var(--text-primary)'}
+                            onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}
+                            title="Clear search"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Sort Dropdown */}
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        flex: '0 1 auto'
+                      }}>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Sort:</span>
+                        <select
+                          value={sortBy}
+                          onChange={(e) => setSortBy(e.target.value)}
+                          style={{
+                            padding: '0.6rem 1.75rem 0.6rem 0.75rem',
+                            background: 'rgba(255, 255, 255, 0.03)',
+                            border: '1px solid var(--border-light)',
+                            borderRadius: '8px',
+                            color: 'var(--text-primary)',
+                            fontSize: '0.9rem',
+                            outline: 'none',
+                            cursor: 'pointer',
+                            transition: 'border-color 0.2s, box-shadow 0.2s',
+                            fontFamily: 'inherit',
+                            appearance: 'none',
+                            backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%2394a3b8\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: 'right 0.5rem center',
+                            backgroundSize: '1em'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = 'var(--accent-primary)';
+                            e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.15)';
+                            e.target.style.background = 'rgba(255, 255, 255, 0.06)';
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = 'var(--border-light)';
+                            e.target.style.boxShadow = 'none';
+                            e.target.style.background = 'rgba(255, 255, 255, 0.03)';
+                          }}
+                        >
+                          <option value="modified" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Last Updated</option>
+                          <option value="name" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Name (A-Z)</option>
+                          <option value="date" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Start Date (Earliest)</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Active Trips Section */}
-                  {sortedActiveTrips.length > 0 && (
+                  {paginatedActiveTrips.length > 0 && (
                     <>
-                      <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Recent Trips</h2>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-                        {sortedActiveTrips.map((trip) => {
+                      <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>
+                        {searchQuery.trim() ? 'Matching Trips' : 'Recent Trips'}
+                      </h2>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '0.5rem' }}>
+                        {paginatedActiveTrips.map((trip) => {
                           const daysCount = trip.days ? trip.days.length : 0;
                           const endDate = calculateEndDate(trip.startDate, daysCount);
                           const curSymbol = getCurrencySymbol(trip.currency);
@@ -1076,12 +1183,63 @@ function App() {
                           );
                         })}
                       </div>
+
+                      {/* Active Trips Pagination Controls */}
+                      {totalActivePages > 1 && (
+                        <div style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                          marginBottom: '1rem'
+                        }}>
+                          <button
+                            disabled={currentActivePage === 1}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTripsPage(currentActivePage - 1);
+                            }}
+                            className="tab-btn"
+                            style={{
+                              padding: '0.4rem 0.8rem',
+                              fontSize: '0.8rem',
+                              opacity: currentActivePage === 1 ? 0.5 : 1,
+                              cursor: currentActivePage === 1 ? 'default' : 'pointer',
+                              margin: 0
+                            }}
+                          >
+                            ◀ Prev
+                          </button>
+                          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                            Page {currentActivePage} of {totalActivePages}
+                          </span>
+                          <button
+                            disabled={currentActivePage === totalActivePages}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTripsPage(currentActivePage + 1);
+                            }}
+                            className="tab-btn"
+                            style={{
+                              padding: '0.4rem 0.8rem',
+                              fontSize: '0.8rem',
+                              opacity: currentActivePage === totalActivePages ? 0.5 : 1,
+                              cursor: currentActivePage === totalActivePages ? 'default' : 'pointer',
+                              margin: 0
+                            }}
+                          >
+                            Next ▶
+                          </button>
+                        </div>
+                      )}
+
                       <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0 1rem 0' }}></div>
                     </>
                   )}
 
                   {/* Archived Trips Collapsible Section */}
-                  {archivedTrips.length > 0 && (
+                  {sortedArchivedTrips.length > 0 && (
                     <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                       <button
                         onClick={() => setShowArchived(!showArchived)}
@@ -1101,7 +1259,7 @@ function App() {
                         }}
                       >
                         <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>
-                          📦 Archived Trips ({archivedTrips.length})
+                          📦 Archived Trips ({sortedArchivedTrips.length})
                         </span>
                         <span style={{ fontSize: '0.8rem', transform: showArchived ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
                           ▼
@@ -1109,162 +1267,390 @@ function App() {
                       </button>
 
                       {showArchived && (
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem', animation: 'modalEnter 0.2s ease-out' }}>
-                          {archivedTrips.map((trip) => {
-                            const daysCount = trip.days ? trip.days.length : 0;
-                            const endDate = calculateEndDate(trip.startDate, daysCount);
-                            const curSymbol = getCurrencySymbol(trip.currency);
-                            const isPast = isTripInPast(trip.startDate, daysCount);
-                            return (
-                              <div
-                                key={trip.id}
-                                className="card"
-                                style={{
-                                  padding: '1.25rem',
-                                  background: 'rgba(255,255,255,0.01)',
-                                  border: '1px solid var(--border-light)',
-                                  borderRadius: '12px',
-                                  color: 'var(--text-secondary)',
-                                  cursor: 'pointer',
-                                  display: 'flex',
-                                  flexDirection: 'column',
-                                  justifyContent: 'space-between',
-                                  gap: '0.75rem',
-                                  transition: 'border-color 0.2s, transform 0.2s',
-                                  margin: 0,
-                                  position: 'relative',
-                                  opacity: 0.8
-                                }}
-                                onClick={() => {
-                                  setAppData(trip);
-                                  setActiveTab('day-0');
-                                  localStorage.setItem('active_trip_id', trip.id);
-                                  if (trip.sourceUrl) {
-                                    localStorage.setItem('it_url', trip.sourceUrl);
-                                  } else {
-                                    localStorage.removeItem('it_url');
-                                  }
-                                }}
-                                onMouseOver={(e) => {
-                                  e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                                  e.currentTarget.style.transform = 'translateY(-2px)';
-                                  e.currentTarget.style.opacity = '1';
-                                }}
-                                onMouseOut={(e) => {
-                                  e.currentTarget.style.borderColor = 'var(--border-light)';
-                                  e.currentTarget.style.transform = 'none';
-                                  e.currentTarget.style.opacity = '0.8';
-                                }}
-                              >
-                                <div style={{ paddingRight: '2.5rem' }}>
-                                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#ccc', wordBreak: 'break-word' }}>{trip.title}</h3>
-                                  <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                                    {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
-                                  </p>
-                                  <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
-                                    <span>📅 {daysCount} Days</span>
-                                    <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
-                                  </p>
-                                </div>
-
+                        <>
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem', animation: 'modalEnter 0.2s ease-out' }}>
+                            {paginatedArchivedTrips.map((trip) => {
+                              const daysCount = trip.days ? trip.days.length : 0;
+                              const endDate = calculateEndDate(trip.startDate, daysCount);
+                              const curSymbol = getCurrencySymbol(trip.currency);
+                              const isPast = isTripInPast(trip.startDate, daysCount);
+                              return (
                                 <div
+                                  key={trip.id}
+                                  className="card"
                                   style={{
-                                    position: 'absolute',
-                                    top: '0.75rem',
-                                    right: '0.75rem',
+                                    padding: '1.25rem',
+                                    background: 'rgba(255,255,255,0.01)',
+                                    border: '1px solid var(--border-light)',
+                                    borderRadius: '12px',
+                                    color: 'var(--text-secondary)',
+                                    cursor: 'pointer',
                                     display: 'flex',
                                     flexDirection: 'column',
-                                    gap: '0.3rem',
+                                    justifyContent: 'space-between',
+                                    gap: '0.75rem',
+                                    transition: 'border-color 0.2s, transform 0.2s',
+                                    margin: 0,
+                                    position: 'relative',
+                                    opacity: 0.8
                                   }}
-                                  onClick={(e) => e.stopPropagation()}
+                                  onClick={() => {
+                                    setAppData(trip);
+                                    setActiveTab('day-0');
+                                    localStorage.setItem('active_trip_id', trip.id);
+                                    if (trip.sourceUrl) {
+                                      localStorage.setItem('it_url', trip.sourceUrl);
+                                    } else {
+                                      localStorage.removeItem('it_url');
+                                    }
+                                  }}
+                                  onMouseOver={(e) => {
+                                    e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                                    e.currentTarget.style.transform = 'translateY(-2px)';
+                                    e.currentTarget.style.opacity = '1';
+                                  }}
+                                  onMouseOut={(e) => {
+                                    e.currentTarget.style.borderColor = 'var(--border-light)';
+                                    e.currentTarget.style.transform = 'none';
+                                    e.currentTarget.style.opacity = '0.8';
+                                  }}
                                 >
-                                  {!isPast && (
+                                  <div style={{ paddingRight: '2.5rem' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#ccc', wordBreak: 'break-word' }}>{trip.title}</h3>
+                                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                      {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
+                                    </p>
+                                    <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                                      <span>📅 {daysCount} Days</span>
+                                      <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
+                                    </p>
+                                  </div>
+
+                                  <div
+                                    style={{
+                                      position: 'absolute',
+                                      top: '0.75rem',
+                                      right: '0.75rem',
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                      gap: '0.3rem',
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {!isPast && (
+                                      <button
+                                        onClick={(e) => handleToggleArchive(trip, e)}
+                                        className="tab-btn"
+                                        style={{
+                                          margin: 0,
+                                          padding: '0.25rem 0.4rem',
+                                          fontSize: '0.75rem',
+                                          background: 'rgba(255, 255, 255, 0.05)',
+                                          border: '1px solid var(--border-light)',
+                                          color: 'var(--text-secondary)',
+                                          borderRadius: '4px',
+                                          cursor: 'pointer',
+                                        }}
+                                        title="Unarchive Trip"
+                                      >
+                                        📤
+                                      </button>
+                                    )}
                                     <button
-                                      onClick={(e) => handleToggleArchive(trip, e)}
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setTripToDelete(trip);
+                                      }}
                                       className="tab-btn"
                                       style={{
                                         margin: 0,
                                         padding: '0.25rem 0.4rem',
                                         fontSize: '0.75rem',
-                                        background: 'rgba(255, 255, 255, 0.05)',
-                                        border: '1px solid var(--border-light)',
-                                        color: 'var(--text-secondary)',
+                                        background: 'rgba(239, 68, 68, 0.1)',
+                                        border: '1px solid #ef4444',
+                                        color: '#ef4444',
                                         borderRadius: '4px',
                                         cursor: 'pointer',
                                       }}
-                                      title="Unarchive Trip"
+                                      title="Delete Trip"
                                     >
-                                      📤
+                                      🗑️
                                     </button>
-                                  )}
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setTripToDelete(trip);
-                                    }}
-                                    className="tab-btn"
-                                    style={{
-                                      margin: 0,
-                                      padding: '0.25rem 0.4rem',
-                                      fontSize: '0.75rem',
-                                      background: 'rgba(239, 68, 68, 0.1)',
-                                      border: '1px solid #ef4444',
-                                      color: '#ef4444',
-                                      borderRadius: '4px',
-                                      cursor: 'pointer',
-                                    }}
-                                    title="Delete Trip"
-                                  >
-                                    🗑️
-                                  </button>
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
-                        </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Archived Trips Pagination Controls */}
+                          {totalArchivedPages > 1 && (
+                            <div style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '1rem',
+                              marginTop: '1rem',
+                              marginBottom: '0.5rem'
+                            }}>
+                              <button
+                                disabled={currentArchivedPage === 1}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setArchivedTripsPage(currentArchivedPage - 1);
+                                }}
+                                className="tab-btn"
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  fontSize: '0.8rem',
+                                  opacity: currentArchivedPage === 1 ? 0.5 : 1,
+                                  cursor: currentArchivedPage === 1 ? 'default' : 'pointer',
+                                  margin: 0
+                                }}
+                              >
+                                ◀ Prev
+                              </button>
+                              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                                Page {currentArchivedPage} of {totalArchivedPages}
+                              </span>
+                              <button
+                                disabled={currentArchivedPage === totalArchivedPages}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setArchivedTripsPage(currentArchivedPage + 1);
+                                }}
+                                className="tab-btn"
+                                style={{
+                                  padding: '0.4rem 0.8rem',
+                                  fontSize: '0.8rem',
+                                  opacity: currentArchivedPage === totalArchivedPages ? 0.5 : 1,
+                                  cursor: currentArchivedPage === totalArchivedPages ? 'default' : 'pointer',
+                                  margin: 0
+                                }}
+                              >
+                                Next ▶
+                              </button>
+                            </div>
+                          )}
+                        </>
                       )}
                       <div style={{ borderBottom: '1px solid var(--border-light)', margin: '1rem 0' }}></div>
+                    </div>
+                  )}
+
+                  {/* Empty Results State */}
+                  {sortedActiveTrips.length === 0 && sortedArchivedTrips.length === 0 && (
+                    <div style={{
+                      textAlign: 'center',
+                      padding: '3rem 1.5rem',
+                      background: 'rgba(255, 255, 255, 0.01)',
+                      border: '1px dashed var(--border-light)',
+                      borderRadius: '12px',
+                      marginTop: '1rem',
+                      marginBottom: '1rem'
+                    }}>
+                      <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>🔍</span>
+                      <h3 style={{ color: 'var(--text-primary)', fontSize: '1.1rem', margin: '0 0 0.5rem 0' }}>No trips found</h3>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0 0 1.25rem 0' }}>
+                        No trips match "{searchQuery}". Try adjusting your search query.
+                      </p>
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid var(--border-light)',
+                          borderRadius: '6px',
+                          color: 'var(--text-primary)',
+                          fontSize: '0.85rem',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          transition: 'background-color 0.2s'
+                        }}
+                        onMouseOver={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
+                        onMouseOut={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
+                      >
+                        Clear Search
+                      </button>
                     </div>
                   )}
                 </>
               );
             })()}
 
-            {recentTrips.length === 0 && (
-              <>
-                <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Sample Itineraries</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
-                  {sampleItinerary.map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => item.data ? handleLoadLocalData(item.data) : fetchData(item.url)}
-                      className="card"
-                      style={{
-                        padding: '1.25rem 0.5rem',
-                        background: 'rgba(255,255,255,0.02)',
-                        border: '1px solid var(--border-light)',
-                        borderRadius: '12px',
-                        color: 'var(--text-primary)',
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.5rem',
-                        transition: 'border-color 0.2s',
-                        margin: 0
-                      }}
-                      onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
-                      onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}
-                    >
-                      <span style={{ fontSize: '1.2rem' }}>🗺️</span>
-                      <span style={{ fontWeight: '600', fontSize: '0.85rem', lineHeight: '1' }}>{item.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
+            {recentTrips.length === 0 && (() => {
+              const itemsPerPage = 3;
+              const totalSamplePages = Math.ceil(sampleItinerary.length / itemsPerPage);
+              const currentSamplePage = Math.min(sampleTripsPage, totalSamplePages || 1);
+              const paginatedSampleTrips = sampleItinerary.slice((currentSamplePage - 1) * itemsPerPage, currentSamplePage * itemsPerPage);
+
+              return (
+                <>
+                  <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Sample Itineraries</h2>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem', marginBottom: '0.5rem' }}>
+                    {paginatedSampleTrips.map((item, index) => (
+                      <button
+                        key={index}
+                        onClick={() => item.data ? handleLoadLocalData(item.data) : fetchData(item.url)}
+                        className="card"
+                        style={{
+                          padding: '1.25rem 0.5rem',
+                          background: 'rgba(255,255,255,0.02)',
+                          border: '1px solid var(--border-light)',
+                          borderRadius: '12px',
+                          color: 'var(--text-primary)',
+                          cursor: 'pointer',
+                          textAlign: 'center',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.5rem',
+                          transition: 'border-color 0.2s',
+                          margin: 0
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
+                        onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}
+                      >
+                        <span style={{ fontSize: '1.2rem' }}>🗺️</span>
+                        <span style={{ fontWeight: '600', fontSize: '0.85rem', lineHeight: '1' }}>{item.name}</span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Sample Itineraries Pagination Controls */}
+                  {totalSamplePages > 1 && (
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '1rem',
+                      marginTop: '0.5rem',
+                      marginBottom: '1rem'
+                    }}>
+                      <button
+                        disabled={currentSamplePage === 1}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSampleTripsPage(currentSamplePage - 1);
+                        }}
+                        className="tab-btn"
+                        style={{
+                          padding: '0.4rem 0.8rem',
+                          fontSize: '0.8rem',
+                          opacity: currentSamplePage === 1 ? 0.5 : 1,
+                          cursor: currentSamplePage === 1 ? 'default' : 'pointer',
+                          margin: 0
+                        }}
+                      >
+                        ◀ Prev
+                      </button>
+                      <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                        Page {currentSamplePage} of {totalSamplePages}
+                      </span>
+                      <button
+                        disabled={currentSamplePage === totalSamplePages}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSampleTripsPage(currentSamplePage + 1);
+                        }}
+                        className="tab-btn"
+                        style={{
+                          padding: '0.4rem 0.8rem',
+                          fontSize: '0.8rem',
+                          opacity: currentSamplePage === totalSamplePages ? 0.5 : 1,
+                          cursor: currentSamplePage === totalSamplePages ? 'default' : 'pointer',
+                          margin: 0
+                        }}
+                      >
+                        Next ▶
+                      </button>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+
+            <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
+
+            {/* 3. Create, Upload, Paste Grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+              <button onClick={() => setShowCreateModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-secondary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
+                <span style={{ fontSize: '1.2rem' }}>➕</span>
+                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Create</span>
+              </button>
+
+              <label className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
+                <span style={{ fontSize: '1.2rem' }}>📁</span>
+                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Upload</span>
+                <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
+              </label>
+
+              <button onClick={() => setShowPasteModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
+                <span style={{ fontSize: '1.2rem' }}>📋</span>
+                <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Paste</span>
+              </button>
+            </div>
+
+            {/* 4. Load from URL */}
+            <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
+              <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Load from URL</h3>
+              <form onSubmit={handleUrlLoad} style={{ display: 'flex', gap: '0.5rem', width: '100%', flexWrap: 'wrap' }}>
+                <input
+                  type="url"
+                  placeholder="https://example.com/itinerary.json"
+                  value={urlInput}
+                  onChange={(e) => setUrlInput(e.target.value)}
+                  style={{ flex: '1 1 200px', minWidth: '0', padding: '0.8rem 1rem', borderRadius: '6px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: '1rem' }}
+                />
+                <button type="submit" disabled={isLoading} className="tab-btn" style={{ flex: '0 0 auto', margin: 0, padding: '0.8rem 1.5rem', background: 'var(--accent-primary)', border: 'none', color: '#fff', cursor: isLoading ? 'default' : 'pointer', opacity: isLoading ? 0.7 : 1, fontSize: '1rem', borderRadius: '6px' }}>
+                  {isLoading ? 'Loading...' : 'Load'}
+                </button>
+              </form>
+            </div>
+
+            {/* 5. Library Backup */}
+            <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
+              <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Library Backup</h3>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <button 
+                  onClick={handleExportBackup} 
+                  disabled={recentTrips.length === 0} 
+                  className="tab-btn" 
+                  style={{ 
+                    flex: '1 1 180px', 
+                    margin: 0, 
+                    padding: '0.8rem 1rem', 
+                    background: 'var(--accent-primary)', 
+                    border: 'none', 
+                    color: '#fff', 
+                    opacity: recentTrips.length === 0 ? 0.5 : 1,
+                    cursor: recentTrips.length === 0 ? 'default' : 'pointer'
+                  }}
+                >
+                  📥 Export Backup ({recentTrips.length} Trips)
+                </button>
+                <label 
+                  className="tab-btn" 
+                  style={{ 
+                    flex: '1 1 180px', 
+                    margin: 0, 
+                    padding: '0.8rem 1rem', 
+                    background: 'rgba(255,255,255,0.05)', 
+                    border: '1px solid var(--border-light)', 
+                    color: 'var(--text-primary)', 
+                    textAlign: 'center', 
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  📤 Import Backup
+                  <input type="file" accept=".json" onChange={handleImportBackup} style={{ display: 'none' }} />
+                </label>
+              </div>
+            </div>
+
           </div>
         </div>
       ) : (
