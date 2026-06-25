@@ -8,7 +8,7 @@ import PromptGenerator from './components/PromptGenerator';
 import EditView from './components/EditView';
 import ConfirmPopover from './components/ConfirmPopover';
 import ootySample from "./samples/ooty_trip.json";
-import { saveTrip, deleteTrip, getAllTrips } from './utils/db';
+import { saveTrip, deleteTrip, getAllTrips, importTrips } from './utils/db';
 
 const formatDate = (dateInput) => {
   if (!dateInput) return "";
@@ -446,6 +446,68 @@ function App() {
     }
   };
 
+  const handleExportBackup = async () => {
+    try {
+      const trips = await getAllTrips();
+      if (trips.length === 0) {
+        setError("No trips found to back up.");
+        return;
+      }
+      const blob = new Blob([JSON.stringify(trips, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const dateStr = new Date().toISOString().split('T')[0];
+      a.href = url;
+      a.download = `j-itinerary-backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError("Failed to export backup: " + err.message);
+    }
+  };
+
+  const handleImportBackup = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (evt) => {
+      try {
+        const parsed = JSON.parse(evt.target.result);
+        if (!Array.isArray(parsed)) {
+          throw new Error("Backup file must contain an array of itineraries.");
+        }
+        
+        const validTrips = [];
+        for (const item of parsed) {
+          if (!validateData(item)) {
+            const normalized = normalizeData(item);
+            validTrips.push({
+              ...normalized,
+              pinned: !!item.pinned,
+              archived: !!item.archived,
+              updatedAt: item.updatedAt || Date.now()
+            });
+          }
+        }
+        
+        if (validTrips.length === 0) {
+          throw new Error("No valid itineraries found in the backup file.");
+        }
+
+        await importTrips(validTrips);
+        await loadRecentTrips();
+        setError(null);
+        alert(`Successfully imported ${validTrips.length} trips!`);
+      } catch (err) {
+        setError("Import failed: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = null;
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setShowScrollTop(window.scrollY > 300);
@@ -785,6 +847,49 @@ function App() {
                   {isLoading ? 'Loading...' : 'Load'}
                 </button>
               </form>
+            </div>
+
+            {/* Library Backup */}
+            <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
+              <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Library Backup</h3>
+              <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                <button 
+                  onClick={handleExportBackup} 
+                  disabled={recentTrips.length === 0} 
+                  className="tab-btn" 
+                  style={{ 
+                    flex: '1 1 180px', 
+                    margin: 0, 
+                    padding: '0.8rem 1rem', 
+                    background: 'var(--accent-primary)', 
+                    border: 'none', 
+                    color: '#fff', 
+                    opacity: recentTrips.length === 0 ? 0.5 : 1,
+                    cursor: recentTrips.length === 0 ? 'default' : 'pointer'
+                  }}
+                >
+                  📥 Export Backup ({recentTrips.length} Trips)
+                </button>
+                <label 
+                  className="tab-btn" 
+                  style={{ 
+                    flex: '1 1 180px', 
+                    margin: 0, 
+                    padding: '0.8rem 1rem', 
+                    background: 'rgba(255,255,255,0.05)', 
+                    border: '1px solid var(--border-light)', 
+                    color: 'var(--text-primary)', 
+                    textAlign: 'center', 
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                >
+                  📤 Import Backup
+                  <input type="file" accept=".json" onChange={handleImportBackup} style={{ display: 'none' }} />
+                </label>
+              </div>
             </div>
 
             {/* Section 3: AI Prompt Generator (Compact & Creative) */}

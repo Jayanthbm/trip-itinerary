@@ -57,3 +57,18 @@ export const deleteTrip = async (id) => {
     request.onerror = () => reject(request.error);
   });
 };
+
+export const importTrips = async (trips) => {
+  const db = await initDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(STORE_NAME, 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    
+    transaction.oncomplete = () => resolve();
+    transaction.onerror = () => reject(transaction.error);
+    
+    for (const trip of trips) {
+      store.put(trip);
+    }
+  });
+};
