@@ -546,3 +546,134 @@ body {
 .flex-1 {
   flex: 1;
 }
+
+/* Responsive Prebooking view styles */
+.prebook-header {
+  background: var(--bg-secondary);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.prebook-header-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.prebook-route-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 0.5rem;
+}
+
+.prebook-station {
+  text-align: center;
+  min-width: 70px;
+}
+
+.prebook-station-code {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  word-break: break-all;
+}
+
+.prebook-connection {
+  flex: 1;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.prebook-connection-line {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+.prebook-connection-dashed {
+  border-top: 1px dashed var(--border-light);
+}
+
+.prebook-connection-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-color);
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.prebook-connection-icon-mobile {
+  display: none;
+}
+
+.prebook-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .prebook-route-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    padding-left: 0.5rem;
+    position: relative;
+  }
+  
+  .prebook-station {
+    text-align: left;
+    min-width: 100%;
+  }
+  
+  .prebook-station-code {
+    font-size: 1.25rem;
+  }
+  
+  .prebook-connection {
+    width: 100%;
+    text-align: left;
+    padding: 0;
+    margin-left: 0.5rem;
+    border-left: 2px dashed var(--border-light);
+    padding-left: 1.5rem;
+    position: relative;
+    min-height: 24px;
+    box-sizing: border-box;
+  }
+
+  .prebook-connection-line {
+    display: none;
+  }
+  
+  .prebook-connection-icon-mobile {
+    display: flex;
+    position: absolute;
+    left: -9px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--bg-color);
+    padding: 2px 0;
+    line-height: 1;
+  }
+
+  .prebook-details-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

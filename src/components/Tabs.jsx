@@ -38,114 +38,176 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
     }
   };
 
-  return (
-    <div style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: hasPrebooking ? 'space-between' : 'flex-end', gap: '0.5rem', paddingRight: '1rem', paddingLeft: '1rem', paddingBottom: '0.5rem', marginBottom: '0.5rem', alignItems: 'center', flexWrap: 'wrap', borderBottom: '1px solid var(--border-light)' }}>
+  const topActiveTab = activeTab.startsWith("day-") ? "days" : activeTab;
 
-        {hasPrebooking ? (
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+  return (
+    <div style={{ width: "100%", padding: "0 0.5rem" }}>
+      {/* Top 3-Tabs Bar */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "0.5rem",
+          paddingBottom: "0.5rem",
+          marginBottom: "0.5rem",
+          alignItems: "center",
+          flexWrap: "wrap",
+          borderBottom: "1px solid var(--border-light)",
+        }}
+      >
+        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+          {hasPrebooking && (
             <button
               className="tab-btn"
-              onClick={() => setActiveTab('prebooking')}
+              onClick={() => setActiveTab("prebooking")}
               style={{
-                padding: '0.4rem 1rem',
-                background: activeTab === 'prebooking' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                border: activeTab === 'prebooking' ? 'none' : '1px solid var(--border-light)',
+                padding: "0.4rem 1.25rem",
+                background:
+                  topActiveTab === "prebooking"
+                    ? "var(--accent-primary)"
+                    : "var(--bg-secondary)",
+                border:
+                  topActiveTab === "prebooking"
+                    ? "none"
+                    : "1px solid var(--border-light)",
                 margin: 0,
-                color: activeTab === 'prebooking' ? '#fff' : 'var(--text-primary)',
-                fontSize: '0.9rem',
-                boxShadow: 'var(--shadow-md)',
-                cursor: 'pointer'
+                color:
+                  topActiveTab === "prebooking"
+                    ? "#fff"
+                    : "var(--text-primary)",
+                fontSize: "0.9rem",
+                boxShadow: "var(--shadow-md)",
+                borderRadius: "6px",
+                cursor: "pointer",
               }}
             >
               Prebooking
             </button>
+          )}
+          <button
+            className="tab-btn"
+            onClick={() => setActiveTab("day-0")}
+            style={{
+              padding: "0.4rem 1.25rem",
+              background:
+                topActiveTab === "days"
+                  ? "var(--accent-primary)"
+                  : "var(--bg-secondary)",
+              border:
+                topActiveTab === "days"
+                  ? "none"
+                  : "1px solid var(--border-light)",
+              margin: 0,
+              color: topActiveTab === "days" ? "#fff" : "var(--text-primary)",
+              fontSize: "0.9rem",
+              boxShadow: "var(--shadow-md)",
+              borderRadius: "6px",
+              cursor: "pointer",
+            }}
+          >
+            Plan
+          </button>
+          <button
+            className={`tab-btn ${isEditing ? "disabled" : ""}`}
+            onClick={() => !isEditing && setActiveTab("budget")}
+            disabled={isEditing}
+            title={isEditing ? "Budget view is disabled during editing" : ""}
+            style={{
+              padding: "0.4rem 1.25rem",
+              background:
+                topActiveTab === "budget"
+                  ? "var(--accent-primary)"
+                  : "var(--bg-secondary)",
+              border:
+                topActiveTab === "budget"
+                  ? "none"
+                  : "1px solid var(--border-light)",
+              margin: 0,
+              color: topActiveTab === "budget" ? "#fff" : "var(--text-primary)",
+              fontSize: "0.9rem",
+              boxShadow: "var(--shadow-md)",
+              borderRadius: "6px",
+              cursor: isEditing ? "not-allowed" : "pointer",
+              opacity: isEditing ? 0.5 : 1,
+            }}
+          >
+            Budget
+          </button>
+        </div>
+
+        {/* Scroll Chevrons - Only show for Daily Plan selection if days count > 1 */}
+        {topActiveTab === "days" && days && days.length > 1 && (
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem",
+              opacity: showLeft || showRight ? 1 : 0,
+              pointerEvents: showLeft || showRight ? "auto" : "none",
+            }}
+          >
             <button
-              className={`tab-btn ${isEditing ? 'disabled' : ''}`}
-              onClick={() => !isEditing && setActiveTab('budget')}
-              disabled={isEditing}
-              title={isEditing ? "Budget view is disabled during editing" : ""}
+              onClick={() => showLeft && scroll("left")}
               style={{
-                padding: '0.4rem 1rem',
-                background: activeTab === 'budget' ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                border: activeTab === 'budget' ? 'none' : '1px solid var(--border-light)',
-                margin: 0,
-                color: activeTab === 'budget' ? '#fff' : 'var(--text-primary)',
-                fontSize: '0.9rem',
-                boxShadow: 'var(--shadow-md)',
-                cursor: isEditing ? 'not-allowed' : 'pointer',
-                opacity: isEditing ? 0.5 : 1
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--border-light)",
+                color: "var(--text-primary)",
+                borderRadius: "50%",
+                width: "28px",
+                height: "28px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: showLeft ? "pointer" : "default",
+                boxShadow: "var(--shadow-md)",
+                opacity: showLeft ? 1 : 0.3,
               }}
             >
-              Total Budget
+              <ChevronLeftIcon />
+            </button>
+            <button
+              onClick={() => showRight && scroll("right")}
+              style={{
+                background: "var(--bg-secondary)",
+                border: "1px solid var(--border-light)",
+                color: "var(--text-primary)",
+                borderRadius: "50%",
+                width: "28px",
+                height: "28px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: showRight ? "pointer" : "default",
+                boxShadow: "var(--shadow-md)",
+                opacity: showRight ? 1 : 0.3,
+              }}
+            >
+              <ChevronRightIcon />
             </button>
           </div>
-        ) : (
-          <div></div>
         )}
-
-        <div style={{ display: 'flex', gap: '0.5rem', opacity: (showLeft || showRight) ? 1 : 0, pointerEvents: (showLeft || showRight) ? 'auto' : 'none' }}>
-          <button
-            onClick={() => showLeft && scroll('left')}
-            style={{
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-light)',
-              color: 'var(--text-primary)',
-              borderRadius: '50%',
-              width: '28px',
-              height: '28px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: showLeft ? 'pointer' : 'default',
-              boxShadow: 'var(--shadow-md)',
-              opacity: showLeft ? 1 : 0.3
-            }}
-          >
-            <ChevronLeftIcon />
-          </button>
-          <button
-            onClick={() => showRight && scroll('right')}
-            style={{
-              background: 'var(--bg-secondary)',
-              border: '1px solid var(--border-light)',
-              color: 'var(--text-primary)',
-              borderRadius: '50%',
-              width: '28px',
-              height: '28px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: showRight ? 'pointer' : 'default',
-              boxShadow: 'var(--shadow-md)',
-              opacity: showRight ? 1 : 0.3
-            }}
-          >
-            <ChevronRightIcon />
-          </button>
-        </div>
       </div>
 
-      {days && days.length > 0 && (
-        <div style={{ padding: '0 1rem', fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
-          Days
+      {/* Sub-Days Row - Only render when Daily Plan is active and days count > 1 */}
+      {topActiveTab === "days" && days && days.length > 1 && (
+        <div
+          className="tabs-container"
+          ref={scrollRef}
+          onScroll={checkScroll}
+          style={{ marginTop: "0.25rem" }}
+        >
+          {days.map((dayObj, index) => (
+            <button
+              key={index}
+              className={`tab-btn ${activeTab === `day-${index}` ? "active" : ""}`}
+              onClick={(e) => handleTabClick(index, e)}
+            >
+              {dayObj.day && dayObj.day.length < 8
+                ? dayObj.day
+                : `Day ${index + 1}`}
+            </button>
+          ))}
         </div>
       )}
-      <div
-        className="tabs-container"
-        ref={scrollRef}
-        onScroll={checkScroll}
-      >
-        {days && days.map((dayObj, index) => (
-          <button
-            key={index}
-            className={`tab-btn ${activeTab === `day-${index}` ? 'active' : ''}`}
-            onClick={(e) => handleTabClick(index, e)}
-          >
-            {dayObj.day && dayObj.day.length < 8 ? dayObj.day : `Day ${index + 1}`}
-          </button>
-        ))}
-      </div>
     </div>
   );
 };
