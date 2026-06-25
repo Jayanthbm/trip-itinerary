@@ -7,8 +7,7 @@ import CreateItineraryModal from './components/CreateItineraryModal';
 import PromptGenerator from './components/PromptGenerator';
 import EditView from './components/EditView';
 import ConfirmPopover from './components/ConfirmPopover';
-import ootySample from './samples/ooty_trip.json';
-import vietnamSample from './samples/benagluru_vietnam_7.json';
+import ootySample from "./samples/ooty_trip.json";
 
 const formatDate = (dateInput) => {
   if (!dateInput) return "";
@@ -53,61 +52,146 @@ const normalizeData = (data) => {
     title: data.title || "Untitled Itinerary",
     startDate: startDate,
     currency: currency,
-    days: (data.days || []).map((day, index) => ({
-      day: day.day ? day.day : index + 1,
-      title: day.title || "",
-      summary: day.summary || "",
-      checklist: Array.isArray(day.checklist) ? day.checklist : [],
-      additionalBudget: (day.additionalBudget || []).map(item => ({
-        title: item.title || "",
-        cost: typeof item.cost === 'number' ? item.cost : 0
-      })),
-      timeline: (day.timeline || []).map(item => ({
-        time: item.time || "10:00 AM",
-        title: item.title || "",
-        description: item.description || "",
-        duration: item.duration || "",
-        location: item.location || "",
-        mapsLink: item.mapsLink || "",
-        cost: typeof item.cost === 'number' ? item.cost : 0
-      }))
-    })),
+    days: (data.days || []).map((day, index) => {
+      let plans = [];
+      if (Array.isArray(day.plans) && day.plans.length > 0) {
+        plans = day.plans.map((p) => ({
+          title: p.title || "Main Plan",
+          timeline: (p.timeline || []).map((item) => ({
+            time: item.time || "10:00 AM",
+            title: item.title || "",
+            description: item.description || "",
+            duration: item.duration || "",
+            location: item.location || "",
+            mapsLink: item.mapsLink || "",
+            cost: typeof item.cost === "number" ? item.cost : 0,
+          })),
+          additionalBudget: (p.additionalBudget || []).map((item) => ({
+            title: item.title || "",
+            cost: typeof item.cost === "number" ? item.cost : 0,
+          })),
+        }));
+      } else {
+        // Fallback / legacy format
+        plans = [
+          {
+            title: "Main Plan",
+            timeline: (day.timeline || []).map((item) => ({
+              time: item.time || "10:00 AM",
+              title: item.title || "",
+              description: item.description || "",
+              duration: item.duration || "",
+              location: item.location || "",
+              mapsLink: item.mapsLink || "",
+              cost: typeof item.cost === "number" ? item.cost : 0,
+            })),
+            additionalBudget: (day.additionalBudget || []).map((item) => ({
+              title: item.title || "",
+              cost: typeof item.cost === "number" ? item.cost : 0,
+            })),
+          },
+        ];
+      }
+
+      let activePlan = day.active_plan;
+      if (!activePlan || !plans.some((p) => p.title === activePlan)) {
+        activePlan = plans[0]?.title || "Main Plan";
+      }
+
+      return {
+        day: day.day ? day.day : index + 1,
+        title: day.title || "",
+        summary: day.summary || "",
+        checklist: Array.isArray(day.checklist) ? day.checklist : [],
+        active_plan: activePlan,
+        plans: plans,
+      };
+    }),
     prebookingData: {
-      flights: Array.isArray(data.prebookingData?.flights) ? data.prebookingData.flights.map((f, i) => ({
-        id: i + 1, date: f.date || startDate, from: f.from || "", to: f.to || "",
-        departure: f.departure || "", arrival: f.arrival || "", airline: f.airline || "",
-        durationMinutes: typeof f.durationMinutes === 'number' ? f.durationMinutes : 0,
-        status: f.status || "Pending", cost: typeof f.cost === 'number' ? f.cost : 0,
-        terminal: { departure: f.terminal?.departure || "", arrival: f.terminal?.arrival || "" },
-        links: Array.isArray(f.links) ? f.links : []
-      })) : [],
-      trains: Array.isArray(data.prebookingData?.trains) ? data.prebookingData.trains.map((t, i) => ({
-        id: i + 1, date: t.date || startDate, name: t.name || "", from: t.from || "", to: t.to || "",
-        departure: t.departure || "", arrival: t.arrival || "",
-        durationMinutes: typeof t.durationMinutes === 'number' ? t.durationMinutes : 0,
-        status: t.status || "Pending", cost: typeof t.cost === 'number' ? t.cost : 0,
-        links: Array.isArray(t.links) ? t.links : []
-      })) : [],
-      bus: Array.isArray(data.prebookingData?.bus) ? data.prebookingData.bus.map((b, i) => ({
-        id: i + 1, date: b.date || startDate, from: b.from || "", to: b.to || "",
-        departure: b.departure || "", arrival: b.arrival || "", provider: b.provider || "",
-        durationMinutes: typeof b.durationMinutes === 'number' ? b.durationMinutes : 0,
-        status: b.status || "Pending", cost: typeof b.cost === 'number' ? b.cost : 0,
-        points: { pickup: b.points?.pickup || "", drop: b.points?.drop || "" },
-        links: Array.isArray(b.links) ? b.links : []
-      })) : [],
-      rooms: Array.isArray(data.prebookingData?.rooms) ? data.prebookingData.rooms.map((r, i) => ({
-        id: i + 1, name: r.name || "", checkin: r.checkin || "", checkout: r.checkout || "",
-        cost: typeof r.cost === 'number' ? r.cost : 0, status: r.status || "Pending",
-        location: r.location || "", mapsLink: r.mapsLink || "", links: Array.isArray(r.links) ? r.links : []
-      })) : [],
-      activities: Array.isArray(data.prebookingData?.activities) ? data.prebookingData.activities.map((a, i) => ({
-        id: i + 1, name: a.name || "", status: a.status || "Pending",
-        cost: typeof a.cost === 'number' ? a.cost : 0, notes: a.notes || "",
-        links: Array.isArray(a.links) ? a.links : [],
-        excludeFromBudget: typeof a.excludeFromBudget === 'boolean' ? a.excludeFromBudget : false
-      })) : []
-    }
+      flights: Array.isArray(data.prebookingData?.flights)
+        ? data.prebookingData.flights.map((f, i) => ({
+            id: i + 1,
+            date: f.date || startDate,
+            from: f.from || "",
+            to: f.to || "",
+            departure: f.departure || "",
+            arrival: f.arrival || "",
+            airline: f.airline || "",
+            durationMinutes:
+              typeof f.durationMinutes === "number" ? f.durationMinutes : 0,
+            status: f.status || "Pending",
+            cost: typeof f.cost === "number" ? f.cost : 0,
+            terminal: {
+              departure: f.terminal?.departure || "",
+              arrival: f.terminal?.arrival || "",
+            },
+            links: Array.isArray(f.links) ? f.links : [],
+          }))
+        : [],
+      trains: Array.isArray(data.prebookingData?.trains)
+        ? data.prebookingData.trains.map((t, i) => ({
+            id: i + 1,
+            date: t.date || startDate,
+            name: t.name || "",
+            from: t.from || "",
+            to: t.to || "",
+            departure: t.departure || "",
+            arrival: t.arrival || "",
+            durationMinutes:
+              typeof t.durationMinutes === "number" ? t.durationMinutes : 0,
+            status: t.status || "Pending",
+            cost: typeof t.cost === "number" ? t.cost : 0,
+            links: Array.isArray(t.links) ? t.links : [],
+          }))
+        : [],
+      bus: Array.isArray(data.prebookingData?.bus)
+        ? data.prebookingData.bus.map((b, i) => ({
+            id: i + 1,
+            date: b.date || startDate,
+            from: b.from || "",
+            to: b.to || "",
+            departure: b.departure || "",
+            arrival: b.arrival || "",
+            provider: b.provider || "",
+            durationMinutes:
+              typeof b.durationMinutes === "number" ? b.durationMinutes : 0,
+            status: b.status || "Pending",
+            cost: typeof b.cost === "number" ? b.cost : 0,
+            points: {
+              pickup: b.points?.pickup || "",
+              drop: b.points?.drop || "",
+            },
+            links: Array.isArray(b.links) ? b.links : [],
+          }))
+        : [],
+      rooms: Array.isArray(data.prebookingData?.rooms)
+        ? data.prebookingData.rooms.map((r, i) => ({
+            id: i + 1,
+            name: r.name || "",
+            checkin: r.checkin || "",
+            checkout: r.checkout || "",
+            cost: typeof r.cost === "number" ? r.cost : 0,
+            status: r.status || "Pending",
+            location: r.location || "",
+            mapsLink: r.mapsLink || "",
+            links: Array.isArray(r.links) ? r.links : [],
+          }))
+        : [],
+      activities: Array.isArray(data.prebookingData?.activities)
+        ? data.prebookingData.activities.map((a, i) => ({
+            id: i + 1,
+            name: a.name || "",
+            status: a.status || "Pending",
+            cost: typeof a.cost === "number" ? a.cost : 0,
+            notes: a.notes || "",
+            links: Array.isArray(a.links) ? a.links : [],
+            excludeFromBudget:
+              typeof a.excludeFromBudget === "boolean"
+                ? a.excludeFromBudget
+                : false,
+          }))
+        : [],
+    },
   };
 };
 
@@ -115,10 +199,6 @@ const sampleItinerary = [
   {
     name: "Ooty Trip (3 Days)",
     data: ootySample,
-  },
-  {
-    name: "Bengaluru - Vietnam (7 days)",
-    data: vietnamSample,
   },
 ];
 
@@ -243,6 +323,12 @@ function App() {
     localStorage.setItem('edits_made', 'true');
   };
 
+  const handleUpdateDay = (dayIndex, updatedDay) => {
+    const newDays = [...appData.days];
+    newDays[dayIndex] = updatedDay;
+    handleUpdateAppData({ ...appData, days: newDays });
+  };
+
   const handleLoadLocalData = (data) => {
     if (validateData(data)) {
       setError("Invalid itinerary data");
@@ -289,9 +375,10 @@ function App() {
       prebookingData
     };
 
-    setAppData(newItinerary);
+    const normalized = normalizeData(newItinerary);
+    setAppData(normalized);
     setActiveTab('day-0');
-    localStorage.setItem('it_loaded', JSON.stringify(newItinerary));
+    localStorage.setItem("it_loaded", JSON.stringify(normalized));
     localStorage.removeItem('it_url');
     localStorage.removeItem('last_fetch');
     setEditsMade(true);
@@ -418,7 +505,17 @@ function App() {
     if (activeTab.startsWith('day-')) {
       const dayIndex = parseInt(activeTab.split('-')[1], 10);
       const dayData = appData.days[dayIndex];
-      if (dayData) return <DayView dayData={dayData} itineraryKey={itineraryKey} dayIndex={dayIndex} startDate={appData.startDate} currencySymbol={currencySymbol} />;
+      if (dayData)
+        return (
+          <DayView
+            dayData={dayData}
+            itineraryKey={itineraryKey}
+            dayIndex={dayIndex}
+            startDate={appData.startDate}
+            currencySymbol={currencySymbol}
+            onUpdateDay={(updated) => handleUpdateDay(dayIndex, updated)}
+          />
+        );
     }
     return <div style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '2rem' }}>Please select a valid tab.</div>;
   };

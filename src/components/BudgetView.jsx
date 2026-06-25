@@ -47,10 +47,13 @@ const BudgetView = ({ prebookingData, daysData, currencySymbol = '₹' }) => {
 
   // ---- Daily Costs ----
   const daysCostData = (daysData || []).map((day) => {
-    const timelineItems = (day.timeline || [])
+    const activePlanTitle = day.active_plan || "Main Plan";
+    const activePlan = (day.plans || []).find(p => p.title === activePlanTitle) || day.plans?.[0] || { timeline: [], additionalBudget: [] };
+
+    const timelineItems = (activePlan.timeline || [])
       .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0)
       .map(e => ({ title: e.title, cost: parseCost(e.cost) }));
-    const additionalItems = (day.additionalBudget || [])
+    const additionalItems = (activePlan.additionalBudget || [])
       .map(b => ({ title: b.title, cost: parseCost(b.cost) }));
     const allItems = [...timelineItems, ...additionalItems];
     const total = allItems.reduce((s, i) => s + i.cost, 0);

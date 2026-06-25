@@ -1,364 +1,696 @@
 {
   "title": "Trip to Ooty",
-  "startDate": "2026-07-04",
+  "startDate": "4 July 2026",
   "currency": "INR",
   "numPeople": 2,
   "days": [
     {
-      "day": "Start",
-      "title": "Departure from Home",
-      "summary": "Travel from home to bus boarding point via cab and begin honeymoon journey comfortably.",
-      "checklist": [
-        "Travel bag",
-        "Umbrella / raincoat",
-        "Snacks & water",
-        "Light jacket / shawl",
-        "Neck pillow (optional)",
-        "Headphones / offline music",
-        "Phone charger / power bank",
-        "Tickets / ID proof"
-      ],
-      "timeline": [
-        {
-          "time": "09:15 PM",
-          "title": "Cab from Home",
-          "description": "Take cab from home to bus boarding point in Bengaluru. Leave slightly early to account for traffic.",
-          "duration": "1h",
-          "location": "Bus Pickup Point",
-          "mapsLink": "",
-          "cost": 500
-        },
-        {
-          "time": "10:15 PM",
-          "title": "Reach Boarding Point",
-          "description": "Arrive early, locate bus, confirm seat, and settle in without rush.",
-          "duration": "45m",
-          "location": "Bus Pickup Point",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "11:00 PM",
-          "title": "Board Night Bus",
-          "description": "Overnight bus to Ooty. Relax, enjoy music, and start the honeymoon journey.",
-          "duration": "8h",
-          "location": "Bus Pickup Point",
-          "mapsLink": "",
-          "cost": 0
-        }
-      ],
-      "additionalBudget": [
-        {
-          "title": "Snacks",
-          "cost": 200
-        },
-        {
-          "title": "Dinner before boarding",
-          "cost": 400
-        }
-      ]
-    },
-    {
       "day": "Day 1",
-      "title": "Arrival and Orientation",
-      "summary": "Arrive Ooty early morning, settle in, and enjoy a relaxed first day with light sightseeing.",
+      "title": "Arrival, Vintage Tea & Local Chocolate Trails",
+      "summary": "Board the KSRTC bus from Bangalore to Ooty. Check-in at the beautiful Welbeck Vintage, relax on the lawns or veranda with warm tea, and explore local chocolate trails and cozy dining in the evening.",
       "checklist": [
-        "Comfortable shoes",
-        "Umbrella / raincoat",
-        "Light jacket",
-        "Extra socks (rain backup)",
-        "Snacks",
-        "Phone charger / power bank"
+        "Pack warm jackets and a sturdy umbrella/raincoat at the top of your bag",
+        "Keep ample physical cash handy for local autos (UPI can fail in pockets of rain/fog)"
       ],
-      "additionalBudget": [
-        { "title": "Early check-in (if charged)", "cost": 1000 }
-      ],
-      "timeline": [
+      "active_plan": "Main Plan",
+      "plans": [
         {
-          "time": "07:30 AM",
-          "title": "Arrive Ooty",
-          "description": "Bus reaches Ooty early morning. Freshen up at nearby restroom if needed.",
-          "duration": "",
-          "location": "Ooty Bus Stand",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "08:00 AM",
-          "title": "Breakfast nearby",
-          "description": "Have a relaxed breakfast at a nearby café. Avoid rushing since you'll be tired from travel.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 500
-        },
-        {
-          "time": "09:15 AM",
-          "title": "Travel to Hotel",
-          "description": "Hire cab to Reflections Guest House. Roads may be slow due to fog/rain.",
-          "duration": "30m",
-          "location": "Ooty Bus Stand → Reflections Guest House",
-          "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
-          "cost": 500
-        },
-        {
-          "time": "10:00 AM",
-          "title": "Hotel Check-in / Rest",
-          "description": "Check-in if available or leave luggage. Rest well after overnight journey.",
-          "duration": "2h",
-          "location": "Reflections Guest House, Ooty",
-          "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
-          "cost": 0
-        },
-        {
-          "time": "12:30 PM",
-          "title": "Ooty Lake Visit",
-          "description": "Visit  for boating and a relaxed walk. Skip if heavy rain.",
-          "duration": "1.5h",
-          "location": "Ooty Lake, Ooty",
-          "mapsLink": "https://goo.gl/maps/3y9GZqj7QXt",
-          "cost": 300
-        },
-        {
-          "time": "02:00 PM",
-          "title": "Lunch",
-          "description": "Lunch at a nearby restaurant. Choose a cozy indoor place due to weather.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 800
-        },
-        {
-          "time": "03:30 PM",
-          "title": "Afternoon Rest / Hotel Relax",
-          "description": "Relax at hotel, enjoy misty views, or nap. Important to recover energy.",
-          "duration": "2h",
-          "location": "Reflections Guest House",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "05:30 PM",
-          "title": "Evening Stroll / Café Time",
-          "description": "Short walk nearby or visit a cozy café if weather permits.",
-          "duration": "1h",
-          "location": "Near Reflections Guest House",
-          "mapsLink": "",
-          "cost": 300
-        },
-        {
-          "time": "08:00 PM",
-          "title": "Dinner",
-          "description": "Relaxed dinner at hotel or nearby restaurant. Keep it light and cozy.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 1000
+          "title": "Main Plan",
+          "timeline": [
+            {
+              "time": "06:30 AM",
+              "title": "Cab/Auto from Home",
+              "description": "Head out early to beat the Bangalore morning traffic towards the Kengeri boarding point.",
+              "duration": "20m",
+              "cost": 150,
+              "location": "Home to Kengeri",
+              "mapsLink": ""
+            },
+            {
+              "time": "07:05 AM",
+              "title": "Onward Bus Departure",
+              "description": "Board the KSRTC Airavat club class bus from Kengeri TTMC. Enjoy the scenic drive through Bandipur.",
+              "duration": "7h 30m",
+              "cost": 0,
+              "location": "KENGERI TTMC BUS STAND",
+              "mapsLink": "https://maps.app.goo.gl/xhNzqsAq5cWbJkox9"
+            },
+            {
+              "time": "02:35 PM",
+              "title": "Arrival & Monsoon-Paced Auto Ride",
+              "description": "Arrive at Ooty Bus Stand (accounting for a realistic 30-min monsoon/ghat delay). Take a quick local auto up to the hotel.",
+              "duration": "15m",
+              "cost": 150,
+              "location": "Ooty Central Bus Stand",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "02:50 PM",
+              "title": "Late Hotel Check-In & Lunch",
+              "description": "Check into Welbeck Vintage and settle down for a quick, comforting lunch at the resort's restaurant.",
+              "duration": "1h 40m",
+              "cost": 1200,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "04:30 PM",
+              "title": "Evening Tea (Veranda / Lawns)",
+              "description": "Enjoy hot tea and local snacks. Shift to the resort's covered veranda if the evening monsoon mist sets in early.",
+              "duration": "1h 30m",
+              "cost": 300,
+              "location": "Welbeck Vintage Gardens",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "06:30 PM",
+              "title": "Explore Charing Cross & Chocolates",
+              "description": "Take an auto down to Charing Cross. Sample and stock up on fresh handmade truffles at King Star Confectionery.",
+              "duration": "1h 30m",
+              "cost": 800,
+              "location": "Charing Cross, Ooty",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "08:00 PM",
+              "title": "Auto to Dinner Cafe",
+              "description": "Take a short 5-minute auto ride from Charing Cross to avoid the evening chill and rain.",
+              "duration": "10m",
+              "cost": 100,
+              "location": "Charing Cross to Place To Bee",
+              "mapsLink": "https://maps.app.goo.gl/hGscv4g5PWhS5q3K7"
+            },
+            {
+              "time": "08:10 PM",
+              "title": "Cozy Dinner at Place To Bee",
+              "description": "Have an intimate, low-key dinner at Place To Bee café, enjoying their excellent vegetarian wood-fired pizzas.",
+              "duration": "1h 20m",
+              "cost": 1500,
+              "location": "Place To Bee",
+              "mapsLink": "https://maps.app.goo.gl/hGscv4g5PWhS5q3K7"
+            },
+            {
+              "time": "09:30 PM",
+              "title": "Auto Return to Hotel",
+              "description": "Hire a local auto outside the restaurant to head back to the resort through the crisp, chilly night air.",
+              "duration": "15m",
+              "cost": 200,
+              "location": "Place To Bee to Welbeck Vintage",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Snacks & Hot Beverages",
+              "cost": 500
+            },
+            {
+              "title": "Emergency Rain Gear / Umbrella Buffer",
+              "cost": 400
+            }
+          ]
         }
       ]
     },
     {
       "day": "Day 2",
-      "title": "Coonoor Day Trip & Scenic Experiences",
-      "summary": "Relaxed day trip to Coonoor with toy train (if available), scenic views, and café time.",
+      "title": "Misty Biosphere, Private Jeep Safari & Lake Strolls",
+      "summary": "Hire a dedicated local cab for a scenic drive southwest. Experience a private, exclusive Forest Department jeep safari through the untouched Shola forests to Avalanche Lake, enjoy a pure-veg wood-fired lunch, and spend a relaxing afternoon walking the terraced lawns of the Botanical Gardens followed by quiet boating.",
       "checklist": [
-        "Comfortable walking shoes",
-        "Rain protection (umbrella / poncho)",
-        "Light jacket",
-        "Camera",
-        "Cash for small shops"
+        "Carry at least ₹3,500 in hard cash specifically for the forest safari (UPI/network drops to zero in the valley)",
+        "Wear comfortable sneakers with good grip for walking on wet, terraced garden paths",
+        "Pack a warm fleece or windbreaker layer as the open-air jeep ride gets incredibly chilly"
       ],
-      "additionalBudget": [
-        { "title": "Cab backup (Coonoor travel)", "cost": 1500 }
-      ],
-      "timeline": [
+      "active_plan": "Main Plan",
+      "plans": [
         {
-          "time": "08:00 AM",
-          "title": "Breakfast",
-          "description": "Relaxed breakfast at hotel. Keep the morning flexible based on weather.",
-          "duration": "1h",
-          "location": "Reflections Guest House",
-          "mapsLink": "",
-          "cost": 500
+          "title": "Main Plan",
+          "timeline": [
+            {
+              "time": "08:00 AM",
+              "title": "Relaxed Resort Breakfast",
+              "description": "Wake up to the crisp mountain air and enjoy a fresh, hot vegetarian breakfast spread at the resort to fuel up for the bumpy journey ahead.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "09:00 AM",
+              "title": "Scenic Southwest Drive",
+              "description": "Your hired day-cab picks you up from the resort lobby. Begin the scenic drive winding past lush tea estates and mist-covered valley curves.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Welbeck Vintage to Emerald Lake",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:00 AM",
+              "title": "Emerald Lake Photo Stop",
+              "description": "Have your driver pull over at the viewpoint. Catch the morning mist clearing over the brilliant blue water and green slopes for some beautiful pictures together.",
+              "duration": "15m",
+              "cost": 0,
+              "location": "Emerald Lake Viewpoint",
+              "mapsLink": "https://maps.app.goo.gl/wYscv3w6PWbS5q3K7"
+            },
+            {
+              "time": "10:15 AM",
+              "title": "Drive to Avalanche Forest Checkpost",
+              "description": "Continue the final stretch of the road through the protected hills to the Forest Department Eco-Tourism center.",
+              "duration": "30m",
+              "cost": 0,
+              "location": "Avalanche Forest Checkpost",
+              "mapsLink": "https://maps.app.goo.gl/7gScv5w4PWhS5q3K7"
+            },
+            {
+              "time": "10:45 AM",
+              "title": "Exclusive Private Jeep Safari",
+              "description": "Secure an official flat-rate ticket using hard cash. Track a rugged 6 km dirt trail through the protected Nilgiri Biosphere in an open-air forest jeep, stopping right at the pristine edges of Avalanche Lake, deep-woods waterfalls, and quiet pine paths.",
+              "duration": "2h 30m",
+              "cost": 3000,
+              "location": "Avalanche Eco-Tourism Zone",
+              "mapsLink": "https://maps.app.goo.gl/7gScv5w4PWhS5q3K7"
+            },
+            {
+              "time": "01:15 PM",
+              "title": "Return Journey to Ooty Town",
+              "description": "Hop back into your day-cab and head back up out of the valley toward the Ooty town center.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Ooty Central Town Grid",
+              "mapsLink": ""
+            },
+            {
+              "time": "02:15 PM",
+              "title": "Pure-Veg Wood-Fired Lunch",
+              "description": "Enjoy a comforting, completely vegetarian lunch at Nahar's Sidewalk Café. Try their signature wood-fired pizzas cooked with locally crafted Nilgiri cheeses in a lovely old-world ambiance.",
+              "duration": "1h 15m",
+              "cost": 1400,
+              "location": "Nahar's Sidewalk Café",
+              "mapsLink": "https://maps.app.goo.gl/vGscv6g4PWhS5q3K7"
+            },
+            {
+              "time": "03:45 PM",
+              "title": "Terraced Stroll at Botanical Garden",
+              "description": "Explore the magnificent, terraced Government Botanical Garden. Doing this early in the afternoon gives you the best chance of clear skies before late afternoon monsoon showers hit.",
+              "duration": "1h 15m",
+              "cost": 150,
+              "location": "Government Botanical Garden",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "05:15 PM",
+              "title": "Private Boating on Ooty Lake",
+              "description": "Have your cab drop you at the Ooty Boat House. Rent a private 2-seater pedal boat and spend a peaceful, uninterrupted half-hour drifting on the water beneath giant eucalyptus trees (keep cash handy for a refundable security deposit).",
+              "duration": "30m",
+              "cost": 400,
+              "location": "Ooty Boat House",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "05:45 PM",
+              "title": "Drop Back to Resort & Unwind",
+              "description": "Your cab drops you back off at Welbeck Vintage, completing its full-day booking. Head inside to escape the sharp evening chill, unpack your local truffles, and enjoy a warm dinner at the resort.",
+              "duration": "0m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Full-Day Cab Booking Package",
+              "cost": 3000
+            },
+            {
+              "title": "Camera Fees & Eco-Tax",
+              "cost": 200
+            },
+            {
+              "title": "Emergency Cash Buffer (Snacks/Tea)",
+              "cost": 500
+            }
+          ]
         },
         {
-          "time": "09:30 AM",
-          "title": "Travel to Station",
-          "description": "Head to station for toy train. If train is delayed/cancelled, switch to cab to .",
-          "duration": "30m",
-          "location": "Ooty Railway Station",
-          "mapsLink": "",
-          "cost": 300
-        },
-        {
-          "time": "10:30 AM",
-          "title": "Toy Train to Coonoor (or Cab)",
-          "description": "Board  for scenic ride OR take cab if unavailable.",
-          "duration": "1h 15m",
-          "location": "Ooty → Coonoor",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "12:00 PM",
-          "title": "Explore Coonoor",
-          "description": "Visit tea estates, viewpoints, and enjoy the peaceful vibe. Keep it unhurried.",
-          "duration": "2h",
-          "location": "Coonoor",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "02:00 PM",
-          "title": "Lunch with View",
-          "description": "Lunch at a scenic café (tea estate view preferred). Take your time.",
-          "duration": "1h",
-          "location": "Coonoor",
-          "mapsLink": "",
-          "cost": 800
-        },
-        {
-          "time": "03:30 PM",
-          "title": "Relaxed Café / Walk",
-          "description": "Short walk or café time. Avoid rushing multiple spots.",
-          "duration": "1h",
-          "location": "Coonoor",
-          "mapsLink": "",
-          "cost": 300
-        },
-        {
-          "time": "04:30 PM",
-          "title": "Return to Ooty (Cab Preferred)",
-          "description": "Return by cab for flexibility and comfort (better than depending on return train).",
-          "duration": "1h",
-          "location": "Coonoor → Ooty",
-          "mapsLink": "",
-          "cost": 1000
-        },
-        {
-          "time": "06:00 PM",
-          "title": "Rest at Hotel",
-          "description": "Relax and freshen up after the day.",
-          "duration": "1h",
-          "location": "Reflections Guest House",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "07:30 PM",
-          "title": "Dinner",
-          "description": "Cozy dinner at hotel or nearby restaurant.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 1000
+          "title": "Backup Plan",
+          "timeline": [
+            {
+              "time": "08:00 AM",
+              "title": "Relaxed Resort Breakfast",
+              "description": "Enjoy a fresh, hot vegetarian breakfast spread at Welbeck Vintage while your driver confirms the checkpost operational status.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "09:00 AM",
+              "title": "Scenic Southwest Valley Drive",
+              "description": "Head southwest past terraced tea plantations. Enjoy the dramatic morning mist moving over the mountain curves.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Welbeck Vintage to Emerald Lake",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:00 AM",
+              "title": "Emerald Lake Viewpoint Stop",
+              "description": "Brief roadside photo pause to witness the morning fog hanging low over the vast, brilliant blue reservoir.",
+              "duration": "15m",
+              "cost": 0,
+              "location": "Emerald Lake Viewpoint",
+              "mapsLink": "https://maps.app.goo.gl/wYscv3w6PWbS5q3K7"
+            },
+            {
+              "time": "10:15 AM",
+              "title": "Drive to Avalanche Checkpost",
+              "description": "Drive the final stretch down into the valley, arriving to find the inner forest safari gates closed due to weather.",
+              "duration": "30m",
+              "cost": 0,
+              "location": "Avalanche Forest Checkpost",
+              "mapsLink": "https://maps.app.goo.gl/7gScv5w4PWhS5q3K7"
+            },
+            {
+              "time": "11:00 AM",
+              "title": "Extended Emerald Lake Lakeside Walk",
+              "description": "Since the safari is closed, turn back and make the most of the valley. Stop at a safe, accessible bank of Emerald Lake for a peaceful, slow walk along the misty shoreline.",
+              "duration": "1h 30m",
+              "cost": 0,
+              "location": "Emerald Lake Banks",
+              "mapsLink": "https://maps.app.goo.gl/wYscv3w6PWbS5q3K7"
+            },
+            {
+              "time": "12:30 PM",
+              "title": "Return Commute to Town Grid",
+              "description": "Drive back up out of the lake basin toward the central Ooty town grid for lunch.",
+              "duration": "30m",
+              "cost": 0,
+              "location": "Ooty Central Town Grid",
+              "mapsLink": ""
+            },
+            {
+              "time": "01:00 PM",
+              "title": "Pure-Veg Wood-Fired Lunch",
+              "description": "Warm up from the chilly valley breeze with hot wood-fired pizzas and pasta at Nahar's Sidewalk Café.",
+              "duration": "1h 15m",
+              "cost": 1400,
+              "location": "Nahar's Sidewalk Café",
+              "mapsLink": "https://maps.app.goo.gl/vGscv6g4PWhS5q3K7"
+            },
+            {
+              "time": "02:30 PM",
+              "title": "Private Boating on Ooty Lake",
+              "description": "Head right down to the city-edge Ooty Boat House. Rent a 2-seater pedal boat for a quick, scenic glide under towering eucalyptus trees before the afternoon showers hit.",
+              "duration": "45m",
+              "cost": 400,
+              "location": "Ooty Boat House",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "03:30 PM",
+              "title": "Cinematic Stroll at Pine Forest",
+              "description": "Take a short drive northwest to the Pine Forest. Walk through the soaring trees on paths coated in pine needles—the forest provides wonderful cover from light monsoonal drizzle.",
+              "duration": "1h 15m",
+              "cost": 40,
+              "location": "Ooty Pine Forest",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "05:00 PM",
+              "title": "Indoor Escape: Ooty Tea Factory",
+              "description": "As the heavy evening fog rolls in, head completely indoors. Tour the factory floors to see how Nilgiri tea is processed, sample hot cardamom tea, and browse the Chocolate Museum.",
+              "duration": "1h",
+              "cost": 60,
+              "location": "Ooty Tea Factory & Museum",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "06:00 PM",
+              "title": "Drop Back to Resort & Unwind",
+              "description": "Your cab drops you back at Welbeck Vintage. Escape the evening drop in temperature, review your day's photos, and relax over a hot dinner.",
+              "duration": "0m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Full-Day Cab Booking Package",
+              "cost": 2800
+            },
+            {
+              "title": "Sightseeing Entry Fees (2 Adults)",
+              "cost": 100
+            },
+            {
+              "title": "Emergency Cash Buffer (Hot Tea & Corn-on-the-cob)",
+              "cost": 500
+            }
+          ]
         }
       ]
     },
     {
       "day": "Day 3",
-      "title": "Leisure Day & Return",
-      "summary": "Relaxed final day with optional sunrise viewpoint, light exploration, café time, and comfortable departure to Bengaluru.",
+      "title": "Heritage Toy Train & Coonoor Highlands",
+      "summary": "Take the legendary Nilgiri Mountain Railway toy train down to Coonoor. Savor a peaceful, walk-in vegetarian lunch, explore the dramatic, fog-laden valley drops of Lamb's Rock and Dolphin's Nose via a cozy local cab, and return to Ooty for a spectacular pavilion dinner at Earl's Secret.",
       "checklist": [
-        "Souvenirs",
-        "Packed luggage",
-        "Camera / phone",
-        "Rain protection",
-        "Phone charger / power bank"
+        "Arrive at Ooty Station by 10:30 AM to secure your coach spots and take photos with the steam engine",
+        "Keep physical printouts or official SMS of your IRCTC toy train tickets handy",
+        "Pack your thickest winter layers for the evening—Ooty drops in temperature sharply after sunset"
       ],
-      "additionalBudget": [
-        { "title": "Evening café / snacks", "cost": 400 }
+      "active_plan": "Main Plan",
+      "plans": [
+        {
+          "title": "Main Plan",
+          "timeline": [
+            {
+              "time": "08:30 AM",
+              "title": "Easy Morning Breakfast",
+              "description": "Enjoy a relaxed breakfast spread at Welbeck Vintage. There is no need to rush since your train departs mid-morning.",
+              "duration": "1h",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "10:15 AM",
+              "title": "Auto to Ooty Railway Station",
+              "description": "Take a short local auto ride down the hill straight to the heritage railway station.",
+              "duration": "15m",
+              "cost": 150,
+              "location": "Welbeck Vintage to Ooty Station",
+              "mapsLink": "https://maps.app.goo.gl/vYscv8w6PWbS5q3K7"
+            },
+            {
+              "time": "10:30 AM",
+              "title": "Arrive at Vintage Ooty Railway Station",
+              "description": "Reach the station early. The heritage building feels like a step back in time—perfect for taking photos with the historic blue steam engine before boarding.",
+              "duration": "55m",
+              "cost": 0,
+              "location": "Ooty Railway Station",
+              "mapsLink": "https://maps.app.goo.gl/vYscv8w6PWbS5q3K7"
+            },
+            {
+              "time": "11:25 AM",
+              "title": "Heritage Toy Train Journey (NMR)",
+              "description": "Board the iconic Nilgiri Mountain Railway train down to Coonoor. The 95-minute ride slowly winds past emerald tea estates, dark tunnels, and over old stone viaducts.",
+              "duration": "1h 35m",
+              "cost": 0,
+              "location": "Ooty Railway Station to Coonoor",
+              "mapsLink": "https://maps.app.goo.gl/vYscv8w6PWbS5q3K7"
+            },
+            {
+              "time": "01:00 PM",
+              "title": "Arrival at Coonoor & Quick Commute",
+              "description": "De-board at Coonoor station and take a very brief auto ride up to the Bedford area for lunch.",
+              "duration": "15m",
+              "cost": 80,
+              "location": "Coonoor Railway Station",
+              "mapsLink": "https://maps.app.goo.gl/7gScv5w4PWhS5q3K7"
+            },
+            {
+              "time": "01:15 PM",
+              "title": "Peaceful Vegetarian Lunch",
+              "description": "Walk into Sri Lakshmi Cafe in Bedford for a simple, comforting, and authentic South Indian vegetarian thali or crispy ghee roasts in a hassle-free setting.",
+              "duration": "1h",
+              "cost": 400,
+              "location": "Sri Lakshmi Cafe, Bedford",
+              "mapsLink": "https://maps.app.goo.gl/vGscv6g4PWhS5q3K7"
+            },
+            {
+              "time": "02:15 PM",
+              "title": "Hired Cab Circuit to Lamb's Rock & Dolphin's Nose",
+              "description": "Hire a warm, closed local road-cab right outside the cafe for a dedicated ridge-line trip. Drive through deep green tea estates to Lamb's Rock, then continue to Dolphin's Nose to witness the massive 180-degree ravines swirling with monsoon mist.",
+              "duration": "2h 30m",
+              "cost": 1400,
+              "location": "Dolphin's Nose Viewpoint",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "04:45 PM",
+              "title": "Scenic Road Journey Back to Ooty",
+              "description": "Head back up to Ooty via a point-to-point local road cab. Traveling up the ghats by road is much quicker and lets you see the tea country under the evening fog.",
+              "duration": "1h",
+              "cost": 600,
+              "location": "Coonoor to Ooty Highway",
+              "mapsLink": ""
+            },
+            {
+              "time": "05:45 PM",
+              "title": "Rest, Refresh & Layer Up at Resort",
+              "description": "Return to Welbeck Vintage to drop off your bags, refresh yourself, and change into thick winter layers as the evening temperature drops sharply.",
+              "duration": "1h 30m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "07:15 PM",
+              "title": "Auto to Earl's Secret",
+              "description": "Take a short auto ride through the misty evening over to the King's Cliff heritage hotel property.",
+              "duration": "15m",
+              "cost": 150,
+              "location": "Welbeck Vintage to Earl's Secret",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "07:30 PM",
+              "title": "Cozy Pavilion Dinner at Earl's Secret",
+              "description": "Indulge in a beautiful dinner inside a heated glass pavilion at Earl's Secret. Enjoy their excellent multi-cuisine vegetarian menu surrounded by old-world mountain charm.",
+              "duration": "2h",
+              "cost": 1600,
+              "location": "Earl's Secret",
+              "mapsLink": "https://maps.app.goo.gl/WhonobNq5a11XDyE7"
+            },
+            {
+              "time": "09:30 PM",
+              "title": "Auto Return to Resort",
+              "description": "Grab a local auto outside the property for a quick ride back to your room to wrap up the day.",
+              "duration": "15m",
+              "cost": 150,
+              "location": "Earl's Secret to Welbeck Vintage",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Viewpoint Entry Fees & Eco-Tax",
+              "cost": 60
+            },
+            {
+              "title": "Snacks & Hot Tea Buffer",
+              "cost": 300
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "day": "Day 4",
+      "title": "Doddabetta Panorama or Cozy Town Retreat & Departure",
+      "summary": "Spend the final morning catching panoramic views from Doddabetta Peak, or pivot to a cozy indoor morning shopping for local spices and resting. Enjoy a stress-free checkout and a reliable, hot pure-veg lunch right next to the bus station before boarding your afternoon bus back to Bangalore.",
+      "checklist": [
+        "Check the mountain peaks from the resort at 07:30 AM to decide between the Main and Backup timelines",
+        "Keep a light jacket easily accessible at the top of your baggage for the windy summit or the air-conditioned KSRTC bus ride",
+        "Pack local chocolates, tea powders, and spices securely in plastic layers to protect them from monsoon moisture"
       ],
-      "timeline": [
+      "active_plan": "Main Plan",
+      "plans": [
         {
-          "time": "07:30 AM",
-          "title": "Optional: Doddabetta Peak",
-          "description": "Visit Doddabetta Peak early morning ONLY if weather is clear. Skip if foggy or rainy.",
-          "duration": "1.5h",
-          "location": "Doddabetta Peak, Ooty",
-          "mapsLink": "https://goo.gl/maps/FgzP6wYP1S62",
-          "cost": 500
+          "title": "Main Plan (Clear Weather - Doddabetta Peak)",
+          "timeline": [
+            {
+              "time": "07:30 AM",
+              "title": "Early Resort Breakfast",
+              "description": "Enjoy an early, warm vegetarian breakfast at Welbeck Vintage. Moving this up gives you the best shot at beating the heavy mountain fog.",
+              "duration": "45m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "08:15 AM",
+              "title": "Morning Drive to Doddabetta Peak",
+              "description": "Hop into a local cab or auto for a crisp, scenic 25-minute drive up the winding mountain slopes before the clouds completely swallow the ridge.",
+              "duration": "25m",
+              "cost": 500,
+              "location": "Doddabetta Peak Parking",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "08:40 AM",
+              "title": "Sweeping Views from the Summit",
+              "description": "Take a short, easy walk from the parking lot. Explore the telescope house observatory and enjoy magnificent 360-degree panoramic views over the valley while the morning air is still sharp and clear.",
+              "duration": "1h 20m",
+              "cost": 40,
+              "location": "Doddabetta Peak Viewpoint",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "10:00 AM",
+              "title": "Return Commute to Resort",
+              "description": "Head back down the mountain road in your ride, watching the heavy white fog slowly roll across the lower tea fields.",
+              "duration": "25m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "10:25 AM",
+              "title": "Pack Bags & Smooth Checkout",
+              "description": "You have a massive, stress-free 2.5-hour window to freshen up, change into comfortable clothes for the long bus ride, pack your chocolate boxes securely, and check out by 01:00 PM.",
+              "duration": "2h 35m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "01:00 PM",
+              "title": "Strategic Lunch Near Bus Stand",
+              "description": "Take an auto straight down to the main town grid right next to the bus station. Walk into Adyar Ananda Bhavan (A2B) or Hotel Saravana Bhavan for a quick, piping-hot, and reliable pure-vegetarian lunch, completely eliminating transit anxiety.",
+              "duration": "1h 15m",
+              "cost": 400,
+              "location": "Adyar Ananda Bhavan (A2B), Ooty",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "02:15 PM",
+              "title": "Auto from Lunch to Bus Platforms",
+              "description": "A nominal 2-minute auto hop across the street to the bus stand gates with your luggage.",
+              "duration": "5m",
+              "cost": 60,
+              "location": "A2B to Ooty Bus Stand",
+              "mapsLink": ""
+            },
+            {
+              "time": "02:20 PM",
+              "title": "Relaxed Boarding at Ooty Bus Stand",
+              "description": "Arrive comfortably early. Pick up water bottles or snacks for the road, locate your platform, and settle into your KSRTC Airavat seats well ahead of the 03:35 PM departure.",
+              "duration": "1h 15m",
+              "cost": 0,
+              "location": "Ooty Bus Stand",
+              "mapsLink": "https://maps.app.goo.gl/vYscv8w6PWbS5q3K7"
+            },
+            {
+              "time": "03:35 PM",
+              "title": "Return Bus Journey to Bangalore",
+              "description": "Board the KSRTC Airavat Club Class bus heading back home, descending the scenic ghats.",
+              "duration": "7h 10m",
+              "cost": 0,
+              "location": "OOTY BUS STAND",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:45 PM",
+              "title": "Arrival at Kengeri Metro Station",
+              "description": "Arrive safely back at Kengeri Metro Station, Bangalore, bypassing the central city traffic.",
+              "duration": "5m",
+              "cost": 0,
+              "location": "Kengeri Metro Station",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:50 PM",
+              "title": "Cab/Auto Back Home",
+              "description": "Take a quick final cab or auto ride back home to conclude your trip.",
+              "duration": "20m",
+              "cost": 150,
+              "location": "Home",
+              "mapsLink": ""
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Local Auto Transfers (Hotel/Lunch/Bus Stand)",
+              "cost": 250
+            }
+          ]
         },
         {
-          "time": "09:00 AM",
-          "title": "Breakfast",
-          "description": "Relaxed breakfast at hotel after returning (or skip Doddabetta and start here).",
-          "duration": "1h",
-          "location": "Reflections Guest House",
-          "mapsLink": "",
-          "cost": 500
-        },
-        {
-          "time": "10:30 AM",
-          "title": "Tea Estate Walk / Botanical Garden",
-          "description": "Visit tea estates or  if weather is clear.",
-          "duration": "2h",
-          "location": "Ooty",
-          "mapsLink": "",
-          "cost": 500
-        },
-        {
-          "time": "01:00 PM",
-          "title": "Chocolate Factory / Local Shopping",
-          "description": "Buy homemade chocolates and souvenirs from local shops.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 2000
-        },
-        {
-          "time": "02:00 PM",
-          "title": "Lunch",
-          "description": "Lunch at a cozy café or restaurant.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 800
-        },
-        {
-          "time": "03:30 PM",
-          "title": "Relax / Pack at Hotel",
-          "description": "Return to hotel, pack luggage, and relax before checkout.",
-          "duration": "2h",
-          "location": "Reflections Guest House",
-          "mapsLink": "",
-          "cost": 0
-        },
-        {
-          "time": "05:30 PM",
-          "title": "Evening Café / Viewpoint",
-          "description": "Visit a scenic café or viewpoint for a final relaxing moment in Ooty.",
-          "duration": "1.5h",
-          "location": "Ooty",
-          "mapsLink": "",
-          "cost": 500
-        },
-        {
-          "time": "07:30 PM",
-          "title": "Dinner",
-          "description": "Early dinner at a good restaurant before departure.",
-          "duration": "1h",
-          "location": "Ooty Town",
-          "mapsLink": "",
-          "cost": 1000
-        },
-        {
-          "time": "09:30 PM",
-          "title": "Travel to Bus Stand",
-          "description": "Take cab to bus stand with buffer time.",
-          "duration": "30m",
-          "location": "Reflections Guest House → Ooty Bus Stand",
-          "mapsLink": "",
-          "cost": 400
-        },
-        {
-          "time": "10:30 PM",
-          "title": "Bus to Bengaluru",
-          "description": "Board night bus back to Bengaluru.",
-          "duration": "8h",
-          "location": "Ooty Bus Stand",
-          "mapsLink": "",
-          "cost": 0
+          "title": "Backup Plan (Rainy Morning / Extra Rest Route)",
+          "timeline": [
+            {
+              "time": "08:30 AM",
+              "title": "Slow-Paced Lazy Breakfast",
+              "description": "Sleep in to escape the damp morning cold. Enjoy a very relaxed, late vegetarian breakfast spread at the resort without any rush.",
+              "duration": "1h 30m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "10:00 AM",
+              "title": "Pack Bags & Mid-Morning Rest",
+              "description": "Freshen up, pack your bags calmly, and relax inside the cozy indoor resort ambiance while listening to the monsoon rain outside.",
+              "duration": "1h 30m",
+              "cost": 0,
+              "location": "Welbeck Vintage By Oxygen Resorts",
+              "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9"
+            },
+            {
+              "time": "11:30 AM",
+              "title": "Indoor Spice Shopping & Local Market",
+              "description": "Check out of the hotel and take a covered auto down to the local commercial shops. Spend a quiet hour picking up aromatic Nilgiri oils, fresh cardamom, and spices completely protected from the rain.",
+              "duration": "1h 15m",
+              "cost": 600,
+              "location": "Ooty Local Spice Market",
+              "mapsLink": ""
+            },
+            {
+              "time": "12:45 PM",
+              "title": "Strategic Lunch Near Bus Stand",
+              "description": "Head right down next to the bus station platform. Enjoy a hot, comforting pure-vegetarian South Indian thali or ghee roasts at A2B or Saravana Bhavan.",
+              "duration": "1h 15m",
+              "cost": 400,
+              "location": "Adyar Ananda Bhavan (A2B), Ooty",
+              "mapsLink": "https://maps.app.goo.gl/MM89aCuewsAfQHA99"
+            },
+            {
+              "time": "02:00 PM",
+              "title": "Early Boarding at Ooty Bus Stand",
+              "description": "Walk comfortably across the street into the covered shelter of the bus stand platforms. Grab some hot tea, find your KSRTC bus, and settle in early to stay warm.",
+              "duration": "1h 35m",
+              "cost": 0,
+              "location": "Ooty Central Bus Stand",
+              "mapsLink": "https://maps.app.goo.gl/vYscv8w6PWbS5q3K7"
+            },
+            {
+              "time": "03:35 PM",
+              "title": "Return Bus Journey to Bangalore",
+              "description": "Board the KSRTC Airavat Club Class bus heading back home, descending the scenic ghats.",
+              "duration": "7h 10m",
+              "cost": 0,
+              "location": "OOTY BUS STAND",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:45 PM",
+              "title": "Arrival at Kengeri Metro Station",
+              "description": "Arrive safely back at Kengeri Metro Station, Bangalore, bypassing the central city traffic.",
+              "duration": "5m",
+              "cost": 0,
+              "location": "Kengeri Metro Station",
+              "mapsLink": ""
+            },
+            {
+              "time": "10:50 PM",
+              "title": "Cab/Auto Back Home",
+              "description": "Take a quick final cab or auto ride back home to conclude your trip.",
+              "duration": "20m",
+              "cost": 150,
+              "location": "Home",
+              "mapsLink": ""
+            }
+          ],
+          "additionalBudget": [
+            {
+              "title": "Local Auto Transfers",
+              "cost": 250
+            }
+          ]
         }
       ]
     }
@@ -369,27 +701,14 @@
       {
         "id": 1,
         "date": "2026-07-06",
-        "name": "Nilgiri Mountain Railway",
-        "from": "Ooty",
-        "to": "Coonoor",
-        "departure": "11:30",
-        "arrival": "12:45",
-        "durationMinutes": 75,
+        "name": "UAM MTP SPECIAL",
+        "from": "Udagamandalam (UAM)",
+        "to": "Coonoor (ONR)",
+        "departure": "11:25",
+        "arrival": "13:00",
+        "durationMinutes": 95,
         "status": "Pending",
-        "cost": 300,
-        "links": []
-      },
-      {
-        "id": 2,
-        "date": "2026-07-06",
-        "name": "Nilgiri Mountain Railway Return",
-        "from": "Coonoor",
-        "to": "Ooty",
-        "departure": "16:00",
-        "arrival": "17:15",
-        "durationMinutes": 75,
-        "status": "Pending",
-        "cost": 300,
+        "cost": 750,
         "links": []
       }
     ],
@@ -397,48 +716,49 @@
       {
         "id": 1,
         "date": "2026-07-04",
-        "from": "Bengaluru",
-        "to": "Ooty",
-        "departure": "23:00",
-        "arrival": "07:30",
-        "provider": "Overnight Bus",
-        "durationMinutes": 510,
+        "from": "BENGALURU",
+        "to": "OOTY",
+        "departure": "07:05",
+        "arrival": "14:01",
+        "provider": "KSRTC",
+        "durationMinutes": 465,
         "status": "Pending",
-        "cost": 1800,
+        "cost": 2030,
         "points": {
-          "pickup": "Bus Boarding Point, Bengaluru",
-          "drop": "Ooty Bus Stand"
+          "pickup": "KENGERI TTMC BUS STAND",
+          "drop": "OOTY BUS STAND"
         },
         "links": []
       },
       {
         "id": 2,
         "date": "2026-07-07",
-        "from": "Ooty",
-        "to": "Bengaluru",
-        "departure": "20:30",
-        "arrival": "06:30",
-        "provider": "Luxury Bus",
-        "durationMinutes": 480,
+        "from": "OOTY",
+        "to": "BENGALURU",
+        "departure": "15:35",
+        "arrival": "22:45",
+        "provider": "KSRTC",
+        "durationMinutes": 430,
         "status": "Pending",
-        "cost": 1800,
-        "points": { "pickup": "Ooty Bus Stand", "drop": "Bengaluru Central" },
+        "cost": 2030,
+        "points": {
+          "pickup": "OOTY BUS STAND",
+          "drop": "Kengeri Metro Station"
+        },
         "links": []
       }
     ],
     "rooms": [
       {
         "id": 1,
-        "name": "Reflections Guest House",
-        "checkin": "2026-07-04 12:00",
-        "checkout": "2026-07-07 11:00",
-        "cost": 15000,
+        "name": "Welbeck Vintage By Oxygen Resorts",
+        "checkin": "2026-07-04 14:00",
+        "checkout": "2026-07-07 14:00",
+        "cost": 14200,
         "status": "Pending",
-        "location": "N Lake Rd, Mani Vihar, Kathadimattam, Ooty",
-        "mapsLink": "https://goo.gl/maps/5ov5t8Tj2V52",
-        "links": [
-          "https://bit.ly/4sko2WA"
-        ]
+        "location": "Ooty",
+        "mapsLink": "https://maps.app.goo.gl/1uALoXiYP2wYz1Ty9",
+        "links": []
       }
     ],
     "activities": []

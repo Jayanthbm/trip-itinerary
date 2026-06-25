@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CheckIcon, WalletIcon, ChevronDownIcon } from './Icons';
 
-const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = '₹' }) => {
+const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = '₹', onUpdateDay }) => {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(true);
+  const [selectedPlanTitle, setSelectedPlanTitle] = useState(dayData.active_plan);
+
+  useEffect(() => {
+    setSelectedPlanTitle(dayData.active_plan);
+  }, [dayData.active_plan, dayIndex]);
 
   const [checkedItems, setCheckedItems] = useState(() => {
     const initialState = {};
@@ -41,12 +46,15 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
   };
   const { dateStr, weekDay } = calculateDateInfo(startDate, dayIndex);
 
+  const plans = dayData.plans || [];
+  const currentPlan = plans.find(p => p.title === selectedPlanTitle) || plans[0] || { timeline: [], additionalBudget: [] };
+
   // Calculate budget from timeline costs + additionalBudget
-  const timelineItems = (dayData.timeline || [])
+  const timelineItems = (currentPlan.timeline || [])
     .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '')
     .map(e => ({ title: e.title, cost: Number(e.cost) || 0 }));
 
-  const additionalItems = (dayData.additionalBudget || [])
+  const additionalItems = (currentPlan.additionalBudget || [])
     .map(b => ({ title: b.title, cost: Number(b.cost) || 0 }));
 
   const allBudgetItems = [...timelineItems, ...additionalItems];
@@ -70,6 +78,72 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
           </p>
         )}
       </div>
+
+      {/* Plan Switcher */}
+      {plans.length > 1 && (
+        <div className="card" style={{ padding: '1rem', background: 'rgba(255, 255, 255, 0.01)', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: '600', marginRight: '0.5rem' }}>PLANS:</span>
+              {plans.map((p, idx) => {
+                const isActive = p.title === dayData.active_plan;
+                const isSelected = p.title === selectedPlanTitle;
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedPlanTitle(p.title)}
+                    className="tab-btn"
+                    style={{
+                      padding: '0.35rem 0.85rem',
+                      fontSize: '0.85rem',
+                      background: isSelected ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                      color: isSelected ? '#fff' : 'var(--text-primary)',
+                      border: isSelected ? '1px solid var(--accent-primary)' : '1px solid var(--border-light)',
+                      borderRadius: '20px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      margin: 0
+                    }}
+                  >
+                    {p.title}
+                    {isActive && <span style={{ color: '#fbbf24', fontSize: '0.95rem' }} title="Active Plan">★</span>}
+                  </button>
+                );
+              })}
+            </div>
+            
+            {selectedPlanTitle !== dayData.active_plan && (
+              <button
+                onClick={() => {
+                  if (onUpdateDay) {
+                    onUpdateDay({
+                      ...dayData,
+                      active_plan: selectedPlanTitle
+                    });
+                  }
+                }}
+                className="tab-btn"
+                style={{
+                  background: 'var(--accent-secondary)',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '0.35rem 0.85rem',
+                  fontSize: '0.85rem',
+                  borderRadius: '6px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  margin: 0,
+                  boxShadow: 'var(--shadow-sm)'
+                }}
+              >
+                🎯 Make Active Plan
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Checklist */}
       {dayData.checklist && dayData.checklist.length > 0 && (
@@ -127,11 +201,11 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
       )}
 
       {/* Timeline */}
-      {dayData.timeline && dayData.timeline.length > 0 && (
+      {currentPlan.timeline && currentPlan.timeline.length > 0 && (
         <>
           <h3 className="section-title mt-4">Timeline</h3>
           <div className="timeline-container">
-            {dayData.timeline.map((event, idx) => (
+            {currentPlan.timeline.map((event, idx) => (
               <div key={idx} className="timeline-item">
                 <div className="timeline-icon">
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">

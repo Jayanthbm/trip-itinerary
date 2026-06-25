@@ -107,18 +107,24 @@ const PromptGenerator = ({ onCancel, onPaste }) => {
           title: "Arrival and Orientation",
           summary: "Arrival at destination...",
           checklist: ["Check-in", "Local currency"],
-          timeline: [
+          active_plan: "Main Plan",
+          plans: [
             {
-              time: readableStartTime,
-              title: "Journey Start",
-              description: `Departure from ${fromLocation || 'home'}.`,
-              duration: "2h",
-              cost: 0,
-              location: fromLocation || "Starting Point",
-              mapsLink: ""
+              title: "Main Plan",
+              timeline: [
+                {
+                  time: readableStartTime,
+                  title: "Journey Start",
+                  description: `Departure from ${fromLocation || 'home'}.`,
+                  duration: "2h",
+                  cost: 0,
+                  location: fromLocation || "Starting Point",
+                  mapsLink: ""
+                }
+              ],
+              additionalBudget: []
             }
-          ],
-          additionalBudget: []
+          ]
         }
       ],
       prebookingData: {

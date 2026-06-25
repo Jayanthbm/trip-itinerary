@@ -60,7 +60,14 @@ The application relies on a specific JSON structure to render itineraries correc
 | `title` | String | Subtitle describing the day's focus |
 | `summary` | String | Brief narrative of the day's plan |
 | `checklist` | Array | Simple strings for daily tasks/reminders |
-| `timeline` | Array | Hourly schedule objects (see Timeline Item) |
+| `active_plan` | String | The title of the currently active default plan (e.g., "Main Plan") |
+| `plans` | Array | Array of plan options (see Plan Object) |
+
+### Plan Object (`plans[]`)
+| Key | Type | Description |
+| :--- | :--- | :--- |
+| `title` | String | Title of this plan option (e.g. "Main Plan", "Backup Plan") |
+| `timeline` | Array | Timeline items for this plan (see Timeline Item) |
 | `additionalBudget` | Array | Extra costs not captured in the timeline (see Budget Item) |
 
 #### Timeline Item
@@ -90,7 +97,8 @@ Use the following prompt to generate a compatible JSON file using an LLM (Claude
 >
 > **Schema Rules**:
 > 1. **Root**: `title`, `startDate` (e.g. "3 July 2026"), `currency` (3-letter code), `days` (Array), `prebookingData` (Object).
-> 2. **Days**: Each day needs `day`, `title`, `summary`, `checklist` (Array), `timeline` (Array), and `additionalBudget` (Array).
+> 2. **Days**: Each day needs `day`, `title`, `summary`, `checklist` (Array), `active_plan` (String), and `plans` (Array).
+>    - Each item in `plans` must have `title` (e.g., "Main Plan" or "Backup Plan"), `timeline` (Array of Timeline Items), and `additionalBudget` (Array of Budget Items).
 > 3. **Timeline**: Each item must have `time`, `title`, `description`, `duration` (e.g. "2h 30m"), `cost` (Number), `location`, and `mapsLink`.
 > 4. **Pre-booking**: Must include arrays for `flights`, `trains`, `bus`, `rooms`, and `activities`.
 >    - Routes (Flights/Trains/Bus) MUST include `durationMinutes` as a Number.
