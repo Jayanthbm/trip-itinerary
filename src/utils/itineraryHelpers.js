@@ -324,3 +324,48 @@ export const sampleItinerary = [
     data: ootySample,
   },
 ];
+
+export const parseTimeString = (timeStr, baseDate) => {
+  if (!timeStr) return null;
+  const cleanStr = timeStr.trim();
+  const match = cleanStr.match(/^(\d+)(?::(\d+))?\s*(AM|PM)?$/i);
+  if (!match) return null;
+  
+  let hours = parseInt(match[1], 10);
+  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+  const ampm = match[3];
+
+  if (ampm) {
+    const ampmUpper = ampm.toUpperCase();
+    if (ampmUpper === 'PM' && hours < 12) hours += 12;
+    if (ampmUpper === 'AM' && hours === 12) hours = 0;
+  }
+  
+  const result = new Date(baseDate);
+  result.setHours(hours, minutes, 0, 0);
+  return result;
+};
+
+export const parseDuration = (durationStr) => {
+  if (!durationStr) return 0;
+  let totalMinutes = 0;
+  
+  const hrMatch = durationStr.match(/(\d+(?:\.\d+)?)\s*(?:hr|hour|h\b)/i);
+  if (hrMatch) {
+    totalMinutes += parseFloat(hrMatch[1]) * 60;
+  }
+  
+  const minMatch = durationStr.match(/(\d+)\s*(?:min|m\b)/i);
+  if (minMatch) {
+    totalMinutes += parseInt(minMatch[1], 10);
+  }
+  
+  if (!hrMatch && !minMatch) {
+    const num = parseFloat(durationStr);
+    if (!isNaN(num)) {
+      totalMinutes = num;
+    }
+  }
+  
+  return totalMinutes;
+};

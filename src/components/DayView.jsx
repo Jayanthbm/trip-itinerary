@@ -1,10 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CheckIcon, WalletIcon, ChevronDownIcon } from './Icons';
+import { parseTimeString, parseDuration } from '../utils/itineraryHelpers';
 
 const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = '₹', onUpdateDay }) => {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(true);
   const [selectedPlanTitle, setSelectedPlanTitle] = useState(dayData.active_plan);
+
+  const [now, setNow] = useState(new Date());
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const targetDate = startDate ? (() => {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + dayIndex);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  })() : null;
+
+  const isToday = targetDate && today.getTime() === targetDate.getTime();
+
+  useEffect(() => {
+    if (!isToday) return;
+
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 10000);
+
+    return () => clearInterval(timer);
+  }, [isToday, dayIndex]);
+
+  const activeEventRef = useRef(null);
+
+  useEffect(() => {
+    if (isToday && activeEventRef.current) {
+      const scrollTimeout = setTimeout(() => {
+        activeEventRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }, 300);
+      return () => clearTimeout(scrollTimeout);
+    }
+  }, [isToday, selectedPlanTitle, dayIndex]);
 
   useEffect(() => {
     setSelectedPlanTitle(dayData.active_plan);
@@ -59,6 +98,55 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
 
   const allBudgetItems = [...timelineItems, ...additionalItems];
   const totalCost = allBudgetItems.reduce((sum, item) => sum + item.cost, 0);
+
+  const parsedTimeline = (currentPlan.timeline || []).map((event, idx, arr) => {
+    if (!event.time) return { ...event, isPast: false, isOngoing: false };
+    
+    const startTime = targetDate ? parseTimeString(event.time, targetDate) : null;
+    if (!startTime) return { ...event, isPast: false, isOngoing: false };
+    
+    let endTime = null;
+    const durationMins = event.duration ? parseDuration(event.duration) : 0;
+    
+    if (durationMins > 0) {
+      endTime = new Date(startTime.getTime() + durationMins * 60 * 1000);
+    } else {
+      let nextStartTime = null;
+      for (let i = idx + 1; i < arr.length; i++) {
+        if (arr[i].time) {
+          nextStartTime = targetDate ? parseTimeString(arr[i].time, targetDate) : null;
+          if (nextStartTime) break;
+        }
+      }
+      if (nextStartTime && nextStartTime > startTime) {
+        endTime = nextStartTime;
+      } else {
+        endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+      }
+    }
+    
+    const isPast = isToday && now >= endTime;
+    const isOngoing = isToday && now >= startTime && now < endTime;
+    
+    let progressPercent = 0;
+    let minutesRemaining = 0;
+    if (isOngoing) {
+      const elapsed = now - startTime;
+      const total = endTime - startTime;
+      progressPercent = total > 0 ? (elapsed / total) * 100 : 0;
+      minutesRemaining = Math.max(0, Math.round((endTime - now) / (60 * 1000)));
+    }
+    
+    return {
+      ...event,
+      startTime,
+      endTime,
+      isPast,
+      isOngoing,
+      progressPercent,
+      minutesRemaining
+    };
+  });
 
   return (
     <div className="content-area">
@@ -205,17 +293,58 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
         <>
           <h3 className="section-title mt-4">Timeline</h3>
           <div className="timeline-container">
-            {currentPlan.timeline.map((event, idx) => (
-              <div key={idx} className="timeline-item">
-                <div className="timeline-icon">
+            {parsedTimeline.map((event, idx) => (
+              <div 
+                key={idx} 
+                ref={event.isOngoing ? activeEventRef : null}
+                className="timeline-item"
+                style={{
+                  opacity: event.isPast ? 0.5 : 1,
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                <div 
+                  className="timeline-icon" 
+                  style={{
+                    borderColor: event.isOngoing ? '#10b981' : event.isPast ? 'var(--border-light)' : 'var(--accent-primary)',
+                    color: event.isOngoing ? '#10b981' : event.isPast ? 'var(--text-secondary)' : 'var(--accent-primary)',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
                     <circle cx="12" cy="12" r="6" />
                   </svg>
                 </div>
-                <div className="timeline-content">
-                  <span className="timeline-time">{event.time}</span>
-                  <h4 className="timeline-title">{event.title}</h4>
+                <div 
+                  className="timeline-content"
+                  style={{
+                    background: event.isOngoing ? 'rgba(16, 185, 129, 0.04)' : 'rgba(255, 255, 255, 0.01)',
+                    border: event.isOngoing ? '1px solid #10b981' : '1px solid var(--border-light)',
+                    boxShadow: event.isOngoing ? '0 0 15px rgba(16, 185, 129, 0.15)' : 'none',
+                    borderRadius: '12px',
+                    padding: '1.25rem',
+                    position: 'relative',
+                    borderLeft: event.isOngoing ? '4px solid #10b981' : undefined,
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  <span className="timeline-time" style={{ color: event.isOngoing ? '#10b981' : 'var(--text-secondary)', fontWeight: event.isOngoing ? 'bold' : 'normal' }}>
+                    {event.time}
+                    {event.isOngoing && <span style={{ marginLeft: '0.5rem', background: '#10b981', color: '#fff', fontSize: '0.65rem', padding: '0.15rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em', verticalAlign: 'middle' }}>Active</span>}
+                  </span>
+                  <h4 className="timeline-title" style={{ color: event.isOngoing ? '#fff' : 'var(--text-primary)' }}>{event.title}</h4>
                   <p className="timeline-desc">{event.description}</p>
+
+                  {event.isOngoing && (
+                    <div style={{ marginTop: '0.75rem', marginBottom: '0.5rem' }}>
+                      <div style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '4px', height: '6px', width: '100%', overflow: 'hidden' }}>
+                        <div style={{ background: '#10b981', height: '100%', width: `${event.progressPercent}%`, transition: 'width 0.5s ease-out', boxShadow: '0 0 8px #10b981' }} />
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: '#10b981', marginTop: '0.25rem', display: 'block', fontWeight: '500' }}>
+                        ⏱️ {Math.round(event.progressPercent)}% elapsed • {event.minutesRemaining} mins remaining
+                      </span>
+                    </div>
+                  )}
 
                   {(event.duration || event.cost) ? (
                     <div style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
