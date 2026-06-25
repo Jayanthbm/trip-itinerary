@@ -29,6 +29,22 @@ const calculateEndDate = (startDate, daysCount) => {
   return formatDate(date);
 };
 
+const isTripInPast = (startDateStr, daysCount) => {
+  if (!startDateStr || !daysCount) return false;
+  const start = new Date(startDateStr);
+  if (isNaN(start.getTime())) return false;
+  
+  // Calculate end date
+  const end = new Date(start);
+  end.setDate(end.getDate() + daysCount - 1);
+  
+  // Set end to the very end of that day (23:59:59.999) to be safe
+  end.setHours(23, 59, 59, 999);
+  
+  const now = new Date();
+  return end < now;
+};
+
 const getCurrencySymbol = (currency) => {
   if (!currency) return "₹";
   const map = { INR: "₹", USD: "$", EUR: "€", GBP: "£", VND: "₫" };
@@ -271,11 +287,32 @@ function App() {
   // IndexedDB specific states
   const [recentTrips, setRecentTrips] = useState([]);
   const [tripToDelete, setTripToDelete] = useState(null);
+  const [showArchived, setShowArchived] = useState(false);
 
   const loadRecentTrips = async () => {
     try {
       const trips = await getAllTrips();
-      setRecentTrips(trips);
+      
+      let updatedAny = false;
+      const processedTrips = await Promise.all(trips.map(async (trip) => {
+        const daysCount = trip.days ? trip.days.length : 0;
+        if (!trip.archived && isTripInPast(trip.startDate, daysCount)) {
+          const updated = { ...trip, archived: true };
+          await saveTrip(updated);
+          updatedAny = true;
+          return updated;
+        }
+        return trip;
+      }));
+
+      setRecentTrips(processedTrips);
+      
+      if (updatedAny && appData) {
+        const currentActive = processedTrips.find(t => t.id === appData.id);
+        if (currentActive && currentActive.archived !== appData.archived) {
+          setAppData(currentActive);
+        }
+      }
     } catch (err) {
       console.error("Failed to load recent trips from IndexedDB:", err);
     }
@@ -378,6 +415,34 @@ function App() {
       setTripToDelete(null);
     } catch (err) {
       setError("Failed to delete trip: " + err.message);
+    }
+  };
+
+  const handleTogglePin = async (trip, e) => {
+    e.stopPropagation();
+    try {
+      const updated = { ...trip, pinned: !trip.pinned };
+      const saved = await saveTrip(updated);
+      if (appData && appData.id === trip.id) {
+        setAppData(saved);
+      }
+      await loadRecentTrips();
+    } catch (err) {
+      setError("Failed to toggle pin state: " + err.message);
+    }
+  };
+
+  const handleToggleArchive = async (trip, e) => {
+    e.stopPropagation();
+    try {
+      const updated = { ...trip, archived: !trip.archived };
+      const saved = await saveTrip(updated);
+      if (appData && appData.id === trip.id) {
+        setAppData(saved);
+      }
+      await loadRecentTrips();
+    } catch (err) {
+      setError("Failed to toggle archive state: " + err.message);
     }
   };
 
@@ -672,6 +737,15 @@ function App() {
         </div>
       )}
 
+      {tripToDelete && (
+        <ConfirmPopover
+          message={`Are you sure you want to delete the trip "${tripToDelete.title}"? This action cannot be undone.`}
+          confirmText="Delete"
+          onConfirm={() => handleDeleteTrip(tripToDelete.id)}
+          onCancel={() => setTripToDelete(null)}
+        />
+      )}
+
       {!appData ? (
         <div className="app-container" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
           <h1 style={{ color: '#fff', textAlign: 'center', marginBottom: '0.2rem' }}>J-itinerary</h1>
@@ -751,103 +825,305 @@ function App() {
 
             <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
 
-            {recentTrips.length > 0 && (
-              <>
-                <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Recent Trips</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
-                  {recentTrips.map((trip) => {
-                    const daysCount = trip.days ? trip.days.length : 0;
-                    const endDate = calculateEndDate(trip.startDate, daysCount);
-                    const curSymbol = getCurrencySymbol(trip.currency);
-                    return (
-                      <div
-                        key={trip.id}
-                        className="card"
+            {recentTrips.length > 0 && (() => {
+              const activeTrips = recentTrips.filter(t => !t.archived);
+              const archivedTrips = recentTrips.filter(t => t.archived);
+
+              // Sort activeTrips: pinned first, then by updatedAt desc
+              const sortedActiveTrips = [...activeTrips].sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return (b.updatedAt || 0) - (a.updatedAt || 0);
+              });
+
+              return (
+                <>
+                  {/* Active Trips Section */}
+                  {sortedActiveTrips.length > 0 && (
+                    <>
+                      <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Recent Trips</h2>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                        {sortedActiveTrips.map((trip) => {
+                          const daysCount = trip.days ? trip.days.length : 0;
+                          const endDate = calculateEndDate(trip.startDate, daysCount);
+                          const curSymbol = getCurrencySymbol(trip.currency);
+                          const isPinned = !!trip.pinned;
+                          return (
+                            <div
+                              key={trip.id}
+                              className="card"
+                              style={{
+                                padding: '1.25rem',
+                                background: 'rgba(255,255,255,0.02)',
+                                border: isPinned ? '1px solid var(--accent-primary)' : '1px solid var(--border-light)',
+                                boxShadow: isPinned ? '0 0 10px rgba(37, 99, 235, 0.15)' : 'none',
+                                borderRadius: '12px',
+                                color: 'var(--text-primary)',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'space-between',
+                                gap: '0.75rem',
+                                transition: 'border-color 0.2s, transform 0.2s',
+                                margin: 0,
+                                position: 'relative'
+                              }}
+                              onClick={() => {
+                                setAppData(trip);
+                                setActiveTab('day-0');
+                                localStorage.setItem('active_trip_id', trip.id);
+                                if (trip.sourceUrl) {
+                                  localStorage.setItem('it_url', trip.sourceUrl);
+                                } else {
+                                  localStorage.removeItem('it_url');
+                                }
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.borderColor = isPinned ? 'var(--accent-primary)' : 'var(--border-light)';
+                                e.currentTarget.style.transform = 'none';
+                              }}
+                            >
+                              <div style={{ paddingRight: '2.5rem' }}>
+                                <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#fff', wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                                  {trip.title}
+                                  {isPinned && <span style={{ fontSize: '0.85rem' }} title="Pinned">📌</span>}
+                                </h3>
+                                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                  {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
+                                </p>
+                                <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                                  <span>📅 {daysCount} Days</span>
+                                  <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
+                                </p>
+                              </div>
+
+                              <div
+                                style={{
+                                  position: 'absolute',
+                                  top: '0.75rem',
+                                  right: '0.75rem',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  gap: '0.3rem',
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <button
+                                  onClick={(e) => handleTogglePin(trip, e)}
+                                  className="tab-btn"
+                                  style={{
+                                    margin: 0,
+                                    padding: '0.2rem 0.35rem',
+                                    fontSize: '0.75rem',
+                                    background: isPinned ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255, 255, 255, 0.05)',
+                                    border: isPinned ? '1px solid var(--accent-primary)' : '1px solid var(--border-light)',
+                                    color: isPinned ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                  }}
+                                  title={isPinned ? "Unpin Trip" : "Pin Trip"}
+                                >
+                                  📌
+                                </button>
+                                <button
+                                  onClick={(e) => handleToggleArchive(trip, e)}
+                                  className="tab-btn"
+                                  style={{
+                                    margin: 0,
+                                    padding: '0.2rem 0.35rem',
+                                    fontSize: '0.75rem',
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid var(--border-light)',
+                                    color: 'var(--text-secondary)',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                  }}
+                                  title="Archive Trip"
+                                >
+                                  📥
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setTripToDelete(trip);
+                                  }}
+                                  className="tab-btn"
+                                  style={{
+                                    margin: 0,
+                                    padding: '0.2rem 0.35rem',
+                                    fontSize: '0.75rem',
+                                    background: 'rgba(239, 68, 68, 0.1)',
+                                    border: '1px solid #ef4444',
+                                    color: '#ef4444',
+                                    borderRadius: '4px',
+                                    cursor: 'pointer',
+                                  }}
+                                  title="Delete Trip"
+                                >
+                                  🗑️
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0 1rem 0' }}></div>
+                    </>
+                  )}
+
+                  {/* Archived Trips Collapsible Section */}
+                  {archivedTrips.length > 0 && (
+                    <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
+                      <button
+                        onClick={() => setShowArchived(!showArchived)}
+                        className="tab-btn"
                         style={{
-                          padding: '1.25rem',
-                          background: 'rgba(255,255,255,0.02)',
+                          width: '100%',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '0.8rem 1rem',
+                          background: 'rgba(255, 255, 255, 0.02)',
                           border: '1px solid var(--border-light)',
-                          borderRadius: '12px',
+                          borderRadius: '8px',
                           color: 'var(--text-primary)',
                           cursor: 'pointer',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          transition: 'border-color 0.2s, transform 0.2s',
-                          margin: 0,
-                          position: 'relative'
-                        }}
-                        onClick={() => {
-                          setAppData(trip);
-                          setActiveTab('day-0');
-                          localStorage.setItem('active_trip_id', trip.id);
-                          if (trip.sourceUrl) {
-                            localStorage.setItem('it_url', trip.sourceUrl);
-                          } else {
-                            localStorage.removeItem('it_url');
-                          }
-                        }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--border-light)';
-                          e.currentTarget.style.transform = 'none';
+                          margin: 0
                         }}
                       >
-                        <div style={{ paddingRight: '2rem' }}>
-                          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#fff', wordBreak: 'break-word' }}>{trip.title}</h3>
-                          <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                            {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
-                          </p>
-                          <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
-                            <span>📅 {daysCount} Days</span>
-                            <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
-                          </p>
+                        <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>
+                          📦 Archived Trips ({archivedTrips.length})
+                        </span>
+                        <span style={{ fontSize: '0.8rem', transform: showArchived ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>
+                          ▼
+                        </span>
+                      </button>
+
+                      {showArchived && (
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem', animation: 'modalEnter 0.2s ease-out' }}>
+                          {archivedTrips.map((trip) => {
+                            const daysCount = trip.days ? trip.days.length : 0;
+                            const endDate = calculateEndDate(trip.startDate, daysCount);
+                            const curSymbol = getCurrencySymbol(trip.currency);
+                            const isPast = isTripInPast(trip.startDate, daysCount);
+                            return (
+                              <div
+                                key={trip.id}
+                                className="card"
+                                style={{
+                                  padding: '1.25rem',
+                                  background: 'rgba(255,255,255,0.01)',
+                                  border: '1px solid var(--border-light)',
+                                  borderRadius: '12px',
+                                  color: 'var(--text-secondary)',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  justifyContent: 'space-between',
+                                  gap: '0.75rem',
+                                  transition: 'border-color 0.2s, transform 0.2s',
+                                  margin: 0,
+                                  position: 'relative',
+                                  opacity: 0.8
+                                }}
+                                onClick={() => {
+                                  setAppData(trip);
+                                  setActiveTab('day-0');
+                                  localStorage.setItem('active_trip_id', trip.id);
+                                  if (trip.sourceUrl) {
+                                    localStorage.setItem('it_url', trip.sourceUrl);
+                                  } else {
+                                    localStorage.removeItem('it_url');
+                                  }
+                                }}
+                                onMouseOver={(e) => {
+                                  e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                                  e.currentTarget.style.transform = 'translateY(-2px)';
+                                  e.currentTarget.style.opacity = '1';
+                                }}
+                                onMouseOut={(e) => {
+                                  e.currentTarget.style.borderColor = 'var(--border-light)';
+                                  e.currentTarget.style.transform = 'none';
+                                  e.currentTarget.style.opacity = '0.8';
+                                }}
+                              >
+                                <div style={{ paddingRight: '2.5rem' }}>
+                                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#ccc', wordBreak: 'break-word' }}>{trip.title}</h3>
+                                  <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                    {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
+                                  </p>
+                                  <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                                    <span>📅 {daysCount} Days</span>
+                                    <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
+                                  </p>
+                                </div>
+
+                                <div
+                                  style={{
+                                    position: 'absolute',
+                                    top: '0.75rem',
+                                    right: '0.75rem',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.3rem',
+                                  }}
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  {!isPast && (
+                                    <button
+                                      onClick={(e) => handleToggleArchive(trip, e)}
+                                      className="tab-btn"
+                                      style={{
+                                        margin: 0,
+                                        padding: '0.25rem 0.4rem',
+                                        fontSize: '0.75rem',
+                                        background: 'rgba(255, 255, 255, 0.05)',
+                                        border: '1px solid var(--border-light)',
+                                        color: 'var(--text-secondary)',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer',
+                                      }}
+                                      title="Unarchive Trip"
+                                    >
+                                      📤
+                                    </button>
+                                  )}
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setTripToDelete(trip);
+                                    }}
+                                    className="tab-btn"
+                                    style={{
+                                      margin: 0,
+                                      padding: '0.25rem 0.4rem',
+                                      fontSize: '0.75rem',
+                                      background: 'rgba(239, 68, 68, 0.1)',
+                                      border: '1px solid #ef4444',
+                                      color: '#ef4444',
+                                      borderRadius: '4px',
+                                      cursor: 'pointer',
+                                    }}
+                                    title="Delete Trip"
+                                  >
+                                    🗑️
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setTripToDelete(trip);
-                          }}
-                          className="tab-btn"
-                          style={{
-                            position: 'absolute',
-                            top: '0.75rem',
-                            right: '0.75rem',
-                            margin: 0,
-                            padding: '0.25rem 0.5rem',
-                            fontSize: '0.75rem',
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: '1px solid #ef4444',
-                            color: '#ef4444',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                          onMouseOver={(e) => {
-                            e.currentTarget.style.background = '#ef4444';
-                            e.currentTarget.style.color = '#fff';
-                          }}
-                          onMouseOut={(e) => {
-                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
-                            e.currentTarget.style.color = '#ef4444';
-                          }}
-                          title="Delete Trip"
-                        >
-                          🗑️
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
-              </>
-            )}
+                      )}
+                      <div style={{ borderBottom: '1px solid var(--border-light)', margin: '1rem 0' }}></div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             {recentTrips.length === 0 && (
               <>
@@ -937,15 +1213,6 @@ function App() {
                 confirmText="Close & Lose Edits"
                 onConfirm={executeClose}
                 onCancel={() => setShowCloseConfirm(false)}
-              />
-            )}
-
-            {tripToDelete && (
-              <ConfirmPopover
-                message={`Are you sure you want to delete the trip "${tripToDelete.title}"? This action cannot be undone.`}
-                confirmText="Delete"
-                onConfirm={() => handleDeleteTrip(tripToDelete.id)}
-                onCancel={() => setTripToDelete(null)}
               />
             )}
         </div>
