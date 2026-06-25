@@ -500,7 +500,7 @@
       "active_plan": "Main Plan",
       "plans": [
         {
-          "title": "Main Plan (Clear Weather - Doddabetta Peak)",
+          "title": "Main Plan",
           "timeline": [
             {
               "time": "07:30 AM",
@@ -610,7 +610,7 @@
           ]
         },
         {
-          "title": "Backup Plan (Rainy Morning / Extra Rest Route)",
+          "title": "Backup Plan",
           "timeline": [
             {
               "time": "08:30 AM",

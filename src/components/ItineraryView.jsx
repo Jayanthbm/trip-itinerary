@@ -6,6 +6,7 @@ import BudgetView from './BudgetView';
 import EditView from './EditView';
 import ConfirmPopover from './ConfirmPopover';
 import { formatDate, calculateEndDate, getCurrencySymbol } from '../utils/itineraryHelpers';
+import { DownloadIcon, EyeIcon, EditIcon, XIcon } from './Icons';
 
 function ItineraryView({
   appData,
@@ -69,20 +70,20 @@ function ItineraryView({
 
   return (
     <div className="app-container" style={{ width: '100%', maxWidth: '100%', padding: '0 0.5rem' }}>
-      <div style={{ background: "var(--bg-secondary)", padding: "1rem", borderBottom: "1px solid var(--border-light)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-        <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", alignItems: "center", width: "100%" }}>
-          <button onClick={handleDownload} className="tab-btn" style={{ margin: 0, padding: "0.4rem 1rem", background: "var(--bg-color)", border: "1px solid var(--border-light)", color: "var(--text-primary)", cursor: "pointer", transition: "border-color 0.2s", borderRadius: "4px" }} onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--accent-primary)")} onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border-light)")}>
-            Download
+      <div className="itinerary-actions-bar">
+        <div className="itinerary-actions-container">
+          <button onClick={handleDownload} className="itinerary-action-btn" title="Download Itinerary">
+            <DownloadIcon size={18} />
           </button>
           <button
             onClick={() => setIsEditing(!isEditing)}
-            className={`tab-btn ${isEditing ? 'active' : ''}`}
-            style={{ margin: 0, padding: "0.4rem 1rem", background: isEditing ? "var(--gradient-secondary)" : "var(--bg-color)", border: "1px solid var(--border-light)", color: isEditing ? "#fff" : "var(--text-primary)", cursor: "pointer", transition: "all 0.2s", borderRadius: "4px" }}
+            className={`itinerary-action-btn ${isEditing ? 'active' : ''}`}
+            title={isEditing ? "Switch to View Mode" : "Switch to Edit Mode"}
           >
-            {isEditing ? "View Mode" : "Edit Mode"}
+            {isEditing ? <EyeIcon size={18} /> : <EditIcon size={18} />}
           </button>
-          <button onClick={handleClose} className="tab-btn" style={{ margin: "0 0 0 auto", padding: "0.4rem 1rem", background: "rgba(239, 68, 68, 0.1)", border: "1px solid #ef4444", color: "#ef4444", cursor: "pointer", transition: "all 0.2s", borderRadius: "4px" }} onMouseOver={(e) => { e.currentTarget.style.background = "#ef4444"; e.currentTarget.style.color = "#fff"; }} onMouseOut={(e) => { e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)"; e.currentTarget.style.color = "#ef4444"; }}>
-            Close Itinerary
+          <button onClick={handleClose} className="itinerary-action-btn itinerary-action-btn-close" title="Close Itinerary">
+            <XIcon size={18} />
           </button>
         </div>
       </div>

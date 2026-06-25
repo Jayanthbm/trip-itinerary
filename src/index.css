@@ -559,13 +559,29 @@ body {
   gap: 0.5rem;
 }
 
-.prebook-header-title {
+.prebook-title-row {
   font-weight: 600;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: wrap;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  flex: 1;
+}
+
+.prebook-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.prebook-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: normal;
+  white-space: nowrap;
 }
 
 .prebook-route-container {
@@ -585,7 +601,8 @@ body {
   font-size: 1.6rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  word-break: break-all;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .prebook-connection {
@@ -627,7 +644,85 @@ body {
   margin-bottom: 0.75rem;
 }
 
+/* Itinerary top actions bar */
+.itinerary-actions-bar {
+  background: var(--bg-secondary);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.itinerary-actions-container {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  width: 100%;
+}
+
+.itinerary-action-btn {
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-color);
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.itinerary-action-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.itinerary-action-btn.active {
+  background: var(--gradient-secondary);
+  color: white;
+  border-color: transparent;
+}
+
+.itinerary-action-btn-close {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  margin-left: auto;
+}
+
+.itinerary-action-btn-close:hover {
+  background: #ef4444;
+  color: white;
+}
+
 @media (max-width: 600px) {
+  .prebook-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .prebook-title-row {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  .prebook-meta-row {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.25rem;
+  }
+
+  .prebook-date {
+    font-size: 0.75rem;
+  }
+
   .prebook-route-container {
     flex-direction: column;
     align-items: flex-start;
@@ -675,5 +770,19 @@ body {
   .prebook-details-grid {
     grid-template-columns: 1fr;
     gap: 0.75rem;
+  }
+
+  .itinerary-actions-container {
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+  }
+
+  .itinerary-action-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .itinerary-action-btn-close {
+    margin-left: auto;
   }
 }

@@ -143,6 +143,7 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
               gap: "0.5rem",
               opacity: showLeft || showRight ? 1 : 0,
               pointerEvents: showLeft || showRight ? "auto" : "none",
+              marginLeft: "auto",
             }}
           >
             <button

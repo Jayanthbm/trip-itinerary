@@ -119,36 +119,36 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
 
   const renderRouteCard = ({ id, emoji, headerTitle, date, from, to, departure, arrival, terminalFrom, terminalTo, durationMinutes, cost, links, statusBadge, extraInfo }) => (
     <div key={id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
-      <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
-        <div style={{ fontWeight: '600', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          {emoji} {headerTitle}
-          {date && <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 'normal' }}>— {date}</span>}
+      <div className="prebook-header">
+        <div className="prebook-title-row">
+          {emoji} <span className="prebook-title-text">{headerTitle}</span>
         </div>
-        {statusBadge}
+        <div className="prebook-meta-row">
+          {date && <span className="prebook-date">{date}</span>}
+          <div className="prebook-status-wrapper" style={{ marginLeft: date ? '0' : 'auto' }}>
+            {statusBadge}
+          </div>
+        </div>
       </div>
 
       <div style={{ padding: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', gap: '0.5rem' }}>
-          <div style={{ textAlign: 'center', minWidth: '70px' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{from}</div>
+        <div className="prebook-route-container">
+          <div className="prebook-station">
+            <div className="prebook-station-code">{from}</div>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{formatTime12h(departure)}</div>
-            {terminalFrom && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalFrom}</div>}
+            {terminalFrom && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{terminalFrom}</div>}
           </div>
 
-          <div style={{ flex: 1, textAlign: 'center', padding: '0 1rem' }}>
-            <div style={{ position: 'relative', margin: '0.5rem 0' }}>
-              <div style={{ borderTop: '1px dashed var(--border-light)' }} />
-              <span style={{
-                position: 'absolute', top: '50%', left: '50%',
-                transform: 'translate(-50%, -50%)',
-                background: 'var(--bg-color)',
-                padding: '0 8px',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                lineHeight: 1
-              }}>
+          <div className="prebook-connection">
+            <div className="prebook-connection-line">
+              <div className="prebook-connection-dashed" />
+              <span className="prebook-connection-icon">
                 {emoji}
               </span>
             </div>
+            <span className="prebook-connection-icon-mobile">
+              {emoji}
+            </span>
             {durationMinutes && (
               <div style={{ color: 'var(--text-muted)', fontSize: '0.72rem', marginTop: '0.4rem' }}>
                 {formatMinutes(durationMinutes)}
@@ -156,13 +156,12 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
             )}
           </div>
 
-          <div style={{ textAlign: 'center', minWidth: '70px' }}>
-            <div style={{ fontSize: '1.6rem', fontWeight: '700', letterSpacing: '0.05em' }}>{to}</div>
+          <div className="prebook-station">
+            <div className="prebook-station-code">{to}</div>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{formatTime12h(arrival)}</div>
-            {terminalTo && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>{terminalTo}</div>}
+            {terminalTo && <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '0.2rem', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{terminalTo}</div>}
           </div>
         </div>
-
 
         {cost && (
           <div style={{ textAlign: 'center', marginBottom: '0.5rem' }}>
@@ -262,24 +261,28 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
         {renderSectionHeader('Accommodations', <BuildingIcon size={18} />, 'rooms', rooms.length)}
         {openSections.rooms && rooms.map(room => (
           <div key={room.id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
-            <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
-              <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <BuildingIcon size={18} /> {room.name}
+            <div className="prebook-header">
+              <div className="prebook-title-row">
+                <BuildingIcon size={18} /> <span className="prebook-title-text">{room.name}</span>
               </div>
-              {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
+              <div className="prebook-meta-row">
+                <div className="prebook-status-wrapper" style={{ marginLeft: 'auto' }}>
+                  {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
+                </div>
+              </div>
             </div>
             <div style={{ padding: '1.25rem' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem', marginBottom: '0.75rem' }}>
+              <div className="prebook-details-grid">
                 {room.checkin && (
                   <div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-in</div>
-                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{formatTime12h(room.checkin)}</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{formatTime12h(room.checkin)}</div>
                   </div>
                 )}
                 {room.checkout && (
                   <div>
                     <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>Check-out</div>
-                    <div style={{ fontWeight: '500', fontSize: '0.9rem' }}>{formatTime12h(room.checkout)}</div>
+                    <div style={{ fontWeight: '500', fontSize: '0.9rem', wordBreak: 'break-word', overflowWrap: 'break-word' }}>{formatTime12h(room.checkout)}</div>
                   </div>
                 )}
                 {room.cost && (
@@ -290,7 +293,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
                 )}
               </div>
               {room.location && (
-                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', wordBreak: 'break-word', overflowWrap: 'break-word' }}>
                   📍 {room.mapsLink ? (
                     <a href={room.mapsLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-primary)', textDecoration: 'none' }}>{room.location} ↗</a>
                   ) : room.location}
@@ -312,11 +315,15 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
         {renderSectionHeader('Activities & Requirements', <CheckIcon size={18} />, 'activities', activities.length)}
         {openSections.activities && activities.map(activity => (
           <div key={activity.id} className="card" style={{ padding: '0', overflow: 'hidden', border: '1px solid var(--border-light)', borderRadius: '12px', marginBottom: '1.25rem' }}>
-            <div style={{ background: 'var(--bg-secondary)', padding: '0.75rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-light)' }}>
-              <div style={{ fontWeight: '600', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <CheckIcon size={18} /> {activity.name}
+            <div className="prebook-header">
+              <div className="prebook-title-row">
+                <CheckIcon size={18} /> <span className="prebook-title-text">{activity.name}</span>
               </div>
-              {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
+              <div className="prebook-meta-row">
+                <div className="prebook-status-wrapper" style={{ marginLeft: 'auto' }}>
+                  {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
+                </div>
+              </div>
             </div>
             <div style={{ padding: '1.25rem' }}>
               {activity.cost !== undefined && (
@@ -336,7 +343,9 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
                   color: 'var(--text-secondary)',
                   fontSize: '0.85rem',
                   fontStyle: 'italic',
-                  lineHeight: '1.6'
+                  lineHeight: '1.6',
+                  wordBreak: 'break-word',
+                  overflowWrap: 'break-word'
                 }}>
                   {activity.notes}
                 </blockquote>
