@@ -45,6 +45,74 @@ const isTripInPast = (startDateStr, daysCount) => {
   return end < now;
 };
 
+const getTripCountdown = (startDateStr, daysCount) => {
+  if (!startDateStr) return { text: "", status: "" };
+  const start = new Date(startDateStr);
+  if (isNaN(start.getTime())) return { text: "", status: "" };
+
+  // Set times to midnight for date-only comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  start.setHours(0, 0, 0, 0);
+
+  const diffTime = start - today;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays > 0) {
+    return {
+      text: `⏳ Starts in ${diffDays} day${diffDays > 1 ? 's' : ''}`,
+      status: "future"
+    };
+  } else if (diffDays === 0) {
+    return {
+      text: `✨ Starts today!`,
+      status: "today"
+    };
+  } else {
+    // Check if ongoing
+    const end = new Date(start);
+    end.setDate(end.getDate() + daysCount - 1);
+    end.setHours(23, 59, 59, 999);
+    
+    const now = new Date();
+    if (now <= end) {
+      const elapsedDays = Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1;
+      return {
+        text: `✈️ Ongoing (Day ${elapsedDays} of ${daysCount})`,
+        status: "ongoing"
+      };
+    } else {
+      return {
+        text: `✅ Completed`,
+        status: "completed"
+      };
+    }
+  }
+};
+
+const statusStyles = {
+  future: {
+    bg: 'rgba(37, 99, 235, 0.15)',
+    border: 'rgba(37, 99, 235, 0.3)',
+    color: '#93c5fd'
+  },
+  today: {
+    bg: 'rgba(245, 158, 11, 0.15)',
+    border: 'rgba(245, 158, 11, 0.3)',
+    color: '#fde047'
+  },
+  ongoing: {
+    bg: 'rgba(16, 185, 129, 0.15)',
+    border: 'rgba(16, 185, 129, 0.3)',
+    color: '#6ee7b7'
+  },
+  completed: {
+    bg: 'rgba(148, 163, 184, 0.15)',
+    border: 'rgba(148, 163, 184, 0.3)',
+    color: '#cbd5e1'
+  }
+};
+
 const getCurrencySymbol = (currency) => {
   if (!currency) return "₹";
   const map = { INR: "₹", USD: "$", EUR: "€", GBP: "£", VND: "₫" };
@@ -349,7 +417,6 @@ function App() {
       setAppData(saved);
       setActiveTab('day-0');
       localStorage.setItem('active_trip_id', saved.id);
-      localStorage.setItem('it_url', url);
       setEditsMade(false);
       localStorage.removeItem('edits_made');
     } catch (err) {
@@ -359,27 +426,7 @@ function App() {
     }
   };
 
-  const checkAndFetchUrl = async (url) => {
-    const now = new Date().getTime();
-    const fifteenMins = 15 * 60 * 1000;
 
-    try {
-      const trips = await getAllTrips();
-      const cachedTrip = trips.find(t => t.sourceUrl === url);
-      if (cachedTrip && cachedTrip.updatedAt && (now - cachedTrip.updatedAt < fifteenMins)) {
-        if (!validateData(cachedTrip)) {
-          setAppData(cachedTrip);
-          setActiveTab('day-0');
-          localStorage.setItem('active_trip_id', cachedTrip.id);
-          localStorage.setItem('it_url', url);
-          return;
-        }
-      }
-    } catch (e) {
-      console.error("Error checking IndexedDB for URL cache:", e);
-    }
-    await fetchData(url);
-  };
 
   const handleUpdateAppData = async (newData) => {
     try {
@@ -410,7 +457,6 @@ function App() {
       setAppData(saved);
       setActiveTab('day-0');
       localStorage.setItem('active_trip_id', saved.id);
-      localStorage.removeItem('it_url');
       localStorage.removeItem('last_fetch');
       setEditsMade(false);
       localStorage.removeItem('edits_made');
@@ -549,32 +595,38 @@ function App() {
     const initApp = async () => {
       if (urlParam) {
         setUrlInput(urlParam);
-        await checkAndFetchUrl(urlParam);
+        try {
+          const trips = await getAllTrips();
+          const existingTrip = trips.find(t => t.sourceUrl === urlParam);
+          if (existingTrip && !validateData(existingTrip)) {
+            setAppData(existingTrip);
+            setActiveTab('day-0');
+            localStorage.setItem('active_trip_id', existingTrip.id);
+          } else {
+            await fetchData(urlParam);
+          }
+        } catch (e) {
+          await fetchData(urlParam);
+        }
       } else {
-        const storedUrl = localStorage.getItem('it_url');
-        if (storedUrl) {
-          setUrlInput(storedUrl);
-          await checkAndFetchUrl(storedUrl);
-        } else {
-          const activeTripId = localStorage.getItem('active_trip_id');
-          if (activeTripId) {
-            try {
-              const trips = await getAllTrips();
-              const activeTrip = trips.find(t => t.id === activeTripId);
-              if (activeTrip && !validateData(activeTrip)) {
-                setAppData(activeTrip);
-                setActiveTab('day-0');
-              } else {
-                localStorage.removeItem('active_trip_id');
-                loadRecentTrips();
-              }
-            } catch (e) {
+        const activeTripId = localStorage.getItem('active_trip_id');
+        if (activeTripId) {
+          try {
+            const trips = await getAllTrips();
+            const activeTrip = trips.find(t => t.id === activeTripId);
+            if (activeTrip && !validateData(activeTrip)) {
+              setAppData(activeTrip);
+              setActiveTab('day-0');
+            } else {
               localStorage.removeItem('active_trip_id');
               loadRecentTrips();
             }
-          } else {
+          } catch (e) {
+            localStorage.removeItem('active_trip_id');
             loadRecentTrips();
           }
+        } else {
+          loadRecentTrips();
         }
       }
     };
@@ -628,7 +680,6 @@ function App() {
       setAppData(saved);
       setActiveTab('day-0');
       localStorage.setItem('active_trip_id', saved.id);
-      localStorage.removeItem('it_url');
       localStorage.removeItem('last_fetch');
       setEditsMade(true);
       localStorage.setItem('edits_made', 'true');
@@ -652,7 +703,6 @@ function App() {
         setAppData(saved);
         setActiveTab('day-0');
         localStorage.setItem('active_trip_id', saved.id);
-        localStorage.removeItem('it_url');
         localStorage.removeItem('last_fetch');
         setEditsMade(false);
         localStorage.removeItem('edits_made');
@@ -681,7 +731,7 @@ function App() {
   const handleUrlLoad = async (e) => {
     e.preventDefault();
     if (!urlInput.trim()) return;
-    await checkAndFetchUrl(urlInput.trim());
+    await fetchData(urlInput.trim());
   };
 
   const handlePasteLoad = () => {
@@ -714,7 +764,6 @@ function App() {
 
   const executeClose = () => {
     localStorage.removeItem('active_trip_id');
-    localStorage.removeItem('it_url');
     localStorage.removeItem('last_fetch');
     localStorage.removeItem('edits_made');
     setAppData(null);
@@ -1060,6 +1109,7 @@ function App() {
                           const endDate = calculateEndDate(trip.startDate, daysCount);
                           const curSymbol = getCurrencySymbol(trip.currency);
                           const isPinned = !!trip.pinned;
+                          const countdown = getTripCountdown(trip.startDate, daysCount);
                           return (
                             <div
                               key={trip.id}
@@ -1084,11 +1134,6 @@ function App() {
                                 setAppData(trip);
                                 setActiveTab('day-0');
                                 localStorage.setItem('active_trip_id', trip.id);
-                                if (trip.sourceUrl) {
-                                  localStorage.setItem('it_url', trip.sourceUrl);
-                                } else {
-                                  localStorage.removeItem('it_url');
-                                }
                               }}
                               onMouseOver={(e) => {
                                 e.currentTarget.style.borderColor = 'var(--accent-primary)';
@@ -1099,18 +1144,37 @@ function App() {
                                 e.currentTarget.style.transform = 'none';
                               }}
                             >
-                              <div style={{ paddingRight: '2.5rem' }}>
+                              <div style={{ paddingRight: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                                 <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#fff', wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                                   {trip.title}
                                   {isPinned && <span style={{ fontSize: '0.85rem' }} title="Pinned">📌</span>}
                                 </h3>
-                                <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                                   {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
                                 </p>
-                                <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
                                   <span>📅 {daysCount} Days</span>
                                   <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
                                 </p>
+                                {countdown.text && (
+                                  <div style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    padding: '0.25rem 0.5rem',
+                                    borderRadius: '6px',
+                                    fontSize: '0.75rem',
+                                    fontWeight: '500',
+                                    marginTop: '0.1rem',
+                                    width: 'fit-content',
+                                    background: statusStyles[countdown.status]?.bg || 'rgba(255,255,255,0.05)',
+                                    border: `1px solid ${statusStyles[countdown.status]?.border || 'var(--border-light)'}`,
+                                    color: statusStyles[countdown.status]?.color || 'var(--text-secondary)',
+                                    backdropFilter: 'blur(4px)',
+                                    WebkitBackdropFilter: 'blur(4px)'
+                                  }}>
+                                    {countdown.text}
+                                  </div>
+                                )}
                               </div>
 
                               <div
@@ -1274,6 +1338,7 @@ function App() {
                               const endDate = calculateEndDate(trip.startDate, daysCount);
                               const curSymbol = getCurrencySymbol(trip.currency);
                               const isPast = isTripInPast(trip.startDate, daysCount);
+                              const countdown = getTripCountdown(trip.startDate, daysCount);
                               return (
                                 <div
                                   key={trip.id}
@@ -1298,11 +1363,6 @@ function App() {
                                     setAppData(trip);
                                     setActiveTab('day-0');
                                     localStorage.setItem('active_trip_id', trip.id);
-                                    if (trip.sourceUrl) {
-                                      localStorage.setItem('it_url', trip.sourceUrl);
-                                    } else {
-                                      localStorage.removeItem('it_url');
-                                    }
                                   }}
                                   onMouseOver={(e) => {
                                     e.currentTarget.style.borderColor = 'var(--accent-primary)';
@@ -1315,15 +1375,34 @@ function App() {
                                     e.currentTarget.style.opacity = '0.8';
                                   }}
                                 >
-                                  <div style={{ paddingRight: '2.5rem' }}>
+                                  <div style={{ paddingRight: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                                     <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#ccc', wordBreak: 'break-word' }}>{trip.title}</h3>
-                                    <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
                                       {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
                                     </p>
-                                    <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
                                       <span>📅 {daysCount} Days</span>
                                       <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
                                     </p>
+                                    {countdown.text && (
+                                      <div style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        padding: '0.25rem 0.5rem',
+                                        borderRadius: '6px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: '500',
+                                        marginTop: '0.1rem',
+                                        width: 'fit-content',
+                                        background: statusStyles[countdown.status]?.bg || 'rgba(255,255,255,0.05)',
+                                        border: `1px solid ${statusStyles[countdown.status]?.border || 'var(--border-light)'}`,
+                                        color: statusStyles[countdown.status]?.color || 'var(--text-secondary)',
+                                        backdropFilter: 'blur(4px)',
+                                        WebkitBackdropFilter: 'blur(4px)'
+                                      }}>
+                                        {countdown.text}
+                                      </div>
+                                    )}
                                   </div>
 
                                   <div
@@ -1655,18 +1734,8 @@ function App() {
         </div>
       ) : (
         <div className="app-container" style={{ width: '100%', maxWidth: '100%', padding: '0 0.5rem' }}>
-          <div style={{ background: "var(--bg-secondary)", padding: "1rem", borderBottom: "1px solid var(--border-light)", display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <form onSubmit={handleUrlLoad} style={{ display: "flex", flex: "1 1 100%", gap: "0.5rem", flexWrap: "wrap", width: "100%" }}>
-              <input type="url" placeholder="Enter JSON URL to load external itinerary..." value={urlInput} onChange={(e) => setUrlInput(e.target.value)} style={{ flex: "1 1 200px", minWidth: "0", padding: "0.6rem 1rem", borderRadius: "4px", border: "1px solid var(--border-light)", background: "var(--bg-color)", color: "var(--text-primary)" }} />
-              <button type="submit" disabled={isLoading} className="tab-btn" style={{ flex: "0 0 auto", margin: 0, padding: "0.6rem 1.5rem", background: "var(--accent-primary)", border: "none", color: "#fff", cursor: isLoading ? "default" : "pointer", opacity: isLoading ? 0.7 : 1, borderRadius: "4px" }}>
-                {isLoading ? "Loading..." : "Load"}
-              </button>
-            </form>
-            <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", alignItems: "center" }}>
-              <label className="tab-btn" style={{ margin: 0, padding: "0.4rem 1rem", background: "var(--bg-color)", border: "1px solid var(--border-light)", color: "var(--text-primary)", cursor: "pointer", transition: "border-color 0.2s", borderRadius: "4px" }} onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--accent-primary)")} onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border-light)")}>
-                Upload
-                <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: "none" }} />
-              </label>
+          <div style={{ background: "var(--bg-secondary)", padding: "1rem", borderBottom: "1px solid var(--border-light)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ display: "flex", gap: "0.8rem", flexWrap: "wrap", alignItems: "center", width: "100%" }}>
               <button onClick={handleDownload} className="tab-btn" style={{ margin: 0, padding: "0.4rem 1rem", background: "var(--bg-color)", border: "1px solid var(--border-light)", color: "var(--text-primary)", cursor: "pointer", transition: "border-color 0.2s", borderRadius: "4px" }} onMouseOver={(e) => (e.currentTarget.style.borderColor = "var(--accent-primary)")} onMouseOut={(e) => (e.currentTarget.style.borderColor = "var(--border-light)")}>
                 Download
               </button>
