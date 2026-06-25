@@ -2,17 +2,11 @@ import React, { useState, useEffect } from 'react';
 import CreateItineraryModal from './CreateItineraryModal';
 import PromptGenerator from './PromptGenerator';
 import ConfirmPopover from './ConfirmPopover';
-import {
-  formatDate,
-  calculateEndDate,
-  isTripInPast,
-  getTripCountdown,
-  statusStyles,
-  getCurrencySymbol,
-  calculateTotalBudget,
-  validateData,
-  sampleItinerary
-} from '../utils/itineraryHelpers';
+import TripCard from './TripCard';
+import ActionGrid from './ActionGrid';
+import LoadFromUrl from './LoadFromUrl';
+import BackupControls from './BackupControls';
+import { sampleItinerary, validateData } from '../utils/itineraryHelpers';
 
 function DashboardView({
   recentTrips,
@@ -35,7 +29,6 @@ function DashboardView({
   const [archivedTripsPage, setArchivedTripsPage] = useState(1);
   const [sampleTripsPage, setSampleTripsPage] = useState(1);
   const [showArchived, setShowArchived] = useState(false);
-  const [urlInput, setUrlInput] = useState('');
 
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showPromptGen, setShowPromptGen] = useState(false);
@@ -98,12 +91,6 @@ function DashboardView({
     e.target.value = null;
   };
 
-  const handleUrlLoad = async (e) => {
-    e.preventDefault();
-    if (!urlInput.trim()) return;
-    await onFetchData(urlInput.trim());
-  };
-
   const handleDeleteConfirm = async () => {
     if (!tripToDelete) return;
     const success = await onDeleteTrip(tripToDelete.id);
@@ -112,7 +99,6 @@ function DashboardView({
     }
   };
 
-  // 1. Filter trips based on searchQuery
   const filterTrips = (tripsList) => {
     if (recentTrips.length <= 3 || !searchQuery.trim()) return tripsList;
     const query = searchQuery.toLowerCase().trim();
@@ -124,7 +110,6 @@ function DashboardView({
   const filteredActiveTrips = filterTrips(recentTrips.filter(t => !t.archived));
   const filteredArchivedTrips = filterTrips(recentTrips.filter(t => t.archived));
 
-  // 2. Sort trips function
   const sortTrips = (tripsList) => {
     return [...tripsList].sort((a, b) => {
       if (sortBy === 'name') {
@@ -139,7 +124,6 @@ function DashboardView({
     });
   };
 
-  // Active trips: pinned first, sorted within each partition
   const pinnedActive = filteredActiveTrips.filter(t => t.pinned);
   const unpinnedActive = filteredActiveTrips.filter(t => !t.pinned);
   const sortedActiveTrips = [
@@ -149,20 +133,17 @@ function DashboardView({
 
   const sortedArchivedTrips = sortTrips(filteredArchivedTrips);
 
-  // 3. Paginate Active Trips (Max 3)
   const itemsPerPage = 3;
   const totalActivePages = Math.ceil(sortedActiveTrips.length / itemsPerPage);
   const currentActivePage = Math.min(activeTripsPage, totalActivePages || 1);
   const paginatedActiveTrips = sortedActiveTrips.slice((currentActivePage - 1) * itemsPerPage, currentActivePage * itemsPerPage);
 
-  // 4. Paginate Archived Trips (Max 3)
   const totalArchivedPages = Math.ceil(sortedArchivedTrips.length / itemsPerPage);
   const currentArchivedPage = Math.min(archivedTripsPage, totalArchivedPages || 1);
   const paginatedArchivedTrips = sortedArchivedTrips.slice((currentArchivedPage - 1) * itemsPerPage, currentArchivedPage * itemsPerPage);
 
   return (
     <div className="app-container" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto', width: '100%' }}>
-      {/* Modals & Overlays */}
       {showCreateModal && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'var(--bg-primary)' }}>
           <CreateItineraryModal onSave={handleCreateNew} onCancel={() => setShowCreateModal(false)} />
@@ -256,7 +237,6 @@ function DashboardView({
         {/* 2. Recent Trips / Sample Itineraries */}
         {recentTrips.length > 0 && (
           <>
-            {/* Search and Sort Controls Bar */}
             {recentTrips.length > 3 && (
               <div style={{
                 display: 'flex',
@@ -267,20 +247,8 @@ function DashboardView({
                 alignItems: 'center',
                 justifyContent: 'space-between'
               }}>
-                {/* Search Field */}
-                <div style={{
-                  position: 'relative',
-                  flex: '1 1 280px',
-                  display: 'flex',
-                  alignItems: 'center'
-                }}>
-                  <span style={{
-                    position: 'absolute',
-                    left: '0.75rem',
-                    color: 'var(--text-secondary)',
-                    fontSize: '0.9rem',
-                    pointerEvents: 'none'
-                  }}>🔍</span>
+                <div style={{ position: 'relative', flex: '1 1 280px', display: 'flex', alignItems: 'center' }}>
+                  <span style={{ position: 'absolute', left: '0.75rem', color: 'var(--text-secondary)', fontSize: '0.9rem', pointerEvents: 'none' }}>🔍</span>
                   <input
                     type="text"
                     placeholder="Search trips by title..."
@@ -312,23 +280,7 @@ function DashboardView({
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      style={{
-                        position: 'absolute',
-                        right: '0.75rem',
-                        background: 'none',
-                        border: 'none',
-                        color: 'var(--text-secondary)',
-                        cursor: 'pointer',
-                        fontSize: '0.85rem',
-                        padding: '0.2rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: '50%',
-                        transition: 'color 0.2s'
-                      }}
-                      onMouseOver={(e) => e.target.style.color = 'var(--text-primary)'}
-                      onMouseOut={(e) => e.target.style.color = 'var(--text-secondary)'}
+                      style={{ position: 'absolute', right: '0.75rem', background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontSize: '0.85rem', padding: '0.2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}
                       title="Clear search"
                     >
                       ✕
@@ -336,13 +288,7 @@ function DashboardView({
                   )}
                 </div>
 
-                {/* Sort Dropdown */}
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  flex: '0 1 auto'
-                }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flex: '0 1 auto' }}>
                   <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap' }}>Sort:</span>
                   <select
                     value={sortBy}
@@ -375,189 +321,44 @@ function DashboardView({
                       e.target.style.background = 'rgba(255, 255, 255, 0.03)';
                     }}
                   >
-                    <option value="modified" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Last Updated</option>
-                    <option value="name" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Name (A-Z)</option>
-                    <option value="date" style={{ background: 'var(--bg-secondary)', color: 'var(--text-primary)' }}>Start Date (Earliest)</option>
+                    <option value="modified">Last Updated</option>
+                    <option value="name">Name (A-Z)</option>
+                    <option value="date">Start Date (Earliest)</option>
                   </select>
                 </div>
               </div>
             )}
 
-            {/* Active Trips Section */}
             {paginatedActiveTrips.length > 0 && (
               <>
                 <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>
                   {searchQuery.trim() ? 'Matching Trips' : 'Recent Trips'}
                 </h2>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginBottom: '0.5rem' }}>
-                  {paginatedActiveTrips.map((trip) => {
-                    const daysCount = trip.days ? trip.days.length : 0;
-                    const endDate = calculateEndDate(trip.startDate, daysCount);
-                    const curSymbol = getCurrencySymbol(trip.currency);
-                    const isPinned = !!trip.pinned;
-                    const countdown = getTripCountdown(trip.startDate, daysCount);
-                    return (
-                      <div
-                        key={trip.id}
-                        className="card"
-                        style={{
-                          padding: '1.25rem',
-                          background: 'rgba(255,255,255,0.02)',
-                          border: isPinned ? '1px solid var(--accent-primary)' : '1px solid var(--border-light)',
-                          boxShadow: isPinned ? '0 0 10px rgba(37, 99, 235, 0.15)' : 'none',
-                          borderRadius: '12px',
-                          color: 'var(--text-primary)',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          gap: '0.75rem',
-                          transition: 'border-color 0.2s, transform 0.2s',
-                          margin: 0,
-                          position: 'relative'
-                        }}
-                        onClick={() => {
-                          setAppData(trip);
-                          setActiveTab('day-0');
-                          localStorage.setItem('active_trip_id', trip.id);
-                        }}
-                        onMouseOver={(e) => {
-                          e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseOut={(e) => {
-                          e.currentTarget.style.borderColor = isPinned ? 'var(--accent-primary)' : 'var(--border-light)';
-                          e.currentTarget.style.transform = 'none';
-                        }}
-                      >
-                        <div style={{ paddingRight: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#fff', wordBreak: 'break-word', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                            {trip.title}
-                            {isPinned && <span style={{ fontSize: '0.85rem' }} title="Pinned">📌</span>}
-                          </h3>
-                          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                            {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
-                          </p>
-                          <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
-                            <span>📅 {daysCount} Days</span>
-                            <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
-                          </p>
-                          {countdown.text && (
-                            <div style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              padding: '0.25rem 0.5rem',
-                              borderRadius: '6px',
-                              fontSize: '0.75rem',
-                              fontWeight: '500',
-                              marginTop: '0.1rem',
-                              width: 'fit-content',
-                              background: statusStyles[countdown.status]?.bg || 'rgba(255,255,255,0.05)',
-                              border: `1px solid ${statusStyles[countdown.status]?.border || 'var(--border-light)'}`,
-                              color: statusStyles[countdown.status]?.color || 'var(--text-secondary)',
-                              backdropFilter: 'blur(4px)',
-                              WebkitBackdropFilter: 'blur(4px)'
-                            }}>
-                              {countdown.text}
-                            </div>
-                          )}
-                        </div>
-
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: '0.75rem',
-                            right: '0.75rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '0.3rem',
-                          }}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <button
-                            onClick={(e) => handleTogglePin(trip, e)}
-                            className="tab-btn"
-                            style={{
-                              margin: 0,
-                              padding: '0.2rem 0.35rem',
-                              fontSize: '0.75rem',
-                              background: isPinned ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255, 255, 255, 0.05)',
-                              border: isPinned ? '1px solid var(--accent-primary)' : '1px solid var(--border-light)',
-                              color: isPinned ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                            }}
-                            title={isPinned ? "Unpin Trip" : "Pin Trip"}
-                          >
-                            📌
-                          </button>
-                          <button
-                            onClick={(e) => handleToggleArchive(trip, e)}
-                            className="tab-btn"
-                            style={{
-                              margin: 0,
-                              padding: '0.2rem 0.35rem',
-                              fontSize: '0.75rem',
-                              background: 'rgba(255, 255, 255, 0.05)',
-                              border: '1px solid var(--border-light)',
-                              color: 'var(--text-secondary)',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                            }}
-                            title="Archive Trip"
-                          >
-                            📥
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setTripToDelete(trip);
-                            }}
-                            className="tab-btn"
-                            style={{
-                              margin: 0,
-                              padding: '0.2rem 0.35rem',
-                              fontSize: '0.75rem',
-                              background: 'rgba(239, 68, 68, 0.1)',
-                              border: '1px solid #ef4444',
-                              color: '#ef4444',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                            }}
-                            title="Delete Trip"
-                          >
-                            🗑️
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {paginatedActiveTrips.map((trip) => (
+                    <TripCard
+                      key={trip.id}
+                      trip={trip}
+                      status="active"
+                      onSelect={() => {
+                        setAppData(trip);
+                        setActiveTab('day-0');
+                        localStorage.setItem('active_trip_id', trip.id);
+                      }}
+                      onTogglePin={handleTogglePin}
+                      onToggleArchive={handleToggleArchive}
+                      onDelete={setTripToDelete}
+                    />
+                  ))}
                 </div>
 
-                {/* Active Trips Pagination Controls */}
                 {totalActivePages > 1 && (
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '1rem',
-                    marginTop: '0.5rem',
-                    marginBottom: '1rem'
-                  }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
                     <button
                       disabled={currentActivePage === 1}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveTripsPage(currentActivePage - 1);
-                      }}
+                      onClick={() => setActiveTripsPage(currentActivePage - 1)}
                       className="tab-btn"
-                      style={{
-                        padding: '0.4rem 0.8rem',
-                        fontSize: '0.8rem',
-                        opacity: currentActivePage === 1 ? 0.5 : 1,
-                        cursor: currentActivePage === 1 ? 'default' : 'pointer',
-                        margin: 0
-                      }}
+                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentActivePage === 1 ? 0.5 : 1, cursor: currentActivePage === 1 ? 'default' : 'pointer', margin: 0 }}
                     >
                       ◀ Prev
                     </button>
@@ -566,18 +367,9 @@ function DashboardView({
                     </span>
                     <button
                       disabled={currentActivePage === totalActivePages}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveTripsPage(currentActivePage + 1);
-                      }}
+                      onClick={() => setActiveTripsPage(currentActivePage + 1)}
                       className="tab-btn"
-                      style={{
-                        padding: '0.4rem 0.8rem',
-                        fontSize: '0.8rem',
-                        opacity: currentActivePage === totalActivePages ? 0.5 : 1,
-                        cursor: currentActivePage === totalActivePages ? 'default' : 'pointer',
-                        margin: 0
-                      }}
+                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentActivePage === totalActivePages ? 0.5 : 1, cursor: currentActivePage === totalActivePages ? 'default' : 'pointer', margin: 0 }}
                     >
                       Next ▶
                     </button>
@@ -588,25 +380,12 @@ function DashboardView({
               </>
             )}
 
-            {/* Archived Trips Collapsible Section */}
             {sortedArchivedTrips.length > 0 && (
               <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
                 <button
                   onClick={() => setShowArchived(!showArchived)}
                   className="tab-btn"
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '0.8rem 1rem',
-                    background: 'rgba(255, 255, 255, 0.02)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: '8px',
-                    color: 'var(--text-primary)',
-                    cursor: 'pointer',
-                    margin: 0
-                  }}
+                  style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', background: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-light)', borderRadius: '8px', color: 'var(--text-primary)', cursor: 'pointer', margin: 0 }}
                 >
                   <span style={{ fontWeight: '600', fontSize: '0.9rem' }}>
                     📦 Archived Trips ({sortedArchivedTrips.length})
@@ -619,158 +398,29 @@ function DashboardView({
                 {showArchived && (
                   <>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', marginTop: '1rem', animation: 'modalEnter 0.2s ease-out' }}>
-                      {paginatedArchivedTrips.map((trip) => {
-                        const daysCount = trip.days ? trip.days.length : 0;
-                        const endDate = calculateEndDate(trip.startDate, daysCount);
-                        const curSymbol = getCurrencySymbol(trip.currency);
-                        const isPast = isTripInPast(trip.startDate, daysCount);
-                        const countdown = getTripCountdown(trip.startDate, daysCount);
-                        return (
-                          <div
-                            key={trip.id}
-                            className="card"
-                            style={{
-                              padding: '1.25rem',
-                              background: 'rgba(255,255,255,0.01)',
-                              border: '1px solid var(--border-light)',
-                              borderRadius: '12px',
-                              color: 'var(--text-secondary)',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              flexDirection: 'column',
-                              justifyContent: 'space-between',
-                              gap: '0.75rem',
-                              transition: 'border-color 0.2s, transform 0.2s',
-                              margin: 0,
-                              position: 'relative',
-                              opacity: 0.8
-                            }}
-                            onClick={() => {
-                              setAppData(trip);
-                              setActiveTab('day-0');
-                              localStorage.setItem('active_trip_id', trip.id);
-                            }}
-                            onMouseOver={(e) => {
-                              e.currentTarget.style.borderColor = 'var(--accent-primary)';
-                              e.currentTarget.style.transform = 'translateY(-2px)';
-                              e.currentTarget.style.opacity = '1';
-                            }}
-                            onMouseOut={(e) => {
-                              e.currentTarget.style.borderColor = 'var(--border-light)';
-                              e.currentTarget.style.transform = 'none';
-                              e.currentTarget.style.opacity = '0.8';
-                            }}
-                          >
-                            <div style={{ paddingRight: '2.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                              <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#ccc', wordBreak: 'break-word' }}>{trip.title}</h3>
-                              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                                {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
-                              </p>
-                              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
-                                <span>📅 {daysCount} Days</span>
-                                <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
-                              </p>
-                              {countdown.text && (
-                                <div style={{
-                                  display: 'inline-flex',
-                                  alignItems: 'center',
-                                  padding: '0.25rem 0.5rem',
-                                  borderRadius: '6px',
-                                  fontSize: '0.75rem',
-                                  fontWeight: '500',
-                                  marginTop: '0.1rem',
-                                  width: 'fit-content',
-                                  background: statusStyles[countdown.status]?.bg || 'rgba(255,255,255,0.05)',
-                                  border: `1px solid ${statusStyles[countdown.status]?.border || 'var(--border-light)'}`,
-                                  color: statusStyles[countdown.status]?.color || 'var(--text-secondary)',
-                                  backdropFilter: 'blur(4px)',
-                                  WebkitBackdropFilter: 'blur(4px)'
-                                }}>
-                                  {countdown.text}
-                                </div>
-                              )}
-                            </div>
-
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: '0.75rem',
-                                right: '0.75rem',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '0.3rem',
-                              }}
-                              onClick={(e) => e.stopPropagation()}
-                            >
-                              {!isPast && (
-                                <button
-                                  onClick={(e) => handleToggleArchive(trip, e)}
-                                  className="tab-btn"
-                                  style={{
-                                    margin: 0,
-                                    padding: '0.25rem 0.4rem',
-                                    fontSize: '0.75rem',
-                                    background: 'rgba(255, 255, 255, 0.05)',
-                                    border: '1px solid var(--border-light)',
-                                    color: 'var(--text-secondary)',
-                                    borderRadius: '4px',
-                                    cursor: 'pointer',
-                                  }}
-                                  title="Unarchive Trip"
-                                >
-                                  📤
-                                </button>
-                              )}
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setTripToDelete(trip);
-                                }}
-                                className="tab-btn"
-                                style={{
-                                  margin: 0,
-                                  padding: '0.25rem 0.4rem',
-                                  fontSize: '0.75rem',
-                                  background: 'rgba(239, 68, 68, 0.1)',
-                                  border: '1px solid #ef4444',
-                                  color: '#ef4444',
-                                  borderRadius: '4px',
-                                  cursor: 'pointer',
-                                }}
-                                title="Delete Trip"
-                              >
-                                🗑️
-                              </button>
-                            </div>
-                          </div>
-                        );
-                      })}
+                      {paginatedArchivedTrips.map((trip) => (
+                        <TripCard
+                          key={trip.id}
+                          trip={trip}
+                          status="archived"
+                          onSelect={() => {
+                            setAppData(trip);
+                            setActiveTab('day-0');
+                            localStorage.setItem('active_trip_id', trip.id);
+                          }}
+                          onToggleArchive={handleToggleArchive}
+                          onDelete={setTripToDelete}
+                        />
+                      ))}
                     </div>
 
-                    {/* Archived Trips Pagination Controls */}
                     {totalArchivedPages > 1 && (
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '1rem',
-                        marginTop: '1rem',
-                        marginBottom: '0.5rem'
-                      }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginTop: '1rem', marginBottom: '0.5rem' }}>
                         <button
                           disabled={currentArchivedPage === 1}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setArchivedTripsPage(currentArchivedPage - 1);
-                          }}
+                          onClick={() => setArchivedTripsPage(currentArchivedPage - 1)}
                           className="tab-btn"
-                          style={{
-                            padding: '0.4rem 0.8rem',
-                            fontSize: '0.8rem',
-                            opacity: currentArchivedPage === 1 ? 0.5 : 1,
-                            cursor: currentArchivedPage === 1 ? 'default' : 'pointer',
-                            margin: 0
-                          }}
+                          style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentArchivedPage === 1 ? 0.5 : 1, cursor: currentArchivedPage === 1 ? 'default' : 'pointer', margin: 0 }}
                         >
                           ◀ Prev
                         </button>
@@ -779,18 +429,9 @@ function DashboardView({
                         </span>
                         <button
                           disabled={currentArchivedPage === totalArchivedPages}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setArchivedTripsPage(currentArchivedPage + 1);
-                          }}
+                          onClick={() => setArchivedTripsPage(currentArchivedPage + 1)}
                           className="tab-btn"
-                          style={{
-                            padding: '0.4rem 0.8rem',
-                            fontSize: '0.8rem',
-                            opacity: currentArchivedPage === totalArchivedPages ? 0.5 : 1,
-                            cursor: currentArchivedPage === totalArchivedPages ? 'default' : 'pointer',
-                            margin: 0
-                          }}
+                          style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentArchivedPage === totalArchivedPages ? 0.5 : 1, cursor: currentArchivedPage === totalArchivedPages ? 'default' : 'pointer', margin: 0 }}
                         >
                           Next ▶
                         </button>
@@ -802,17 +443,8 @@ function DashboardView({
               </div>
             )}
 
-            {/* Empty Results State */}
             {sortedActiveTrips.length === 0 && sortedArchivedTrips.length === 0 && (
-              <div style={{
-                textAlign: 'center',
-                padding: '3rem 1.5rem',
-                background: 'rgba(255, 255, 255, 0.01)',
-                border: '1px dashed var(--border-light)',
-                borderRadius: '12px',
-                marginTop: '1rem',
-                marginBottom: '1rem'
-              }}>
+              <div style={{ textAlign: 'center', padding: '3rem 1.5rem', background: 'rgba(255, 255, 255, 0.01)', border: '1px dashed var(--border-light)', borderRadius: '12px', marginTop: '1rem', marginBottom: '1rem' }}>
                 <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.75rem' }}>🔍</span>
                 <h3 style={{ color: 'var(--text-primary)', fontSize: '1.1rem', margin: '0 0 0.5rem 0' }}>No trips found</h3>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', margin: '0 0 1.25rem 0' }}>
@@ -820,17 +452,7 @@ function DashboardView({
                 </p>
                 <button
                   onClick={() => setSearchQuery('')}
-                  style={{
-                    padding: '0.5rem 1rem',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: '6px',
-                    color: 'var(--text-primary)',
-                    fontSize: '0.85rem',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    transition: 'background-color 0.2s'
-                  }}
+                  style={{ padding: '0.5rem 1rem', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--border-light)', borderRadius: '6px', color: 'var(--text-primary)', fontSize: '0.85rem', cursor: 'pointer', fontFamily: 'inherit', transition: 'background-color 0.2s' }}
                   onMouseOver={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.1)'}
                   onMouseOut={(e) => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
                 >
@@ -856,22 +478,7 @@ function DashboardView({
                     key={index}
                     onClick={() => item.data ? onLoadLocalData(item.data) : onFetchData(item.url)}
                     className="card"
-                    style={{
-                      padding: '1.25rem 0.5rem',
-                      background: 'rgba(255,255,255,0.02)',
-                      border: '1px solid var(--border-light)',
-                      borderRadius: '12px',
-                      color: 'var(--text-primary)',
-                      cursor: 'pointer',
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '0.5rem',
-                      transition: 'border-color 0.2s',
-                      margin: 0
-                    }}
+                    style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-light)', borderRadius: '12px', color: 'var(--text-primary)', cursor: 'pointer', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', transition: 'border-color 0.2s', margin: 0 }}
                     onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
                     onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}
                   >
@@ -881,30 +488,13 @@ function DashboardView({
                 ))}
               </div>
 
-              {/* Sample Itineraries Pagination Controls */}
               {totalSamplePages > 1 && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '1rem',
-                  marginTop: '0.5rem',
-                  marginBottom: '1rem'
-                }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
                   <button
                     disabled={currentSamplePage === 1}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSampleTripsPage(currentSamplePage - 1);
-                    }}
+                    onClick={() => setSampleTripsPage(currentSamplePage - 1)}
                     className="tab-btn"
-                    style={{
-                      padding: '0.4rem 0.8rem',
-                      fontSize: '0.8rem',
-                      opacity: currentSamplePage === 1 ? 0.5 : 1,
-                      cursor: currentSamplePage === 1 ? 'default' : 'pointer',
-                      margin: 0
-                    }}
+                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentSamplePage === 1 ? 0.5 : 1, cursor: currentSamplePage === 1 ? 'default' : 'pointer', margin: 0 }}
                   >
                     ◀ Prev
                   </button>
@@ -913,18 +503,9 @@ function DashboardView({
                   </span>
                   <button
                     disabled={currentSamplePage === totalSamplePages}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSampleTripsPage(currentSamplePage + 1);
-                    }}
+                    onClick={() => setSampleTripsPage(currentSamplePage + 1)}
                     className="tab-btn"
-                    style={{
-                      padding: '0.4rem 0.8rem',
-                      fontSize: '0.8rem',
-                      opacity: currentSamplePage === totalSamplePages ? 0.5 : 1,
-                      cursor: currentSamplePage === totalSamplePages ? 'default' : 'pointer',
-                      margin: 0
-                    }}
+                    style={{ padding: '0.4rem 0.8rem', fontSize: '0.8rem', opacity: currentSamplePage === totalSamplePages ? 0.5 : 1, cursor: currentSamplePage === totalSamplePages ? 'default' : 'pointer', margin: 0 }}
                   >
                     Next ▶
                   </button>
@@ -936,84 +517,22 @@ function DashboardView({
 
         <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
 
-        {/* 3. Create, Upload, Paste Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
-          <button onClick={() => setShowCreateModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-secondary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-            <span style={{ fontSize: '1.2rem' }}>➕</span>
-            <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Create</span>
-          </button>
+        <ActionGrid
+          onCreateClick={() => setShowCreateModal(true)}
+          onPasteClick={() => setShowPasteModal(true)}
+          onFileUpload={handleFileUpload}
+        />
 
-          <label className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-            <span style={{ fontSize: '1.2rem' }}>📁</span>
-            <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Upload</span>
-            <input type="file" accept=".json" onChange={handleFileUpload} style={{ display: 'none' }} />
-          </label>
+        <LoadFromUrl
+          onFetchData={onFetchData}
+          isLoading={isLoading}
+        />
 
-          <button onClick={() => setShowPasteModal(true)} className="card" style={{ padding: '1.25rem 0.5rem', background: 'rgba(255,255,255,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0, textAlign: 'center', border: '1px solid var(--border-light)', color: 'var(--text-primary)' }} onMouseOver={(e) => (e.currentTarget.style.borderColor = 'var(--accent-primary)')} onMouseOut={(e) => (e.currentTarget.style.borderColor = 'var(--border-light)')}>
-            <span style={{ fontSize: '1.2rem' }}>📋</span>
-            <span style={{ fontWeight: '600', fontSize: '0.85rem' }}>Paste</span>
-          </button>
-        </div>
-
-        {/* 4. Load from URL */}
-        <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Load from URL</h3>
-          <form onSubmit={handleUrlLoad} style={{ display: 'flex', gap: '0.5rem', width: '100%', flexWrap: 'wrap' }}>
-            <input
-              type="url"
-              placeholder="https://example.com/itinerary.json"
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              style={{ flex: '1 1 200px', minWidth: '0', padding: '0.8rem 1rem', borderRadius: '6px', border: '1px solid var(--border-light)', background: 'var(--bg-secondary)', color: 'var(--text-primary)', fontSize: '1rem' }}
-            />
-            <button type="submit" disabled={isLoading} className="tab-btn" style={{ flex: '0 0 auto', margin: 0, padding: '0.8rem 1.5rem', background: 'var(--accent-primary)', border: 'none', color: '#fff', cursor: isLoading ? 'default' : 'pointer', opacity: isLoading ? 0.7 : 1, fontSize: '1rem', borderRadius: '6px' }}>
-              {isLoading ? 'Loading...' : 'Load'}
-            </button>
-          </form>
-        </div>
-
-        {/* 5. Library Backup */}
-        <div className="card" style={{ padding: '1.25rem', background: 'rgba(255,255,255,0.02)', margin: 0 }}>
-          <h3 style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Library Backup</h3>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button 
-              onClick={handleExportBackup} 
-              disabled={recentTrips.length === 0} 
-              className="tab-btn" 
-              style={{ 
-                flex: '1 1 180px', 
-                margin: 0, 
-                padding: '0.8rem 1rem', 
-                background: 'var(--accent-primary)', 
-                border: 'none', 
-                color: '#fff', 
-                opacity: recentTrips.length === 0 ? 0.5 : 1,
-                cursor: recentTrips.length === 0 ? 'default' : 'pointer'
-              }}
-            >
-              📥 Export Backup ({recentTrips.length} Trips)
-            </button>
-            <label 
-              className="tab-btn" 
-              style={{ 
-                flex: '1 1 180px', 
-                margin: 0, 
-                padding: '0.8rem 1rem', 
-                background: 'rgba(255,255,255,0.05)', 
-                border: '1px solid var(--border-light)', 
-                color: 'var(--text-primary)', 
-                textAlign: 'center', 
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}
-            >
-              📤 Import Backup
-              <input type="file" accept=".json" onChange={handleImportBackup} style={{ display: 'none' }} />
-            </label>
-          </div>
-        </div>
+        <BackupControls
+          recentTrips={recentTrips}
+          handleExportBackup={handleExportBackup}
+          handleImportBackup={handleImportBackup}
+        />
 
       </div>
     </div>
