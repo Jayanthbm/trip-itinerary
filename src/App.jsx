@@ -8,6 +8,7 @@ import PromptGenerator from './components/PromptGenerator';
 import EditView from './components/EditView';
 import ConfirmPopover from './components/ConfirmPopover';
 import ootySample from "./samples/ooty_trip.json";
+import { saveTrip, deleteTrip, getAllTrips } from './utils/db';
 
 const formatDate = (dateInput) => {
   if (!dateInput) return "";
@@ -34,6 +35,52 @@ const getCurrencySymbol = (currency) => {
   return map[currency.toUpperCase()] || currency;
 };
 
+const calculateTotalBudget = (trip) => {
+  if (!trip) return 0;
+  
+  const parseCost = (val) => {
+    if (val === undefined || val === null || val === '') return 0;
+    if (typeof val === 'number') return val;
+    const numStr = String(val).replace(/[^\d.]/g, '');
+    return parseFloat(numStr) || 0;
+  };
+
+  let total = 0;
+
+  // Pre-booking items
+  const flights = trip.prebookingData?.flights || [];
+  total += flights.reduce((s, f) => s + parseCost(f.cost), 0);
+
+  const trains = trip.prebookingData?.trains || [];
+  total += trains.reduce((s, t) => s + parseCost(t.cost), 0);
+
+  const buses = trip.prebookingData?.bus || [];
+  total += buses.reduce((s, b) => s + parseCost(b.cost), 0);
+
+  const rooms = trip.prebookingData?.rooms || [];
+  total += rooms.reduce((s, r) => s + parseCost(r.cost), 0);
+
+  const activities = (trip.prebookingData?.activities || []).filter(a => a.excludeFromBudget !== true);
+  total += activities.reduce((s, a) => s + parseCost(a.cost), 0);
+
+  // Daily timeline and additional budget
+  const days = trip.days || [];
+  days.forEach(day => {
+    const activePlanTitle = day.active_plan || "Main Plan";
+    const activePlan = (day.plans || []).find(p => p.title === activePlanTitle) || day.plans?.[0];
+    if (activePlan) {
+      const timelineItems = (activePlan.timeline || [])
+        .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0);
+      total += timelineItems.reduce((s, i) => s + parseCost(i.cost), 0);
+
+      const additionalItems = activePlan.additionalBudget || [];
+      total += additionalItems.reduce((s, i) => s + parseCost(i.cost), 0);
+    }
+  });
+
+  return total;
+};
+
 const validateData = (data) => {
   if (!data) return "Data is empty";
   if (!data.title) return "Missing 'title'";
@@ -46,9 +93,11 @@ const normalizeData = (data) => {
   if (!data) return null;
   const startDate = data.startDate || "";
   const currency = data.currency || "INR";
+  const id = data.id || (window.crypto?.randomUUID ? window.crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2));
 
   return {
     ...data,
+    id: id,
     title: data.title || "Untitled Itinerary",
     startDate: startDate,
     currency: currency,
@@ -219,77 +268,17 @@ function App() {
   const [editsMade, setEditsMade] = useState(false);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  // IndexedDB specific states
+  const [recentTrips, setRecentTrips] = useState([]);
+  const [tripToDelete, setTripToDelete] = useState(null);
 
-  useEffect(() => {
-    // Check if edits_made was stored
-    const storedEdits = localStorage.getItem('edits_made');
-    if (storedEdits === 'true') setEditsMade(true);
-
-    const params = new URLSearchParams(window.location.search);
-    const urlParam = params.get('it');
-
-    if (urlParam) {
-      setUrlInput(urlParam);
-      checkAndFetchUrl(urlParam);
-    } else {
-      const storedUrl = localStorage.getItem('it_url');
-      if (storedUrl) {
-        setUrlInput(storedUrl);
-        checkAndFetchUrl(storedUrl);
-      } else {
-        const storedData = localStorage.getItem('it_loaded');
-        if (storedData) {
-          try {
-            const parsed = JSON.parse(storedData);
-            if (!validateData(parsed)) {
-              setAppData(parsed);
-              setActiveTab('day-0');
-            } else {
-              localStorage.removeItem('it_loaded');
-            }
-          } catch (e) {
-            localStorage.removeItem('it_loaded');
-          }
-        }
-      }
+  const loadRecentTrips = async () => {
+    try {
+      const trips = await getAllTrips();
+      setRecentTrips(trips);
+    } catch (err) {
+      console.error("Failed to load recent trips from IndexedDB:", err);
     }
-
-    // Tab close warning
-    const handleBeforeUnload = (e) => {
-      if (localStorage.getItem('edits_made') === 'true') {
-        e.preventDefault();
-        e.returnValue = '';
-      }
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
-
-  const checkAndFetchUrl = async (url) => {
-    const storedUrl = localStorage.getItem('it_url');
-    const lastFetch = localStorage.getItem('last_fetch');
-    const storedDataStr = localStorage.getItem('it_loaded');
-    const now = new Date().getTime();
-    const fifteenMins = 15 * 60 * 1000;
-
-    if (storedUrl === url && storedDataStr && lastFetch && (now - parseInt(lastFetch, 10) < fifteenMins)) {
-      try {
-        const parsed = JSON.parse(storedDataStr);
-        if (!validateData(parsed)) {
-          setAppData(parsed);
-          setActiveTab('day-0');
-          return;
-        }
-      } catch (e) { }
-    }
-    await fetchData(url);
   };
 
   const fetchData = async (url) => {
@@ -302,11 +291,12 @@ function App() {
       if (validateData(jsonData)) throw new Error(validateData(jsonData));
 
       const normalized = normalizeData(jsonData);
-      setAppData(normalized);
+      normalized.sourceUrl = url;
+      const saved = await saveTrip(normalized);
+      setAppData(saved);
       setActiveTab('day-0');
-      localStorage.setItem('it_loaded', JSON.stringify(normalized));
+      localStorage.setItem('active_trip_id', saved.id);
       localStorage.setItem('it_url', url);
-      localStorage.setItem('last_fetch', new Date().getTime().toString());
       setEditsMade(false);
       localStorage.removeItem('edits_made');
     } catch (err) {
@@ -316,11 +306,38 @@ function App() {
     }
   };
 
-  const handleUpdateAppData = (newData) => {
-    setAppData(newData);
-    localStorage.setItem('it_loaded', JSON.stringify(newData));
-    setEditsMade(true);
-    localStorage.setItem('edits_made', 'true');
+  const checkAndFetchUrl = async (url) => {
+    const now = new Date().getTime();
+    const fifteenMins = 15 * 60 * 1000;
+
+    try {
+      const trips = await getAllTrips();
+      const cachedTrip = trips.find(t => t.sourceUrl === url);
+      if (cachedTrip && cachedTrip.updatedAt && (now - cachedTrip.updatedAt < fifteenMins)) {
+        if (!validateData(cachedTrip)) {
+          setAppData(cachedTrip);
+          setActiveTab('day-0');
+          localStorage.setItem('active_trip_id', cachedTrip.id);
+          localStorage.setItem('it_url', url);
+          return;
+        }
+      }
+    } catch (e) {
+      console.error("Error checking IndexedDB for URL cache:", e);
+    }
+    await fetchData(url);
+  };
+
+  const handleUpdateAppData = async (newData) => {
+    try {
+      const saved = await saveTrip(newData);
+      setAppData(saved);
+      localStorage.setItem('active_trip_id', saved.id);
+      setEditsMade(true);
+      localStorage.setItem('edits_made', 'true');
+    } catch (err) {
+      console.error("Failed to auto-save trip to IndexedDB:", err);
+    }
   };
 
   const handleUpdateDay = (dayIndex, updatedDay) => {
@@ -329,23 +346,110 @@ function App() {
     handleUpdateAppData({ ...appData, days: newDays });
   };
 
-  const handleLoadLocalData = (data) => {
+  const handleLoadLocalData = async (data) => {
     if (validateData(data)) {
       setError("Invalid itinerary data");
       return;
     }
-    const normalized = normalizeData(data);
-    setAppData(normalized);
-    setActiveTab('day-0');
-    localStorage.setItem('it_loaded', JSON.stringify(normalized));
-    localStorage.removeItem('it_url');
-    localStorage.removeItem('last_fetch');
-    setEditsMade(false);
-    localStorage.removeItem('edits_made');
-    setError(null);
+    try {
+      const normalized = normalizeData(data);
+      const saved = await saveTrip(normalized);
+      setAppData(saved);
+      setActiveTab('day-0');
+      localStorage.setItem('active_trip_id', saved.id);
+      localStorage.removeItem('it_url');
+      localStorage.removeItem('last_fetch');
+      setEditsMade(false);
+      localStorage.removeItem('edits_made');
+      setError(null);
+    } catch (err) {
+      setError("Failed to save itinerary: " + err.message);
+    }
   };
 
-  const handleCreateNew = (formData) => {
+  const handleDeleteTrip = async (id) => {
+    try {
+      await deleteTrip(id);
+      if (appData && appData.id === id) {
+        executeClose();
+      } else {
+        loadRecentTrips();
+      }
+      setTripToDelete(null);
+    } catch (err) {
+      setError("Failed to delete trip: " + err.message);
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!appData) {
+      loadRecentTrips();
+    }
+  }, [appData]);
+
+  useEffect(() => {
+    // Check if edits_made was stored
+    const storedEdits = localStorage.getItem('edits_made');
+    if (storedEdits === 'true') setEditsMade(true);
+
+    const params = new URLSearchParams(window.location.search);
+    const urlParam = params.get('it');
+
+    const initApp = async () => {
+      if (urlParam) {
+        setUrlInput(urlParam);
+        await checkAndFetchUrl(urlParam);
+      } else {
+        const storedUrl = localStorage.getItem('it_url');
+        if (storedUrl) {
+          setUrlInput(storedUrl);
+          await checkAndFetchUrl(storedUrl);
+        } else {
+          const activeTripId = localStorage.getItem('active_trip_id');
+          if (activeTripId) {
+            try {
+              const trips = await getAllTrips();
+              const activeTrip = trips.find(t => t.id === activeTripId);
+              if (activeTrip && !validateData(activeTrip)) {
+                setAppData(activeTrip);
+                setActiveTab('day-0');
+              } else {
+                localStorage.removeItem('active_trip_id');
+                loadRecentTrips();
+              }
+            } catch (e) {
+              localStorage.removeItem('active_trip_id');
+              loadRecentTrips();
+            }
+          } else {
+            loadRecentTrips();
+          }
+        }
+      }
+    };
+
+    initApp();
+
+    // Tab close warning
+    const handleBeforeUnload = (e) => {
+      if (localStorage.getItem('edits_made') === 'true') {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, []);
+
+  const handleCreateNew = async (formData) => {
     const { title, startDate, endDate, currency } = formData;
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -375,30 +479,36 @@ function App() {
       prebookingData
     };
 
-    const normalized = normalizeData(newItinerary);
-    setAppData(normalized);
-    setActiveTab('day-0');
-    localStorage.setItem("it_loaded", JSON.stringify(normalized));
-    localStorage.removeItem('it_url');
-    localStorage.removeItem('last_fetch');
-    setEditsMade(true);
-    localStorage.setItem('edits_made', 'true');
-    setShowCreateModal(false);
-    setIsEditing(true);
+    try {
+      const normalized = normalizeData(newItinerary);
+      const saved = await saveTrip(normalized);
+      setAppData(saved);
+      setActiveTab('day-0');
+      localStorage.setItem('active_trip_id', saved.id);
+      localStorage.removeItem('it_url');
+      localStorage.removeItem('last_fetch');
+      setEditsMade(true);
+      localStorage.setItem('edits_made', 'true');
+      setShowCreateModal(false);
+      setIsEditing(true);
+    } catch (err) {
+      setError("Failed to create new itinerary: " + err.message);
+    }
   };
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       try {
         const parsed = JSON.parse(evt.target.result);
         if (validateData(parsed)) throw new Error(validateData(parsed));
         const normalized = normalizeData(parsed);
-        setAppData(normalized);
+        const saved = await saveTrip(normalized);
+        setAppData(saved);
         setActiveTab('day-0');
-        localStorage.setItem('it_loaded', JSON.stringify(normalized));
+        localStorage.setItem('active_trip_id', saved.id);
         localStorage.removeItem('it_url');
         localStorage.removeItem('last_fetch');
         setEditsMade(false);
@@ -460,7 +570,7 @@ function App() {
   };
 
   const executeClose = () => {
-    localStorage.removeItem('it_loaded');
+    localStorage.removeItem('active_trip_id');
     localStorage.removeItem('it_url');
     localStorage.removeItem('last_fetch');
     localStorage.removeItem('edits_made');
@@ -641,37 +751,139 @@ function App() {
 
             <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
 
-            <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Sample Itineraries</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
-              {sampleItinerary.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => item.data ? handleLoadLocalData(item.data) : fetchData(item.url)}
-                  className="card"
-                  style={{
-                    padding: '1.25rem 0.5rem',
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid var(--border-light)',
-                    borderRadius: '12px',
-                    color: 'var(--text-primary)',
-                    cursor: 'pointer',
-                    textAlign: 'center',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.5rem',
-                    transition: 'border-color 0.2s',
-                    margin: 0
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
-                  onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}
-                >
-                  <span style={{ fontSize: '1.2rem' }}>🗺️</span>
-                  <span style={{ fontWeight: '600', fontSize: '0.85rem', lineHeight: '1' }}>{item.name}</span>
-                </button>
-              ))}
-            </div>
+            {recentTrips.length > 0 && (
+              <>
+                <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Recent Trips</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                  {recentTrips.map((trip) => {
+                    const daysCount = trip.days ? trip.days.length : 0;
+                    const endDate = calculateEndDate(trip.startDate, daysCount);
+                    const curSymbol = getCurrencySymbol(trip.currency);
+                    return (
+                      <div
+                        key={trip.id}
+                        className="card"
+                        style={{
+                          padding: '1.25rem',
+                          background: 'rgba(255,255,255,0.02)',
+                          border: '1px solid var(--border-light)',
+                          borderRadius: '12px',
+                          color: 'var(--text-primary)',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          gap: '0.75rem',
+                          transition: 'border-color 0.2s, transform 0.2s',
+                          margin: 0,
+                          position: 'relative'
+                        }}
+                        onClick={() => {
+                          setAppData(trip);
+                          setActiveTab('day-0');
+                          localStorage.setItem('active_trip_id', trip.id);
+                          if (trip.sourceUrl) {
+                            localStorage.setItem('it_url', trip.sourceUrl);
+                          } else {
+                            localStorage.removeItem('it_url');
+                          }
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--accent-primary)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.borderColor = 'var(--border-light)';
+                          e.currentTarget.style.transform = 'none';
+                        }}
+                      >
+                        <div style={{ paddingRight: '2rem' }}>
+                          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: '600', color: '#fff', wordBreak: 'break-word' }}>{trip.title}</h3>
+                          <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                            {formatDate(trip.startDate)} {endDate ? `- ${endDate}` : ''}
+                          </p>
+                          <p style={{ margin: '0.4rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', gap: '0.5rem' }}>
+                            <span>📅 {daysCount} Days</span>
+                            <span>💰 {curSymbol}{calculateTotalBudget(trip).toLocaleString('en-IN')}</span>
+                          </p>
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setTripToDelete(trip);
+                          }}
+                          className="tab-btn"
+                          style={{
+                            position: 'absolute',
+                            top: '0.75rem',
+                            right: '0.75rem',
+                            margin: 0,
+                            padding: '0.25rem 0.5rem',
+                            fontSize: '0.75rem',
+                            background: 'rgba(239, 68, 68, 0.1)',
+                            border: '1px solid #ef4444',
+                            color: '#ef4444',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.background = '#ef4444';
+                            e.currentTarget.style.color = '#fff';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)';
+                            e.currentTarget.style.color = '#ef4444';
+                          }}
+                          title="Delete Trip"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div style={{ borderBottom: '1px solid var(--border-light)', margin: '0.1rem 0' }}></div>
+              </>
+            )}
+
+            {recentTrips.length === 0 && (
+              <>
+                <h2 style={{ color: 'var(--text-primary)', marginBottom: '0.1rem', fontSize: '1rem' }}>Sample Itineraries</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
+                  {sampleItinerary.map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => item.data ? handleLoadLocalData(item.data) : fetchData(item.url)}
+                      className="card"
+                      style={{
+                        padding: '1.25rem 0.5rem',
+                        background: 'rgba(255,255,255,0.02)',
+                        border: '1px solid var(--border-light)',
+                        borderRadius: '12px',
+                        color: 'var(--text-primary)',
+                        cursor: 'pointer',
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                        transition: 'border-color 0.2s',
+                        margin: 0
+                      }}
+                      onMouseOver={(e) => e.currentTarget.style.borderColor = 'var(--accent-primary)'}
+                      onMouseOut={(e) => e.currentTarget.style.borderColor = 'var(--border-light)'}
+                    >
+                      <span style={{ fontSize: '1.2rem' }}>🗺️</span>
+                      <span style={{ fontWeight: '600', fontSize: '0.85rem', lineHeight: '1' }}>{item.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
       ) : (
@@ -725,6 +937,15 @@ function App() {
                 confirmText="Close & Lose Edits"
                 onConfirm={executeClose}
                 onCancel={() => setShowCloseConfirm(false)}
+              />
+            )}
+
+            {tripToDelete && (
+              <ConfirmPopover
+                message={`Are you sure you want to delete the trip "${tripToDelete.title}"? This action cannot be undone.`}
+                confirmText="Delete"
+                onConfirm={() => handleDeleteTrip(tripToDelete.id)}
+                onCancel={() => setTripToDelete(null)}
               />
             )}
         </div>

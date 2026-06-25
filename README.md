@@ -14,10 +14,11 @@ Trip Itinerary Viewer serves as an elegant, robust UI shell that can ingest arbi
 - **Offline File Uploads:** Direct `<input type="file" />` integration allowing you to load `*.json` documents locally without network requests.
 - **JSON Exporter:** Hit "Download" at any time to dump the currently active itinerary scope back into a formatted `*.json` file on disk.
 
-### **Intelligent Caching**
-The application implements an extensive state caching model utilizing standard HTML5 `localStorage`:
-- **Offline Reliability:** Your active payload is securely retained in browser memory (`it_loaded`), allowing you to close the application safely and return to the identical state without prompt.
-- **Network Caching:** Implements URL-based request debouncing! The application monitors the `it_url` property and records your `last_fetch` timestamp. It acts as an intercept proxy: if a matching URL request is made within exactly 15 minutes of an existing cache hit, the trip data is effortlessly loaded from native memory—bypassing redundant internet overhead.
+### **Multi-Trip Management & Intelligent Caching**
+The application implements a robust local database layer using IndexedDB and `localStorage` to manage multiple itineraries:
+- **Offline Multi-Trip Storage:** Itineraries are stored inside browser-native IndexedDB. Users can save, switch, and delete multiple trips directly from a visual "Recent Trips" dashboard.
+- **Offline Reliability:** The active trip state is preserved across reloads using the `active_trip_id` reference in `localStorage`.
+- **Network Caching:** Implements URL-based request debouncing! If a matching URL request is made within exactly 15 minutes of an existing IndexedDB cache hit, the trip data is loaded instantly from the database, bypassing redundant network overhead.
 
 ### **UI Components**
 - **Detailed Layout Engine:** Renders comprehensive daily `timelines`, `checklists`, and dedicated daily `budgets`.
