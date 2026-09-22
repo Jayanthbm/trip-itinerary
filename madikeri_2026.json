@@ -32,8 +32,8 @@
             },
             {
               "time": "06:20 AM",
-              "title": "Board KSRTC EV Power Plus (Kengeri to Highway Stop)",
-              "description": "Board KSRTC EV Power Plus (Trip Code: 0530BNGMRC, PNR: KS22879177, Seats: 13, 14) from Kengeri TTMC platform. Enjoy a smooth cruise along the Bengaluru–Mysuru Expressway.",
+              "title": "Board KSRTC EV Power Plus",
+              "description": "Board KSRTC EV Power Plus from Kengeri TTMC platform. Enjoy a smooth cruise along the Bengaluru–Mysuru Expressway.",
               "duration": "2h 10m",
               "location": "KENGERI TTMC BUS STAND",
               "mapsLink": "https://maps.app.goo.gl/wJiDQYtqHAS9S7jWA",
@@ -44,7 +44,7 @@
               "title": "En Route Highway Breakfast Stop",
               "description": "Bus halts for a scheduled 25–30 minute breakfast break at a pure veg highway food plaza along the expressway / bypass (Maddur/Mandya stretch). Enjoy hot thatte idli, vada, masala dosa, and filter coffee.",
               "duration": "30m",
-              "location": "Highway Pure Veg Food Plaza",
+              "location": "Highway Food Plaza",
               "mapsLink": "",
               "cost": 300
             },
@@ -59,26 +59,80 @@
             },
             {
               "time": "01:00 PM",
-              "title": "Arrival at Madikeri & Check-in at Treebo Doha King",
-              "description": "Alight at Madikeri KSRTC Bus Stand. Take a 2-minute stroll (200–300 meters) directly behind the station to Treebo Doha King. Complete check-in, inspect room linens and geyser, unpack, and freshen up.",
-              "duration": "30m",
+              "title": "Arrival at Madikeri KSRTC Bus Stand",
+              "description": "Alight at Madikeri KSRTC Bus Stand. Collect luggage, stretch legs, and exit towards the rear gate heading towards the hotel.",
+              "duration": "10m",
+              "location": "Madikeri KSRTC Bus Stand",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:10 PM",
+              "title": "Walk to Treebo Doha King",
+              "description": "Take a short 2-minute stroll (approx. 200–300 meters) directly behind the bus stand to reach Treebo Doha King.",
+              "duration": "5m",
+              "location": "Madikeri Bus Stand to Treebo Doha King",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:15 PM",
+              "title": "Check-in & Freshen Up at Hotel",
+              "description": "Complete check-in formalities at the front desk, inspect room linens and geyser, drop luggage, and quickly freshen up before lunch.",
+              "duration": "15m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             },
             {
               "time": "01:30 PM",
-              "title": "Pure Vegetarian Lunch & 4x4 Jeep Reservation",
-              "description": "Walk 2 minutes to Udupi The Veg for a hot South Indian lunch (akki roti with saagu, neer dosa, or thali). Right next to the bus terminal, coordinate with the taxi/jeep stand to lock in Saturday's 06:00 AM Mandalpatti + Abbey Falls circuit (target ₹2,200–₹2,500; note driver contact).",
-              "duration": "1h 15m",
-              "location": "Udupi The Veg & Madikeri Jeep Stand",
+              "title": "Walk to Udupi The Veg",
+              "description": "Take a short 2-minute stroll (approx. 150 meters) from Treebo Doha King towards Udupi The Veg near the bus stand entrance.",
+              "duration": "5m",
+              "location": "Treebo Doha King to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "01:35 PM",
+              "title": "Pure Vegetarian Lunch at Udupi The Veg",
+              "description": "Enjoy a hot, freshly prepared South Indian lunch (akki roti with saagu, neer dosa, or South Indian meals thali) along with hot filter coffee.",
+              "duration": "40m",
+              "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 450
             },
             {
+              "time": "02:15 PM",
+              "title": "Walk to Madikeri Taxi & Jeep Stand",
+              "description": "Step outside the restaurant and take a 1-minute walk to the main Madikeri Taxi & 4x4 Jeep Stand adjacent to the KSRTC Bus Station.",
+              "duration": "5m",
+              "location": "Madikeri Jeep Stand (Near KSRTC Bus Stand)",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Bus+Stand",
+              "cost": 0
+            },
+            {
+              "time": "02:20 PM",
+              "title": "Book 4x4 Jeep Safari for Day 2",
+              "description": "Coordinate directly with local drivers at the jeep stand. Lock in Saturday's 06:00 AM hotel pickup for Mandalpatti Peak (sunrise/morning clouds) + Abbey Falls circuit (target ₹2,200–₹2,500 total). Exchange mobile numbers and reconfirm pickup spot at Treebo Doha King.",
+              "duration": "20m",
+              "location": "Madikeri Jeep Stand",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Bus+Stand",
+              "cost": 0
+            },
+            {
+              "time": "02:40 PM",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Walk 3 minutes (approx. 250 meters) back to Treebo Doha King from the jeep stand.",
+              "duration": "5m",
+              "location": "Jeep Stand to Treebo Doha King",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
               "time": "02:45 PM",
               "title": "Midday Rest & Refresh at Hotel",
-              "description": "Return to Treebo Doha King for an uninterrupted 1.5-hour rest to recharge from the 6-hour morning road journey.",
+              "description": "Relax in the room for an uninterrupted 1.5-hour afternoon rest to recharge from the early-morning start and 6-hour road journey.",
               "duration": "1h 30m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
@@ -87,7 +141,7 @@
             {
               "time": "04:15 PM",
               "title": "Auto to Raja's Seat",
-              "description": "Hire a local auto from the hotel/bus stand area up to Raja's Seat viewpoint.",
+              "description": "Hire an auto from outside the hotel / bus stand area up to the entrance of Raja's Seat viewpoint.",
               "duration": "15m",
               "location": "Treebo Doha King to Raja's Seat",
               "mapsLink": "https://maps.google.com/?q=Raja's+Seat+Madikeri",
@@ -95,8 +149,8 @@
             },
             {
               "time": "04:30 PM",
-              "title": "Raja's Seat Gardens, Sunset & Musical Fountain",
-              "description": "Stroll through the manicured flower gardens with clear valley vistas. Enjoy the cool hillside breeze during golden hour, watch the sunset over the Western Ghats around 06:15 PM, and stay for the musical fountain show at dusk.",
+              "title": "Raja's Seat Gardens, Sunset & Viewpoint",
+              "description": "Purchase entry tickets (₹25–₹40 per person). Stroll through the seasonal flower beds, enjoy expansive daylight panoramic views of Coorg's misty hills and valleys, catch golden hour and sunset over the Western Ghats around 06:05–06:15 PM.",
               "duration": "2h",
               "location": "Raja's Seat Garden & Viewpoint",
               "mapsLink": "https://maps.google.com/?q=Raja's+Seat+Madikeri",
@@ -104,8 +158,8 @@
             },
             {
               "time": "06:30 PM",
-              "title": "Auto to Shri Omkareshwara Swamy Temple",
-              "description": "Take a short auto ride across town from Raja's Seat down to Omkareshwara Temple.",
+              "title": "Auto from Raja's Seat to Shri Omkareshwara Temple",
+              "description": "Take a local auto from Raja's Seat parking down into town to Shri Omkareshwara Swamy Temple.",
               "duration": "10m",
               "location": "Raja's Seat to Omkareshwara Temple",
               "mapsLink": "https://maps.google.com/?q=Omkareshwara+Temple+Madikeri",
@@ -113,8 +167,8 @@
             },
             {
               "time": "06:40 PM",
-              "title": "Omkareshwara Temple Evening Darshan & Pond Walk",
-              "description": "Experience the temple during evening darshan with deepas (oil lamps) lit. Admire the unique Gothic-Islamic dome and minaret architecture, participate in evening aarti, and take a peaceful walk around the central water tank.",
+              "title": "Omkareshwara Temple Darshan & Sacred Tank Stroll",
+              "description": "Leave footwear at the counter, enter the temple for evening aarti, admire the unique Islamic dome and Gothic minaret architecture, and enjoy a quiet walk around the central fish tank lit by evening lamps.",
               "duration": "50m",
               "location": "Shri Omkareshwara Swamy Temple, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Omkareshwara+Temple+Madikeri",
@@ -122,17 +176,26 @@
             },
             {
               "time": "07:30 PM",
-              "title": "Auto to Hotel / Bus Stand Area",
-              "description": "Take an auto back from Omkareshwara Temple to the bus stand area near the hotel.",
+              "title": "Auto from Temple to Bus Stand / Hotel Area",
+              "description": "Take a return auto from the temple stand back to the central bus stand area near the hotel.",
               "duration": "10m",
               "location": "Omkareshwara Temple to Hotel Area",
               "mapsLink": "",
               "cost": 50
             },
             {
+              "time": "07:40 PM",
+              "title": "Walk to Udupi The Veg",
+              "description": "Short 2-minute stroll across to Udupi The Veg for dinner.",
+              "duration": "5m",
+              "location": "Bus Stand Area to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
               "time": "07:45 PM",
-              "title": "Pure Veg Dinner at Udupi The Veg",
-              "description": "Enjoy a comforting, light pure vegetarian dinner (dosa, bisibelebath, or South Indian meals) without any rush.",
+              "title": "Pure Vegetarian Dinner at Udupi The Veg",
+              "description": "Enjoy a comforting pure vegetarian dinner (crispy dosas, bisibelebath, or South Indian meals) without any rush.",
               "duration": "45m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
@@ -140,10 +203,10 @@
             },
             {
               "time": "08:30 PM",
-              "title": "Walk back to Hotel & Early Rest",
-              "description": "Take a 2-minute stroll back to Treebo Doha King, prep warm layers for the open-jeep safari, and get a good night's sleep for the 05:30 AM wakeup.",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Walk 2 minutes back to Treebo Doha King. Collect extra water bottles, ensure warm layers and windbreakers are packed for the open-top morning jeep ride, and wind down for early rest.",
               "duration": "15m",
-              "location": "Treebo Doha King, Madikeri",
+              "location": "Udupi The Veg to Treebo Doha King",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             }
@@ -179,16 +242,16 @@
             {
               "time": "05:30 AM",
               "title": "Early Wakeup & Hot Coffee",
-              "description": "Wake up to brisk mountain air at Treebo Doha King, grab hot coffee or tea in the room, and have light dry biscuits or snacks for the bumpy trail.",
+              "description": "Wake up to brisk mountain air at Treebo Doha King, make hot tea/coffee in room, gear up in warm layers and windbreakers, and prep water bottles for the bumpy trail.",
               "duration": "30m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
-              "cost": 100
+              "cost": 50
             },
             {
               "time": "06:00 AM",
               "title": "Board 4x4 Jeep to Mandalpatti Peak",
-              "description": "Board your pre-booked 4x4 jeep right at Treebo Doha King. Head north through the misty hills, transitioning onto the rugged off-road forest trail ascending toward Mandalpatti.",
+              "description": "Meet driver at hotel porch. Board the 4x4 jeep and head north out of Madikeri town into the winding hills, passing coffee estates before hitting the rugged off-road forest department track.",
               "duration": "1h 30m",
               "location": "Madikeri to Mandalpatti Peak",
               "mapsLink": "https://maps.google.com/?q=Mandalpatti+Peak",
@@ -197,26 +260,35 @@
             {
               "time": "07:30 AM",
               "title": "Mandalpatti Peak Summit & Cloud Views",
-              "description": "Witness 360-degree panoramic views overlooking the Pushpagiri Wildlife Sanctuary shrouded in early-morning mist and clouds before holiday crowds build up.",
-              "duration": "1h 30m",
+              "description": "Arrive at Mandalpatti parking. Pay Forest entry/eco-fee, take the short 10-min uphill walk to the viewpoint tower. Take in the 360-degree panoramic vista over Pushpagiri sanctuary shrouded in morning clouds.",
+              "duration": "1h 15m",
               "location": "Mandalpatti Peak Viewpoint",
               "mapsLink": "https://maps.google.com/?q=Mandalpatti+Peak",
               "cost": 100
             },
             {
-              "time": "09:00 AM",
-              "title": "Scenic Jeep Descent to Abbey Falls",
-              "description": "Descend the mountain track, branching onto the shaded interior road leading directly toward Abbey Falls.",
+              "time": "08:45 AM",
+              "title": "Scenic Jeep Descent to Abbey Falls Junction",
+              "description": "Board jeep from summit parking and descend down the rocky trail, cutting across lush green interior estate lanes towards Abbey Falls.",
               "duration": "1h",
               "location": "Mandalpatti to Abbey Falls",
               "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
               "cost": 0
             },
             {
-              "time": "10:00 AM",
+              "time": "09:45 AM",
+              "title": "Hot Breakfast & Filter Coffee near Abbey Falls",
+              "description": "Take a 25-minute stop at the tea shacks near Abbey Falls entrance for hot thatte idlis / vada, piping hot Coorg filter coffee, and fresh tender coconut before walking down the steps.",
+              "duration": "25m",
+              "location": "Abbey Falls Entrance Stalls",
+              "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
+              "cost": 300
+            },
+            {
+              "time": "10:10 AM",
               "title": "Abbey Falls Exploration & Hanging Bridge",
-              "description": "Walk down the stepped paved trail through dense pepper vines, cardamom plants, and coffee trees. Take in the roaring cascade from the hanging suspension footbridge.",
-              "duration": "1h 15m",
+              "description": "Purchase entry tickets, walk down the paved stone steps (approx. 200 steps) through coffee and spice plantations. Photograph the roaring monsoon-fed cascade from the suspension footbridge.",
+              "duration": "1h 05m",
               "location": "Abbey Falls, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
               "cost": 100
@@ -224,26 +296,53 @@
             {
               "time": "11:15 AM",
               "title": "Jeep Return to Hotel (with Traffic Buffer)",
-              "description": "Drive back toward Madikeri. A generous 1 hour 45 minute buffer absorbs holiday traffic on the narrow approach road, safely dropping you back at Treebo Doha King around 12:45 PM – 01:00 PM. Settle the jeep balance with the driver.",
-              "duration": "1h 45m",
+              "description": "Climb up to the jeep parking and drive back to Madikeri. A generous 1 hour 30 minute buffer handles any tourist traffic along the narrow approach road, reaching Treebo Doha King comfortably by 12:45 PM – 01:00 PM.",
+              "duration": "1h 30m",
               "location": "Abbey Falls to Treebo Doha King",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             },
             {
+              "time": "12:45 PM",
+              "title": "Drop at Hotel",
+              "description": "Alight at Treebo Doha King, verify full circuit completion, and settle agreed jeep hiring fare with the driver.",
+              "duration": "15m",
+              "location": "Treebo Doha King, Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
               "time": "01:00 PM",
-              "title": "Pure Veg Lunch at Udupi The Veg",
-              "description": "Walk 2 minutes to Udupi The Veg or Hotel Capitol's veg section for a hot South Indian meal, akki roti with veg saagu, or neer dosa.",
-              "duration": "45m",
+              "title": "Walk to Udupi The Veg",
+              "description": "Take the short 2-minute stroll across to Udupi The Veg for lunch.",
+              "duration": "5m",
+              "location": "Treebo Doha King to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "01:05 PM",
+              "title": "Pure Vegetarian Lunch at Udupi The Veg",
+              "description": "Relish a hearty South Indian lunch (meals thali, akki roti with veg saagu, or neer dosa) to refuel after the active morning.",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 500
             },
             {
               "time": "01:45 PM",
-              "title": "Quick Refresh & Rest at Hotel",
-              "description": "Return to your room at Treebo Doha King for 45 minutes to shower, wash off trail dust, change into fresh clothes, and recharge phones.",
-              "duration": "45m",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Short 2-minute stroll back to the hotel.",
+              "duration": "5m",
+              "location": "Udupi The Veg to Treebo Doha King",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:50 PM",
+              "title": "Shower, Refresh & Rest at Hotel",
+              "description": "Shower to wash off trail red dust, change into light afternoon clothing, recharge mobile phones/cameras, and relax in the room.",
+              "duration": "40m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
@@ -251,7 +350,7 @@
             {
               "time": "02:30 PM",
               "title": "Auto to Madikeri Fort",
-              "description": "Take a 5-minute auto ride from the hotel/bus stand area up to the fort gates (approx. 1.2 km).",
+              "description": "Hire an auto outside the hotel / bus stand to Madikeri Fort entrance (approx. 1.2 km, 5–7 mins).",
               "duration": "10m",
               "location": "Treebo Doha King to Madikeri Fort",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
@@ -260,7 +359,7 @@
             {
               "time": "02:40 PM",
               "title": "Explore Madikeri Fort & Government Museum",
-              "description": "Walk the 17th-century stone ramparts, photograph the two life-sized stone elephant sculptures, and tour the state archaeological museum housed inside the Gothic St. Mark's Church.",
+              "description": "Walk the 17th-century stone ramparts, view the life-sized stone elephants, and tour the state archaeological museum housed inside the Gothic St. Mark's Church.",
               "duration": "1h 05m",
               "location": "Madikeri Fort & Museum",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
@@ -269,7 +368,7 @@
             {
               "time": "03:45 PM",
               "title": "Darshan at Kote Maha Ganapathi Temple",
-              "description": "Walk directly across the fort gateway courtyard to the historic Kote Maha Ganapathi Temple. Offer prayers at this ancient shrine deeply associated with the Kodagu Rajas and Madikeri Dasara.",
+              "description": "Walk directly across the fort gateway courtyard to Kote Maha Ganapathi Temple for prayers and blessings at this revered historical shrine.",
               "duration": "20m",
               "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
               "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
@@ -278,7 +377,7 @@
             {
               "time": "04:05 PM",
               "title": "Auto to Gaddige (Raja's Tomb)",
-              "description": "Hire an auto outside the fort gate heading straight north through Mahadevpet up to Gaddige (approx. 2.2 km).",
+              "description": "Hire an auto from the fort gate up through Mahadevpet to Gaddige (approx. 2.2 km).",
               "duration": "15m",
               "location": "Madikeri Fort to Gaddige",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
@@ -287,7 +386,7 @@
             {
               "time": "04:20 PM",
               "title": "Tour Gaddige (Raja's Tomb)",
-              "description": "Explore the 18th-century Indo-Saracenic royal mausoleums of King Lingarajendra II and Doddaveerarajendra, strolling the manicured garden grounds in bright late-afternoon light.",
+              "description": "Explore the 18th-century royal Indo-Saracenic domed monuments of King Lingarajendra II and Doddaveerarajendra set amidst green lawns.",
               "duration": "45m",
               "location": "Gaddige (Raja's Tomb), Madikeri",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
@@ -296,7 +395,7 @@
             {
               "time": "05:05 PM",
               "title": "Auto to Ainmane Coffee Experience Centre",
-              "description": "Take an auto from Gaddige back toward town down to College Road (approx. 2.5 km).",
+              "description": "Take an auto from Gaddige down to Ainmane on College Road (approx. 2.5 km).",
               "duration": "20m",
               "location": "Gaddige to Ainmane Cafe",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
@@ -305,7 +404,7 @@
             {
               "time": "05:25 PM",
               "title": "Specialty Coffee Tasting at Ainmane",
-              "description": "Unwind inside the flagship Ainmane Coffee Experience Centre. Sample single-origin estate brews (such as Monsooned Malabar), try local fruit preserves, and browse artisan chocolate displays.",
+              "description": "Sip artisanal single-origin estate brews (such as Monsooned Malabar), try passion fruit spreads, and explore local chocolate gifts in a cozy ambiance.",
               "duration": "1h 15m",
               "location": "Ainmane Specialty Cafe, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
@@ -314,7 +413,7 @@
             {
               "time": "06:40 PM",
               "title": "Relaxed Town Stroll",
-              "description": "Stroll through the town center at a leisurely pace to enjoy the Dasara festive lights and evening buzz.",
+              "description": "Stroll down College Road towards the central market to see Dasara festive lights, spice shop displays, and evening street vibe.",
               "duration": "50m",
               "location": "Madikeri Town Bazaar",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Market",
@@ -322,19 +421,28 @@
             },
             {
               "time": "07:30 PM",
-              "title": "Early Pure Veg Dinner",
-              "description": "Enjoy a wholesome, warm South Indian dinner (ghee roast dosa, bisibelebath, or meals) at Atithi Restaurant or Udupi The Veg.",
+              "title": "Walk to Pure Veg Dinner",
+              "description": "Take a short walk towards Udupi The Veg or Atithi Restaurant for dinner.",
+              "duration": "5m",
+              "location": "Town Bazaar to Restaurant",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "07:35 PM",
+              "title": "Pure Vegetarian Dinner",
+              "description": "Enjoy a warm South Indian dinner (ghee roast dosa, bisibelebath, or meals) without any rush.",
               "duration": "45m",
-              "location": "Atithi Restaurant / Udupi The Veg",
+              "location": "Udupi The Veg / Atithi Restaurant",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 450
             },
             {
-              "time": "08:15 PM",
-              "title": "Walk back to Hotel & Early Rest",
-              "description": "Take the short 2-minute stroll back to Treebo Doha King. Pack main bags leisurely for tomorrow's checkout and turn in early for a solid night of rest.",
+              "time": "08:20 PM",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Take a 2-minute stroll back to Treebo Doha King. Start packing main luggage leisurely for Sunday morning checkout.",
               "duration": "15m",
-              "location": "Treebo Doha King, Madikeri",
+              "location": "Restaurant to Treebo Doha King",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             }
@@ -355,54 +463,99 @@
           "timeline": [
             {
               "time": "08:00 AM",
-              "title": "Warm Hotel Breakfast",
-              "description": "Wake up at a leisurely pace and enjoy a hot breakfast at the hotel to wait out early morning mist or heavy rainfall.",
+              "title": "Warm Hotel Breakfast & Filter Coffee",
+              "description": "Wake up at a leisurely pace, check outside weather conditions, and enjoy a warm, fresh South Indian breakfast (idli, vada, dosa, and hot filter coffee) at Treebo Doha King or Udupi The Veg to wait out morning rains.",
               "duration": "1h",
-              "location": "Treebo Doha King, Madikeri",
+              "location": "Treebo Doha King / Udupi The Veg",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 300
             },
             {
-              "time": "09:30 AM",
-              "title": "Covered Cab to Abbey Falls",
-              "description": "Instead of an open 4x4 jeep to rugged mountain ridges, hire a covered closed cab to visit Abbey Falls.",
+              "time": "09:00 AM",
+              "title": "Arrange Covered Cab to Abbey Falls",
+              "description": "Coordinate with hotel reception or the taxi stand directly behind the hotel for a closed, covered hatchback/sedan cab for a round-trip to Abbey Falls (avoids rain and open winds).",
+              "duration": "15m",
+              "location": "Treebo Doha King / Taxi Stand",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "09:15 AM",
+              "title": "Covered Cab Drive to Abbey Falls",
+              "description": "Board the covered cab and take a scenic, mist-covered 8 km drive through lush, rain-washed coffee and spice plantations.",
               "duration": "25m",
               "location": "Madikeri to Abbey Falls",
               "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
-              "cost": 500
+              "cost": 600
             },
             {
-              "time": "10:00 AM",
-              "title": "Abbey Falls Sightseeing",
-              "description": "Enjoy the dramatic roaring waterfall from the covered viewpoints and hanging suspension bridge.",
-              "duration": "1h 30m",
+              "time": "09:40 AM",
+              "title": "Abbey Falls Exploration & Hanging Bridge",
+              "description": "Equipped with umbrellas/rainwear, buy entry tickets and descend the paved steps through dense foliage. View the roaring monsoon cascade safely from the sheltered viewpoints and suspension bridge.",
+              "duration": "1h 15m",
               "location": "Abbey Falls, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
               "cost": 100
             },
             {
-              "time": "11:30 AM",
-              "title": "Cab Return to Madikeri Town",
-              "description": "Drive back from Abbey Falls to Treebo Doha King by covered cab, avoiding the rain.",
-              "duration": "45m",
+              "time": "10:55 AM",
+              "title": "Hot Coorg Tea & Snacks Break",
+              "description": "Warm up with piping hot ginger tea, filter coffee, and freshly steamed sweet corn or bajji at the covered stalls near Abbey Falls entrance.",
+              "duration": "20m",
+              "location": "Abbey Falls Entrance Stalls",
+              "mapsLink": "https://maps.google.com/?q=Abbi+Falls+Coorg",
+              "cost": 150
+            },
+            {
+              "time": "11:15 AM",
+              "title": "Covered Cab Return to Madikeri Town",
+              "description": "Board the waiting cab for a smooth return drive to Madikeri town, safely dropping back at Treebo Doha King before peak noon traffic.",
+              "duration": "35m",
               "location": "Abbey Falls to Treebo Doha King",
               "mapsLink": "https://maps.google.com/?q=Treebo+Doha+King+Madikeri",
               "cost": 0
             },
             {
+              "time": "11:50 AM",
+              "title": "Pre-Lunch Hotel Rest & Unwind",
+              "description": "Dry off, change out of damp rain jackets/shoes, and unwind comfortably in the hotel room.",
+              "duration": "1h 10m",
+              "location": "Treebo Doha King, Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
               "time": "01:00 PM",
-              "title": "Pure Veg Lunch at Udupi The Veg",
-              "description": "Walk 2 minutes to Udupi The Veg or Hotel Capitol's veg section for a warm South Indian thali, akki roti, or hot dosa.",
-              "duration": "45m",
+              "title": "Walk to Udupi The Veg",
+              "description": "Take the short 2-minute stroll across to Udupi The Veg for lunch.",
+              "duration": "5m",
+              "location": "Treebo Doha King to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "01:05 PM",
+              "title": "Pure Vegetarian Lunch at Udupi The Veg",
+              "description": "Enjoy a comforting, hot vegetarian lunch (akki roti with saagu, South Indian meals thali, or hot rasam rice).",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 500
             },
             {
               "time": "01:45 PM",
-              "title": "Quick Refresh & Rest at Hotel",
-              "description": "Return to your room at Treebo Doha King for 45 minutes to freshen up, change clothes, and relax.",
-              "duration": "45m",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Short 2-minute stroll back to the hotel room.",
+              "duration": "5m",
+              "location": "Udupi The Veg to Treebo Doha King",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:50 PM",
+              "title": "Afternoon Rest & Refresh",
+              "description": "Recharge in the room before beginning the sheltered town sightseeing circuit.",
+              "duration": "40m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
@@ -419,7 +572,7 @@
             {
               "time": "02:40 PM",
               "title": "Explore Madikeri Fort & Government Museum",
-              "description": "Explore the historical exhibits sheltered inside the Gothic St. Mark's Church archaeological museum and view the fort grounds.",
+              "description": "Tour the sheltered exhibits inside the Gothic St. Mark's Church archaeological museum (sculptures, historical coins, weaponry) and photograph the fort ramparts.",
               "duration": "1h 05m",
               "location": "Madikeri Fort & Museum",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
@@ -428,7 +581,7 @@
             {
               "time": "03:45 PM",
               "title": "Darshan at Kote Maha Ganapathi Temple",
-              "description": "Walk across to the sheltered courtyard of Kote Maha Ganapathi Temple right at the fort gate for evening prayers.",
+              "description": "Walk directly across the sheltered courtyard right at the fort gate for prayers and blessings at Kote Maha Ganapathi Temple.",
               "duration": "20m",
               "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
               "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
@@ -437,7 +590,7 @@
             {
               "time": "04:05 PM",
               "title": "Auto to Gaddige (Raja's Tomb)",
-              "description": "Take an auto northward through Mahadevpet up to Gaddige (approx. 2.2 km).",
+              "description": "Hire an auto outside the fort gate heading north up to Gaddige (approx. 2.2 km).",
               "duration": "15m",
               "location": "Madikeri Fort to Gaddige",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
@@ -446,7 +599,7 @@
             {
               "time": "04:20 PM",
               "title": "Tour Gaddige (Raja's Tomb)",
-              "description": "View the royal Indo-Saracenic mausoleums and surrounding lawns.",
+              "description": "View the royal Indo-Saracenic domed mausoleums, admire the intricate stone carvings, and stroll the quiet grounds.",
               "duration": "45m",
               "location": "Gaddige (Raja's Tomb), Madikeri",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
@@ -455,7 +608,7 @@
             {
               "time": "05:05 PM",
               "title": "Auto to Ainmane Coffee Experience Centre",
-              "description": "Take an auto from Gaddige down to College Road (approx. 2.5 km).",
+              "description": "Take an auto from Gaddige down to Ainmane on College Road (approx. 2.5 km).",
               "duration": "20m",
               "location": "Gaddige to Ainmane Cafe",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
@@ -464,7 +617,7 @@
             {
               "time": "05:25 PM",
               "title": "Specialty Coffee Tasting at Ainmane",
-              "description": "Warm up inside with estate-brewed hot coffee, local snacks, and specialty chocolate shopping.",
+              "description": "Warm up inside the cozy cafe with hot artisanal estate brews, homemade pastries, and local chocolate shopping while watching rain over the hills.",
               "duration": "1h 15m",
               "location": "Ainmane Specialty Cafe, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
@@ -472,8 +625,8 @@
             },
             {
               "time": "06:40 PM",
-              "title": "Relaxed Town Stroll",
-              "description": "Take a gentle umbrella stroll through the illuminated town center if the rain eases up.",
+              "title": "Relaxed Town Stroll / Covered Arcade Walk",
+              "description": "Take an easy umbrella walk through town along covered shop corridors, enjoying the evening vibe.",
               "duration": "50m",
               "location": "Madikeri Town Bazaar",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Market",
@@ -481,19 +634,28 @@
             },
             {
               "time": "07:30 PM",
-              "title": "Early Pure Veg Dinner",
-              "description": "Enjoy a comforting, hot vegetarian dinner at Atithi Restaurant or Udupi The Veg.",
+              "title": "Walk to Pure Veg Dinner",
+              "description": "Short walk towards Udupi The Veg or Atithi Restaurant for dinner.",
+              "duration": "5m",
+              "location": "Town Bazaar to Restaurant",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "07:35 PM",
+              "title": "Pure Vegetarian Dinner",
+              "description": "Enjoy a hot, satisfying South Indian dinner (dosa, bisibelebath, or hot meals).",
               "duration": "45m",
-              "location": "Atithi Restaurant / Udupi The Veg",
+              "location": "Udupi The Veg / Atithi Restaurant",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 450
             },
             {
-              "time": "08:15 PM",
-              "title": "Walk back to Hotel & Early Rest",
-              "description": "Stroll 2 minutes back to Treebo Doha King to pack and rest early.",
+              "time": "08:20 PM",
+              "title": "Walk back to Treebo Doha King",
+              "description": "Stroll 2 minutes back to Treebo Doha King. Pack luggage leisurely for checkout tomorrow morning.",
               "duration": "15m",
-              "location": "Treebo Doha King, Madikeri",
+              "location": "Restaurant to Treebo Doha King",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             }
@@ -529,26 +691,35 @@
           "timeline": [
             {
               "time": "08:00 AM",
+              "title": "Walk to Udupi The Veg",
+              "description": "Step out from Treebo Doha King and take a 2-minute stroll (150 meters) across to Udupi The Veg.",
+              "duration": "5m",
+              "location": "Treebo Doha King to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "08:05 AM",
               "title": "Pure Veg Breakfast & Filter Coffee",
-              "description": "Walk 2 minutes to Udupi The Veg for a piping-hot breakfast (thatte idli-vada, masala dosa, and traditional Kumbakonam/filter coffee) to fuel the morning.",
-              "duration": "45m",
+              "description": "Enjoy a fresh, piping-hot South Indian breakfast (thatte idli-vada, crisp masala dosa, and traditional filter coffee) to kickstart the final day.",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 300
             },
             {
-              "time": "08:50 AM",
-              "title": "Auto to General Thimayya Memorial Museum",
-              "description": "Take a 5-minute auto hop from the town center up to 'Sunny Side' (approx. 1.2 km).",
-              "duration": "10m",
-              "location": "Treebo Doha King to General Thimayya Memorial Museum",
+              "time": "08:45 AM",
+              "title": "Walk to Auto Stand & Board Auto",
+              "description": "Walk 1 minute to the auto stand outside the bus station and hire an auto heading north to 'Sunny Side' (General Thimayya Museum).",
+              "duration": "15m",
+              "location": "Madikeri Auto Stand to General Thimayya Memorial Museum",
               "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
               "cost": 50
             },
             {
               "time": "09:00 AM",
               "title": "Tour General Thimayya Memorial Museum (Sunny Side)",
-              "description": "Explore the ancestral home of former Chief of Army Staff General K.S. Thimayya. Inspect the decommissioned IAF MiG-21 fighter jet, the Indian Army T-55 battle tank, military artillery, medals, and historical war galleries.",
+              "description": "Explore the ancestral home of former Chief of Army Staff General K.S. Thimayya right at opening time. Inspect the decommissioned IAF MiG-21 fighter jet, the Indian Army T-55 battle tank, military artillery, medals, and historical war galleries.",
               "duration": "1h",
               "location": "General Thimayya Memorial Museum, Madikeri",
               "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
@@ -556,8 +727,8 @@
             },
             {
               "time": "10:00 AM",
-              "title": "Auto back to Treebo Doha King",
-              "description": "Take an auto from the museum back to the hotel area.",
+              "title": "Auto from Museum back to Treebo Doha King",
+              "description": "Hire an auto outside the museum gates for the short return drive down to Treebo Doha King (approx. 1.2 km).",
               "duration": "10m",
               "location": "General Thimayya Memorial Museum to Treebo Doha King",
               "mapsLink": "https://maps.google.com/?q=Treebo+Doha+King+Madikeri",
@@ -565,8 +736,8 @@
             },
             {
               "time": "10:10 AM",
-              "title": "Pack Bags & Official Hotel Checkout",
-              "description": "Conduct a final sweep of the room for chargers and belongings, complete checkout at Treebo Doha King before 11:00 AM, and deposit luggage with the front desk reception cloak storage.",
+              "title": "Final Packing, Checkout & Cloakroom Luggage Drop",
+              "description": "Conduct a final sweep of the room for chargers, toiletries, and jackets. Complete official checkout at Treebo Doha King reception before 11:00 AM, and deposit main travel bags with the front desk cloakroom for hands-free afternoon shopping.",
               "duration": "35m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
@@ -574,44 +745,89 @@
             },
             {
               "time": "10:45 AM",
-              "title": "Hands-Free Spice & Market Shopping",
-              "description": "Stroll hands-free through Madikeri central bazaar. Shop for GI-tagged whole black pepper, green cardamom pods, pure Coorg wild honey, handmade fruit chocolates, and fresh roasted coffee blends.",
-              "duration": "1h 30m",
-              "location": "Madikeri Town Bazaar",
+              "title": "Hands-Free Spice, Coffee & Chocolate Shopping",
+              "description": "Stroll hands-free through Madikeri central bazaar (College Road and market area). Shop at established outlets like Coorg Greens, Choci Coorg, or Big Cup Cafe store for GI-tagged whole black pepper, green cardamom pods, pure wild honey, artisan fruit chocolates, and fresh estate-ground filter coffee powder.",
+              "duration": "1h 25m",
+              "location": "Madikeri Town Bazaar & Spice Emporiums",
               "mapsLink": "https://maps.google.com/?q=Madikeri+Market",
               "cost": 2500
             },
             {
+              "time": "12:10 PM",
+              "title": "Walk to Udupi The Veg",
+              "description": "Walk back from the bazaar area across to Udupi The Veg near the bus terminal.",
+              "duration": "5m",
+              "location": "Market to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
               "time": "12:15 PM",
               "title": "Early Pure Veg Lunch at Udupi The Veg",
-              "description": "Enjoy an unhurried, nourishing pure vegetarian South Indian thali or lunch at Udupi The Veg before long-distance transit.",
-              "duration": "45m",
+              "description": "Enjoy an unhurried, nourishing pure vegetarian South Indian thali or lunch before boarding the long-distance return bus.",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 450
             },
             {
-              "time": "01:00 PM",
-              "title": "Collect Luggage & Walk to Bus Stand",
-              "description": "Collect stored luggage from Treebo Doha King reception and take the flat 2-minute walk (200 meters) across to Platform 0 of the Madikeri KSRTC Bus Stand. Board by 01:15 PM.",
+              "time": "12:55 PM",
+              "title": "Retrieve Luggage from Treebo Doha King",
+              "description": "Walk 2 minutes back into Treebo Doha King, show your cloakroom token to collect stored bags, use the restroom, and ensure bus tickets/water bottles are accessible.",
+              "duration": "10m",
+              "location": "Treebo Doha King, Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:05 PM",
+              "title": "Walk to Madikeri KSRTC Bus Stand",
+              "description": "Take the flat 2-minute stroll (approx. 200 meters) from the hotel rear exit directly into Platform 0 of Madikeri KSRTC Bus Stand. Identify your Airavat Club Class bus (Trip Code: 1002MNGBNG).",
+              "duration": "10m",
+              "location": "Treebo Doha King to KSRTC Bus Stand Platform 0",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+KSRTC+Bus+Stand",
+              "cost": 0
+            },
+            {
+              "time": "01:15 PM",
+              "title": "Luggage Loading & Boarding Airavat Club Class",
+              "description": "Load larger backpacks into the undercarriage luggage bay, show digital ticket (PNR: KS22879259, Seats: 5, 6) to the conductor, and settle into recliner seats before departure.",
               "duration": "15m",
-              "location": "Treebo Doha King to KSRTC Bus Stand",
+              "location": "Madikeri KSRTC Bus Stand",
               "mapsLink": "https://maps.google.com/?q=Madikeri+KSRTC+Bus+Stand",
               "cost": 0
             },
             {
               "time": "01:30 PM",
-              "title": "Board KSRTC Airavat Club Class to Bengaluru",
-              "description": "Depart Madikeri on KSRTC Airavat Club Class (Trip Code: 1002MNGBNG, PNR: KS22879259, Seats: 5, 6). Relax through the ghat descent via Kushalnagar, Hunsur bypass, and the expressway back toward Bengaluru.",
-              "duration": "6h 30m",
-              "location": "Madikeri to Kengeri BMTC TTMC",
+              "title": "Depart Madikeri: Scenic Ghat Descent",
+              "description": "Bus departs on schedule. Relax through the winding Western Ghat descent via Suntikoppa, Kushalnagar, and Piriyapatna towards Hunsur bypass.",
+              "duration": "3h 30m",
+              "location": "Madikeri to Expressway Route",
+              "mapsLink": "https://maps.app.goo.gl/MCcLaxfsas5Y2bvt9",
+              "cost": 0
+            },
+            {
+              "time": "05:00 PM",
+              "title": "En Route Highway Tea & Restroom Halt",
+              "description": "Scheduled 20–25 minute KSRTC refreshment halt at an expressway food plaza (around Mandya / Maddur stretch). Grab hot tea/filter coffee, snacks, and stretch legs.",
+              "duration": "25m",
+              "location": "Highway Pure Veg Food Plaza",
+              "mapsLink": "",
+              "cost": 250
+            },
+            {
+              "time": "05:25 PM",
+              "title": "Expressway Cruise to Bengaluru (with Traffic Buffer)",
+              "description": "Resume high-speed cruise along Bengaluru–Mysuru Expressway with built-in buffer for Sunday evening entry traffic heading into Kengeri.",
+              "duration": "2h 35m",
+              "location": "Expressway to Kengeri BMTC TTMC",
               "mapsLink": "https://maps.app.goo.gl/MCcLaxfsas5Y2bvt9",
               "cost": 0
             },
             {
               "time": "08:00 PM",
               "title": "Arrival at Kengeri BMTC TTMC",
-              "description": "Alight at Kengeri BMTC TTMC flyover bus bay. Collect luggage from the undercarriage hold.",
+              "description": "Alight at Kengeri BMTC TTMC flyover bus bay. Collect baggage from the luggage hold and head down the ramp to the auto stand.",
               "duration": "15m",
               "location": "Kengeri BMTC TTMC, Bengaluru",
               "mapsLink": "https://maps.google.com/?q=Kengeri+TTMC+Bus+Stand",
@@ -620,7 +836,7 @@
             {
               "time": "08:15 PM",
               "title": "Auto from Kengeri TTMC to Home",
-              "description": "Take a local auto from Kengeri TTMC back home to JDR Aadhitri, Kodipalya (approx. 2.8 km).",
+              "description": "Hire a local auto from Kengeri TTMC stand back home to JDR Aadhitri, Kodipalya (approx. 2.8 km, 12–15 mins).",
               "duration": "20m",
               "location": "Kengeri TTMC to JDR Aadhitri, Kodipalya",
               "mapsLink": "https://www.google.com/maps/dir/KSRTC+Pick+up+point+Kengeri+BMTC+TTMC,+Bmtc+Ttmc,+Mysore+Rd,+Kengeri,+Bengaluru,+Karnataka+560060/JDR+AADHITRI,+104,+Kodipalya,+Bengaluru,+Karnataka+560060,+India",
@@ -629,11 +845,7 @@
           ],
           "additionalBudget": [
             {
-              "title": "Highway Tea & Evening Snacks Buffer",
-              "cost": 250
-            },
-            {
-              "title": "Bottled Mineral Water & Porter/Auto Buffer",
+              "title": "Bottled Mineral Water & Auto Buffer",
               "cost": 150
             }
           ]
@@ -643,53 +855,107 @@
           "timeline": [
             {
               "time": "08:30 AM",
-              "title": "Relaxed Breakfast at Hotel / Udupi The Veg",
-              "description": "Enjoy a warm South Indian breakfast nearby without rushing through early morning showers.",
-              "duration": "45m",
+              "title": "Walk to Udupi The Veg",
+              "description": "Take a 2-minute umbrella stroll across to Udupi The Veg for breakfast.",
+              "duration": "5m",
+              "location": "Treebo Doha King to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
+              "time": "08:35 AM",
+              "title": "Relaxed Breakfast at Udupi The Veg",
+              "description": "Enjoy a warm South Indian breakfast (thatte idli, vada, masala dosa, and filter coffee) without rushing through early morning showers.",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 300
             },
             {
+              "time": "09:15 AM",
+              "title": "Covered Auto to General Thimayya Museum",
+              "description": "Hire an auto directly outside the bus stand to 'Sunny Side' (approx. 1.2 km).",
+              "duration": "15m",
+              "location": "Madikeri Auto Stand to General Thimayya Memorial Museum",
+              "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
+              "cost": 50
+            },
+            {
               "time": "09:30 AM",
               "title": "Indoor Tour of General Thimayya Museum",
-              "description": "Take an auto directly to Sunny Side to explore the indoor military artifacts, medals, and uniforms under cover.",
-              "duration": "1h 15m",
+              "description": "Explore the indoor military galleries, medals, war artifacts, and weaponry safely sheltered inside the museum building.",
+              "duration": "1h",
               "location": "General Thimayya Memorial Museum, Madikeri",
               "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
-              "cost": 150
+              "cost": 50
+            },
+            {
+              "time": "10:30 AM",
+              "title": "Auto back to Treebo Doha King",
+              "description": "Take an auto from the museum back down to Treebo Doha King.",
+              "duration": "15m",
+              "location": "General Thimayya Memorial Museum to Treebo Doha King",
+              "mapsLink": "https://maps.google.com/?q=Treebo+Doha+King+Madikeri",
+              "cost": 50
             },
             {
               "time": "10:45 AM",
               "title": "Hotel Checkout & Luggage Drop",
-              "description": "Return to Treebo Doha King, complete check-out, and store bags safely at the front desk.",
-              "duration": "30m",
+              "description": "Complete room checkout formalities and hand over bags to the front desk reception cloak storage.",
+              "duration": "25m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             },
             {
-              "time": "11:15 AM",
+              "time": "11:10 AM",
               "title": "Covered Emporium & Spice Shopping",
-              "description": "Shop inside covered government and estate spice emporiums for spices, chocolates, and coffee powder away from the rain.",
+              "description": "Shop inside covered government and estate spice emporiums along College Road for black pepper, cardamom, local chocolates, and coffee powder, staying dry.",
               "duration": "1h",
               "location": "Madikeri Spice Emporiums",
               "mapsLink": "",
               "cost": 2500
             },
             {
+              "time": "12:10 PM",
+              "title": "Walk to Udupi The Veg",
+              "description": "Short walk back towards Udupi The Veg near the bus stand.",
+              "duration": "5m",
+              "location": "Market to Udupi The Veg",
+              "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
+              "cost": 0
+            },
+            {
               "time": "12:15 PM",
               "title": "Early Pure Veg Lunch",
-              "description": "Warm South Indian thali or hot dosa at Udupi The Veg.",
-              "duration": "45m",
+              "description": "Enjoy a warm South Indian thali, rasam rice, or hot dosa at Udupi The Veg.",
+              "duration": "40m",
               "location": "Udupi The Veg, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Udupi+The+Veg+Madikeri",
               "cost": 450
             },
             {
-              "time": "01:00 PM",
-              "title": "Collect Luggage & Move to KSRTC Covered Platform",
-              "description": "Retrieve bags and wait under the covered shelter of Platform 0 at the bus stand.",
+              "time": "12:55 PM",
+              "title": "Retrieve Luggage from Treebo Doha King",
+              "description": "Collect stored baggage from hotel reception, prepare rain gear, and freshen up before bus boarding.",
+              "duration": "10m",
+              "location": "Treebo Doha King, Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "cost": 0
+            },
+            {
+              "time": "01:05 PM",
+              "title": "Walk to KSRTC Covered Platform 0",
+              "description": "Walk 2 minutes into the covered bus bay of Platform 0 at Madikeri KSRTC Bus Stand.",
+              "duration": "10m",
+              "location": "Madikeri KSRTC Bus Stand Platform 0",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+KSRTC+Bus+Stand",
+              "cost": 0
+            },
+            {
+              "time": "01:15 PM",
+              "title": "Luggage Loading & Boarding Airavat Club Class",
+              "description": "Load luggage into undercarriage hold and board Airavat Club Class (PNR: KS22879259, Seats: 5, 6).",
               "duration": "15m",
               "location": "Madikeri KSRTC Bus Stand",
               "mapsLink": "https://maps.google.com/?q=Madikeri+KSRTC+Bus+Stand",
@@ -697,18 +963,45 @@
             },
             {
               "time": "01:30 PM",
-              "title": "Board KSRTC Airavat Club Class to Bengaluru",
-              "description": "Board the bus (PNR: KS22879259, Seats: 5, 6) for the return journey to Kengeri TTMC.",
-              "duration": "6h 30m",
-              "location": "Madikeri to Kengeri BMTC TTMC",
+              "title": "Depart Madikeri: Western Ghat Descent",
+              "description": "Scenic rainy descent via Kushalnagar and Hunsur bypass towards Bengaluru.",
+              "duration": "3h 30m",
+              "location": "Madikeri to Expressway Route",
+              "mapsLink": "https://maps.app.goo.gl/MCcLaxfsas5Y2bvt9",
+              "cost": 0
+            },
+            {
+              "time": "05:00 PM",
+              "title": "Highway Tea & Restroom Halt",
+              "description": "Scheduled 20–25 minute KSRTC refreshment halt at an expressway food plaza near Mandya. Grab hot tea/coffee and snacks.",
+              "duration": "25m",
+              "location": "Highway Pure Veg Food Plaza",
+              "mapsLink": "",
+              "cost": 250
+            },
+            {
+              "time": "05:25 PM",
+              "title": "Expressway Cruise to Bengaluru",
+              "description": "High-speed expressway run with traffic buffer for Sunday evening arrival into Kengeri.",
+              "duration": "2h 35m",
+              "location": "Expressway to Kengeri BMTC TTMC",
               "mapsLink": "https://maps.app.goo.gl/MCcLaxfsas5Y2bvt9",
               "cost": 0
             },
             {
               "time": "08:00 PM",
-              "title": "Arrival at Kengeri TTMC & Auto Home",
-              "description": "Alight at Kengeri TTMC and take an auto back to JDR Aadhitri, Kodipalya.",
-              "duration": "35m",
+              "title": "Arrival at Kengeri BMTC TTMC",
+              "description": "Alight at Kengeri BMTC TTMC flyover bus bay, retrieve bags, and head down to the auto stand.",
+              "duration": "15m",
+              "location": "Kengeri BMTC TTMC, Bengaluru",
+              "mapsLink": "https://maps.google.com/?q=Kengeri+TTMC+Bus+Stand",
+              "cost": 0
+            },
+            {
+              "time": "08:15 PM",
+              "title": "Auto from Kengeri TTMC to Home",
+              "description": "Take an auto back home to JDR Aadhitri, Kodipalya (approx. 2.8 km).",
+              "duration": "20m",
               "location": "Kengeri TTMC to JDR Aadhitri, Kodipalya",
               "mapsLink": "https://www.google.com/maps/dir/KSRTC+Pick+up+point+Kengeri+BMTC+TTMC,+Bmtc+Ttmc,+Mysore+Rd,+Kengeri,+Bengaluru,+Karnataka+560060/JDR+AADHITRI,+104,+Kodipalya,+Bengaluru,+Karnataka+560060,+India",
               "cost": 120
@@ -781,7 +1074,7 @@
         "id": 1,
         "name": "Mandalpatti 4x4 Off-Road Jeep Safari & Abbey Falls Circuit",
         "status": "Planned",
-        "cost": 2200,
+        "cost": 3000,
         "notes": "Hired as a complete package directly from Madikeri town / hotel front desk. Single 4x4 vehicle covers Town -> Mandalpatti Peak -> Abbey Falls -> Town.",
         "links": [],
         "excludeFromBudget": false
