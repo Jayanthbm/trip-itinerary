@@ -6,8 +6,8 @@
   "days": [
     {
       "day": "Day 1",
-      "title": "Journey, Check-in, Rest, Sunset at Raja's Seat & Temple Darshan",
-      "summary": "Depart home at 5:45 AM, board the KSRTC EV Power Plus from Kengeri TTMC with an en route highway breakfast break, and arrive in Madikeri by 1:00 PM. Check in at Treebo Doha King, enjoy a pure vegetarian lunch at Udupi The Veg, book Saturday's 4x4 jeep safari, and take a 1.5-hour afternoon rest. Head to Raja's Seat for daylight views, golden hour, and sunset, followed by an illuminated evening visit to Shri Omkareshwara Swamy Temple and a relaxed vegetarian dinner.",
+      "title": "Journey, Check-in, Military Heritage, Sunset at Raja's Seat & Temple Darshan",
+      "summary": "Depart home at 5:45 AM, board the KSRTC EV Power Plus from Kengeri TTMC with an en route highway breakfast break, and arrive in Madikeri by 1:00 PM. Check in at Treebo Doha King, enjoy a pure vegetarian lunch at Udupi The Veg, book Saturday's 4x4 jeep safari, and take an afternoon rest. Tour the General Thimayya Memorial Museum ('Sunny Side') to view the MiG-21 and military artifacts, then head to Raja's Seat for golden hour and sunset, followed by an illuminated evening visit to Shri Omkareshwara Swamy Temple and a relaxed vegetarian dinner.",
       "checklist": [
         "Book an auto from JDR Aadhitri by 05:35 AM to reach Kengeri TTMC by 05:55 AM",
         "Keep KSRTC PNR (KS22879177) and Government IDs ready for conductor verification",
@@ -63,7 +63,7 @@
               "description": "Alight at Madikeri KSRTC Bus Stand. Collect luggage, stretch legs, and exit towards the rear gate heading towards the hotel.",
               "duration": "10m",
               "location": "Madikeri KSRTC Bus Stand",
-              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "mapsLink": "https://maps.app.goo.gl/JVDbZVm9FZDvkwUq9",
               "cost": 0
             },
             {
@@ -72,7 +72,7 @@
               "description": "Take a short 2-minute stroll (approx. 200–300 meters) directly behind the bus stand to reach Treebo Doha King.",
               "duration": "5m",
               "location": "Madikeri Bus Stand to Treebo Doha King",
-              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "mapsLink": "https://maps.app.goo.gl/JVDbZVm9FZDvkwUq9",
               "cost": 0
             },
             {
@@ -81,7 +81,7 @@
               "description": "Complete check-in formalities at the front desk, inspect room linens and geyser, drop luggage, and quickly freshen up before lunch.",
               "duration": "15m",
               "location": "Treebo Doha King, Madikeri",
-              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "mapsLink": "https://maps.app.goo.gl/UoWjS2fVgt7Qh54i6",
               "cost": 0
             },
             {
@@ -108,7 +108,7 @@
               "description": "Step outside the restaurant and take a 1-minute walk to the main Madikeri Taxi & 4x4 Jeep Stand adjacent to the KSRTC Bus Station.",
               "duration": "5m",
               "location": "Madikeri Jeep Stand (Near KSRTC Bus Stand)",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Bus+Stand",
+              "mapsLink": "https://maps.app.goo.gl/9sYRX2JcUVHkK1Dh8",
               "cost": 0
             },
             {
@@ -117,7 +117,7 @@
               "description": "Coordinate directly with local drivers at the jeep stand. Lock in Saturday's 06:00 AM hotel pickup for Mandalpatti Peak (sunrise/morning clouds) + Abbey Falls circuit (target ₹2,200–₹2,500 total). Exchange mobile numbers and reconfirm pickup spot at Treebo Doha King.",
               "duration": "20m",
               "location": "Madikeri Jeep Stand",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Bus+Stand",
+              "mapsLink": "https://maps.app.goo.gl/9sYRX2JcUVHkK1Dh8",
               "cost": 0
             },
             {
@@ -126,34 +126,52 @@
               "description": "Walk 3 minutes (approx. 250 meters) back to Treebo Doha King from the jeep stand.",
               "duration": "5m",
               "location": "Jeep Stand to Treebo Doha King",
-              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "mapsLink": "https://maps.app.goo.gl/BaZ8mymnBYyqSZ3Q6",
               "cost": 0
             },
             {
               "time": "02:45 PM",
               "title": "Midday Rest & Refresh at Hotel",
-              "description": "Relax in the room for an uninterrupted 1.5-hour afternoon rest to recharge from the early-morning start and 6-hour road journey.",
-              "duration": "1h 30m",
+              "description": "Relax in the room for a 1-hour rest to recharge from the morning road journey.",
+              "duration": "1h",
               "location": "Treebo Doha King, Madikeri",
-              "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
+              "mapsLink": "https://maps.app.goo.gl/UoWjS2fVgt7Qh54i6",
               "cost": 0
             },
             {
-              "time": "04:15 PM",
-              "title": "Auto to Raja's Seat",
-              "description": "Hire an auto from outside the hotel / bus stand area up to the entrance of Raja's Seat viewpoint.",
+              "time": "03:45 PM",
+              "title": "Auto to General Thimayya Memorial Museum",
+              "description": "Hire an auto outside the hotel / bus stand area up to 'Sunny Side' (General Thimayya Museum, approx. 1.2 km).",
               "duration": "15m",
-              "location": "Treebo Doha King to Raja's Seat",
+              "location": "Treebo Doha King to General Thimayya Memorial Museum",
+              "mapsLink": "https://maps.app.goo.gl/7NNKhMmhBw19Lu4HA",
+              "cost": 50
+            },
+            {
+              "time": "04:00 PM",
+              "title": "Tour General Thimayya Memorial Museum (Sunny Side)",
+              "description": "Explore the ancestral home of former Chief of Army Staff General K.S. Thimayya. Inspect the decommissioned IAF MiG-21 fighter jet, the Indian Army T-55 battle tank, military artillery, medals, and historical war galleries.",
+              "duration": "50m",
+              "location": "General Thimayya Memorial Museum, Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/7NNKhMmhBw19Lu4HA",
+              "cost": 50
+            },
+            {
+              "time": "04:50 PM",
+              "title": "Auto from Museum to Raja's Seat",
+              "description": "Take an auto from outside the museum gates directly to Raja's Seat (approx. 1.5 km, 7–10 mins).",
+              "duration": "10m",
+              "location": "General Thimayya Museum to Raja's Seat",
               "mapsLink": "https://maps.google.com/?q=Raja's+Seat+Madikeri",
               "cost": 50
             },
             {
-              "time": "04:30 PM",
+              "time": "05:00 PM",
               "title": "Raja's Seat Gardens, Sunset & Viewpoint",
-              "description": "Purchase entry tickets (₹25–₹40 per person). Stroll through the seasonal flower beds, enjoy expansive daylight panoramic views of Coorg's misty hills and valleys, catch golden hour and sunset over the Western Ghats around 06:05–06:15 PM.",
-              "duration": "2h",
+              "description": "Purchase entry tickets (₹25–₹40 per person). Stroll through the seasonal flower beds, enjoy expansive panoramic views of Coorg's misty valleys, and catch golden hour and sunset over the Western Ghats around 06:05–06:15 PM.",
+              "duration": "1h 30m",
               "location": "Raja's Seat Garden & Viewpoint",
-              "mapsLink": "https://maps.google.com/?q=Raja's+Seat+Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/tBjK9ykXXux4W9n49",
               "cost": 80
             },
             {
@@ -162,7 +180,7 @@
               "description": "Take a local auto from Raja's Seat parking down into town to Shri Omkareshwara Swamy Temple.",
               "duration": "10m",
               "location": "Raja's Seat to Omkareshwara Temple",
-              "mapsLink": "https://maps.google.com/?q=Omkareshwara+Temple+Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/XvGSJfWiaTQ6aFro8",
               "cost": 50
             },
             {
@@ -171,7 +189,7 @@
               "description": "Leave footwear at the counter, enter the temple for evening aarti, admire the unique Islamic dome and Gothic minaret architecture, and enjoy a quiet walk around the central fish tank lit by evening lamps.",
               "duration": "50m",
               "location": "Shri Omkareshwara Swamy Temple, Madikeri",
-              "mapsLink": "https://maps.google.com/?q=Omkareshwara+Temple+Madikeri",
+              "mapsLink": "https://maps.app.goo.gl/XvGSJfWiaTQ6aFro8",
               "cost": 50
             },
             {
@@ -226,13 +244,13 @@
     },
     {
       "day": "Day 2",
-      "title": "4x4 Jeep Safari, Abbey Falls, Fort, Temples, Royal Tombs & Specialty Coffee",
-      "summary": "Embark on an early-morning 4x4 off-road jeep safari to Mandalpatti Peak and Abbey Falls, returning to Madikeri by 1:00 PM with a built-in traffic buffer. After a pure vegetarian lunch and a quick 45-minute refresh at Treebo Doha King, explore Madikeri Fort & Museum, take darshan at Kote Maha Ganapathi Temple, tour the royal mausoleums at Gaddige, and enjoy an evening specialty brew tasting at Ainmane Coffee before an early dinner.",
+      "title": "4x4 Jeep Safari, Abbey Falls, Royal Tombs & Specialty Coffee",
+      "summary": "Embark on an early-morning 4x4 off-road jeep safari to Mandalpatti Peak and Abbey Falls, returning to Madikeri by 1:00 PM with a built-in traffic buffer. After a pure vegetarian lunch and a relaxing 2-hour rest at Treebo Doha King, tour the royal mausoleums at Gaddige, enjoy an evening specialty brew tasting at Ainmane Coffee, and take a relaxed town stroll before dinner.",
       "checklist": [
         "Wear warm windcheaters or jackets for the breezy open 4x4 jeep safari",
         "Wear sturdy walking shoes with good traction for wet rocky pathways around Abbey Falls",
         "Carry ₹2,500 - ₹3,000 cash for the private 4x4 jeep driver, entry tickets, and forest eco-tax",
-        "Keep physical cash handy for afternoon auto rides to Fort, Gaddige, and Ainmane (₹50-₹70 per trip)"
+        "Keep physical cash handy for afternoon auto rides to Gaddige and Ainmane (₹70 per trip)"
       ],
       "active_plan": "Main Plan",
       "plans": [
@@ -340,60 +358,33 @@
             },
             {
               "time": "01:50 PM",
-              "title": "Shower, Refresh & Rest at Hotel",
-              "description": "Shower to wash off trail red dust, change into light afternoon clothing, recharge mobile phones/cameras, and relax in the room.",
-              "duration": "40m",
+              "title": "Shower, Refresh & Extended Afternoon Rest",
+              "description": "Shower to wash off trail red dust, change into fresh clothes, recharge mobile phones/cameras, and enjoy a relaxed 1 hour 50 minute rest to fully recover from the bumpy morning safari.",
+              "duration": "1h 55m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             },
             {
-              "time": "02:30 PM",
-              "title": "Auto to Madikeri Fort",
-              "description": "Hire an auto outside the hotel / bus stand to Madikeri Fort entrance (approx. 1.2 km, 5–7 mins).",
-              "duration": "10m",
-              "location": "Treebo Doha King to Madikeri Fort",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
-              "cost": 50
-            },
-            {
-              "time": "02:40 PM",
-              "title": "Explore Madikeri Fort & Government Museum",
-              "description": "Walk the 17th-century stone ramparts, view the life-sized stone elephants, and tour the state archaeological museum housed inside the Gothic St. Mark's Church.",
-              "duration": "1h 05m",
-              "location": "Madikeri Fort & Museum",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
-              "cost": 40
-            },
-            {
               "time": "03:45 PM",
-              "title": "Darshan at Kote Maha Ganapathi Temple",
-              "description": "Walk directly across the fort gateway courtyard to Kote Maha Ganapathi Temple for prayers and blessings at this revered historical shrine.",
-              "duration": "20m",
-              "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
-              "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
-              "cost": 30
-            },
-            {
-              "time": "04:05 PM",
               "title": "Auto to Gaddige (Raja's Tomb)",
-              "description": "Hire an auto from the fort gate up through Mahadevpet to Gaddige (approx. 2.2 km).",
+              "description": "Hire an auto outside the hotel / bus stand heading north up through Mahadevpet to Gaddige (approx. 2.2 km).",
               "duration": "15m",
-              "location": "Madikeri Fort to Gaddige",
+              "location": "Treebo Doha King to Gaddige",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
               "cost": 70
             },
             {
-              "time": "04:20 PM",
+              "time": "04:00 PM",
               "title": "Tour Gaddige (Raja's Tomb)",
-              "description": "Explore the 18th-century royal Indo-Saracenic domed monuments of King Lingarajendra II and Doddaveerarajendra set amidst green lawns.",
-              "duration": "45m",
+              "description": "Explore the 18th-century royal Indo-Saracenic domed monuments of King Lingarajendra II and Doddaveerarajendra set amidst quiet green lawns.",
+              "duration": "50m",
               "location": "Gaddige (Raja's Tomb), Madikeri",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
               "cost": 40
             },
             {
-              "time": "05:05 PM",
+              "time": "04:50 PM",
               "title": "Auto to Ainmane Coffee Experience Centre",
               "description": "Take an auto from Gaddige down to Ainmane on College Road (approx. 2.5 km).",
               "duration": "20m",
@@ -402,10 +393,10 @@
               "cost": 70
             },
             {
-              "time": "05:25 PM",
+              "time": "05:10 PM",
               "title": "Specialty Coffee Tasting at Ainmane",
               "description": "Sip artisanal single-origin estate brews (such as Monsooned Malabar), try passion fruit spreads, and explore local chocolate gifts in a cozy ambiance.",
-              "duration": "1h 15m",
+              "duration": "1h 30m",
               "location": "Ainmane Specialty Cafe, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
               "cost": 400
@@ -554,59 +545,32 @@
             {
               "time": "01:50 PM",
               "title": "Afternoon Rest & Refresh",
-              "description": "Recharge in the room before beginning the sheltered town sightseeing circuit.",
-              "duration": "40m",
+              "description": "Recharge in the room for a relaxing 1 hour 55 minute rest before heading out for afternoon sightseeing.",
+              "duration": "1h 55m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
             },
             {
-              "time": "02:30 PM",
-              "title": "Auto to Madikeri Fort",
-              "description": "Take a 5-minute auto ride from the hotel/bus stand area up to the fort gates (approx. 1.2 km).",
-              "duration": "10m",
-              "location": "Treebo Doha King to Madikeri Fort",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
-              "cost": 50
-            },
-            {
-              "time": "02:40 PM",
-              "title": "Explore Madikeri Fort & Government Museum",
-              "description": "Tour the sheltered exhibits inside the Gothic St. Mark's Church archaeological museum (sculptures, historical coins, weaponry) and photograph the fort ramparts.",
-              "duration": "1h 05m",
-              "location": "Madikeri Fort & Museum",
-              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
-              "cost": 40
-            },
-            {
               "time": "03:45 PM",
-              "title": "Darshan at Kote Maha Ganapathi Temple",
-              "description": "Walk directly across the sheltered courtyard right at the fort gate for prayers and blessings at Kote Maha Ganapathi Temple.",
-              "duration": "20m",
-              "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
-              "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
-              "cost": 30
-            },
-            {
-              "time": "04:05 PM",
               "title": "Auto to Gaddige (Raja's Tomb)",
-              "description": "Hire an auto outside the fort gate heading north up to Gaddige (approx. 2.2 km).",
+              "description": "Hire an auto outside the hotel / bus stand heading north up through Mahadevpet to Gaddige (approx. 2.2 km).",
               "duration": "15m",
-              "location": "Madikeri Fort to Gaddige",
+              "location": "Treebo Doha King to Gaddige",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
               "cost": 70
             },
             {
-              "time": "04:20 PM",
+              "time": "04:00 PM",
               "title": "Tour Gaddige (Raja's Tomb)",
               "description": "View the royal Indo-Saracenic domed mausoleums, admire the intricate stone carvings, and stroll the quiet grounds.",
-              "duration": "45m",
+              "duration": "50m",
               "location": "Gaddige (Raja's Tomb), Madikeri",
               "mapsLink": "https://maps.google.com/?q=Gaddige+Raja's+Tomb+Madikeri",
               "cost": 40
             },
             {
-              "time": "05:05 PM",
+              "time": "04:50 PM",
               "title": "Auto to Ainmane Coffee Experience Centre",
               "description": "Take an auto from Gaddige down to Ainmane on College Road (approx. 2.5 km).",
               "duration": "20m",
@@ -615,10 +579,10 @@
               "cost": 70
             },
             {
-              "time": "05:25 PM",
+              "time": "05:10 PM",
               "title": "Specialty Coffee Tasting at Ainmane",
               "description": "Warm up inside the cozy cafe with hot artisanal estate brews, homemade pastries, and local chocolate shopping while watching rain over the hills.",
-              "duration": "1h 15m",
+              "duration": "1h 30m",
               "location": "Ainmane Specialty Cafe, Madikeri",
               "mapsLink": "https://maps.google.com/?q=Ainmane+Coffee+Madikeri",
               "cost": 400
@@ -675,8 +639,8 @@
     },
     {
       "day": "Day 3",
-      "title": "Military Heritage, Checkout, Spice Shopping & Return Bus",
-      "summary": "Start Sunday with a fresh South Indian breakfast and an early morning tour of the General Thimayya Memorial Museum ('Sunny Side') to view the MiG-21 and military artifacts. Complete checkout at Treebo Doha King before 11:00 AM, store bags at the front desk, and enjoy dedicated, hands-free spice and chocolate shopping in the town bazaar. After an early pure veg lunch at Udupi The Veg, collect luggage and walk across to Madikeri KSRTC Bus Stand to board the 01:30 PM Airavat Club Class bus back to Bengaluru.",
+      "title": "Historical Fort & Temple, Checkout, Spice Shopping & Return Bus",
+      "summary": "Start Sunday with a fresh South Indian breakfast and an early morning tour of Madikeri Fort & Archaeological Museum, followed by darshan at Kote Maha Ganapathi Temple. Complete checkout at Treebo Doha King before 11:00 AM, store bags at the front desk, and enjoy dedicated, hands-free spice and chocolate shopping in the town bazaar. After an early pure veg lunch at Udupi The Veg, collect luggage and walk across to Madikeri KSRTC Bus Stand to board the 01:30 PM Airavat Club Class bus back to Bengaluru.",
       "checklist": [
         "Complete room packing and front desk checkout at Treebo Doha King by 10:45 AM",
         "Hand over luggage to hotel reception for safe cloakroom storage during shopping and lunch",
@@ -709,36 +673,45 @@
             },
             {
               "time": "08:45 AM",
-              "title": "Walk to Auto Stand & Board Auto",
-              "description": "Walk 1 minute to the auto stand outside the bus station and hire an auto heading north to 'Sunny Side' (General Thimayya Museum).",
-              "duration": "15m",
-              "location": "Madikeri Auto Stand to General Thimayya Memorial Museum",
-              "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
-              "cost": 50
-            },
-            {
-              "time": "09:00 AM",
-              "title": "Tour General Thimayya Memorial Museum (Sunny Side)",
-              "description": "Explore the ancestral home of former Chief of Army Staff General K.S. Thimayya right at opening time. Inspect the decommissioned IAF MiG-21 fighter jet, the Indian Army T-55 battle tank, military artillery, medals, and historical war galleries.",
-              "duration": "1h",
-              "location": "General Thimayya Memorial Museum, Madikeri",
-              "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
-              "cost": 50
-            },
-            {
-              "time": "10:00 AM",
-              "title": "Auto from Museum back to Treebo Doha King",
-              "description": "Hire an auto outside the museum gates for the short return drive down to Treebo Doha King (approx. 1.2 km).",
+              "title": "Walk to Auto Stand & Board Auto to Fort",
+              "description": "Walk 1 minute to the auto stand outside the bus station and hire an auto heading to Madikeri Fort gates (approx. 1.2 km, 5–7 mins).",
               "duration": "10m",
-              "location": "General Thimayya Memorial Museum to Treebo Doha King",
+              "location": "Madikeri Auto Stand to Madikeri Fort",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
+              "cost": 50
+            },
+            {
+              "time": "08:55 AM",
+              "title": "Explore Madikeri Fort & Government Museum",
+              "description": "Walk the 17th-century stone ramparts, view the life-sized stone elephants, and tour the state archaeological museum housed inside the Gothic St. Mark's Church right at morning opening time.",
+              "duration": "50m",
+              "location": "Madikeri Fort & Museum",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
+              "cost": 40
+            },
+            {
+              "time": "09:45 AM",
+              "title": "Darshan at Kote Maha Ganapathi Temple",
+              "description": "Walk directly across the fort gateway courtyard to Kote Maha Ganapathi Temple for prayers and morning blessings at this revered historical shrine.",
+              "duration": "20m",
+              "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
+              "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
+              "cost": 30
+            },
+            {
+              "time": "10:05 AM",
+              "title": "Auto from Fort back to Treebo Doha King",
+              "description": "Hire an auto outside the fort gate for the short return drive down to Treebo Doha King (approx. 1.2 km).",
+              "duration": "10m",
+              "location": "Madikeri Fort to Treebo Doha King",
               "mapsLink": "https://maps.google.com/?q=Treebo+Doha+King+Madikeri",
               "cost": 50
             },
             {
-              "time": "10:10 AM",
+              "time": "10:15 AM",
               "title": "Final Packing, Checkout & Cloakroom Luggage Drop",
               "description": "Conduct a final sweep of the room for chargers, toiletries, and jackets. Complete official checkout at Treebo Doha King reception before 11:00 AM, and deposit main travel bags with the front desk cloakroom for hands-free afternoon shopping.",
-              "duration": "35m",
+              "duration": "30m",
               "location": "Treebo Doha King, Madikeri",
               "mapsLink": "https://maps.app.goo.gl/NACX48BHoUG66TMo8",
               "cost": 0
@@ -873,33 +846,42 @@
             },
             {
               "time": "09:15 AM",
-              "title": "Covered Auto to General Thimayya Museum",
-              "description": "Hire an auto directly outside the bus stand to 'Sunny Side' (approx. 1.2 km).",
+              "title": "Covered Auto to Madikeri Fort",
+              "description": "Hire an auto directly outside the bus stand to Madikeri Fort entrance (approx. 1.2 km).",
+              "duration": "10m",
+              "location": "Madikeri Auto Stand to Madikeri Fort",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
+              "cost": 50
+            },
+            {
+              "time": "09:25 AM",
+              "title": "Indoor Tour of Madikeri Fort & Museum",
+              "description": "Tour the sheltered archaeological exhibits inside the Gothic St. Mark's Church museum away from the rain.",
+              "duration": "45m",
+              "location": "Madikeri Fort & Museum",
+              "mapsLink": "https://maps.google.com/?q=Madikeri+Fort",
+              "cost": 40
+            },
+            {
+              "time": "10:10 AM",
+              "title": "Darshan at Kote Maha Ganapathi Temple",
+              "description": "Walk across the sheltered fort gateway courtyard to offer prayers at Kote Maha Ganapathi Temple.",
               "duration": "15m",
-              "location": "Madikeri Auto Stand to General Thimayya Memorial Museum",
-              "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
-              "cost": 50
+              "location": "Kote Maha Ganapathi Temple, Madikeri Fort",
+              "mapsLink": "https://maps.google.com/?q=Kote+Maha+Ganapathi+Temple+Madikeri",
+              "cost": 30
             },
             {
-              "time": "09:30 AM",
-              "title": "Indoor Tour of General Thimayya Museum",
-              "description": "Explore the indoor military galleries, medals, war artifacts, and weaponry safely sheltered inside the museum building.",
-              "duration": "1h",
-              "location": "General Thimayya Memorial Museum, Madikeri",
-              "mapsLink": "https://maps.google.com/?q=General+Thimayya+Memorial+Museum+Madikeri",
-              "cost": 50
-            },
-            {
-              "time": "10:30 AM",
+              "time": "10:25 AM",
               "title": "Auto back to Treebo Doha King",
-              "description": "Take an auto from the museum back down to Treebo Doha King.",
-              "duration": "15m",
-              "location": "General Thimayya Memorial Museum to Treebo Doha King",
+              "description": "Take an auto from the fort gate back down to Treebo Doha King.",
+              "duration": "10m",
+              "location": "Madikeri Fort to Treebo Doha King",
               "mapsLink": "https://maps.google.com/?q=Treebo+Doha+King+Madikeri",
               "cost": 50
             },
             {
-              "time": "10:45 AM",
+              "time": "10:35 AM",
               "title": "Hotel Checkout & Luggage Drop",
               "description": "Complete room checkout formalities and hand over bags to the front desk reception cloak storage.",
               "duration": "25m",
@@ -908,10 +890,10 @@
               "cost": 0
             },
             {
-              "time": "11:10 AM",
+              "time": "11:00 AM",
               "title": "Covered Emporium & Spice Shopping",
               "description": "Shop inside covered government and estate spice emporiums along College Road for black pepper, cardamom, local chocolates, and coffee powder, staying dry.",
-              "duration": "1h",
+              "duration": "1h 10m",
               "location": "Madikeri Spice Emporiums",
               "mapsLink": "",
               "cost": 2500
@@ -1082,5 +1064,5 @@
     ]
   },
   "id": "8c2d5793-1740-415c-ad15-f00d28dd8b0e",
-  "updatedAt": 1790054284475
+  "updatedAt": 1790088407000
 }
