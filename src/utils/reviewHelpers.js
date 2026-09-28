@@ -235,14 +235,20 @@ export const computeActualTotals = (trip) => {
 
 // Immutable update helper: sets/merges a review entry, lazily creating the
 // review object and flipping status to in_progress on first write.
-export const withReviewEntry = (trip, section, key, updater) => {
+// `snapshot` ({ label, plannedCost }) stamps what the user reviewed: isEntryStale
+// compares it against the live item later, and any new write re-confirms it.
+export const withReviewEntry = (trip, section, key, updater, snapshot) => {
   const review = trip?.review ? normalizeReview(trip.review) : emptyReview();
   if (section && !review.prebooking[section]) review.prebooking[section] = {};
   const bucket = section ? review.prebooking[section] : review.timeline;
   const k = String(key);
   const current = bucket[k] || { actualCost: null, done: false, skipped: false, notes: '' };
-  const next = typeof updater === 'function' ? updater({ ...current }) : { ...current, ...updater };
-  if (next === null || next === undefined) {
+  const updated = typeof updater === 'function' ? updater({ ...current }) : { ...current, ...updater };
+  const next = updated === null || updated === undefined ? null : {
+    ...updated,
+    ...(snapshot ? { label: String(snapshot.label ?? ''), plannedCost: parseCost(snapshot.plannedCost) } : {}),
+  };
+  if (next === null) {
     delete bucket[k];
   } else {
     bucket[k] = next;

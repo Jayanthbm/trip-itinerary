@@ -182,7 +182,14 @@ const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) =>
   }
 
   const onEntry = (item, updater) => {
-    onUpdateReview(withReviewEntry(appData, item.kind === 'prebooking' ? item.section : null, item.key, updater));
+    onUpdateReview(withReviewEntry(
+      appData,
+      item.kind === 'prebooking' ? item.section : null,
+      item.key,
+      updater,
+      // Stamp what the user reviewed so later plan edits show as stale (⚠).
+      { label: item.label, plannedCost: item.plannedCost }
+    ));
   };
 
   const markComplete = () => {

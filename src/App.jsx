@@ -42,8 +42,13 @@ function App() {
 
   // Persist a review update immediately, bypassing the edits_made unsaved-changes
   // flow (§8). The end-date guard is a data-safety net behind the UI gating.
+  // IMPORTANT: prefer the live appData over recentTrips — recentTrips holds the
+  // snapshot from app load, and saving from it would silently revert any
+  // plan edits made during this session (browser-test finding).
   const handleUpdateTripReview = (tripId, review) => {
-    const trip = (tripId && recentTrips.find((t) => t.id === tripId)) || appData;
+    const trip = (appData && appData.id === tripId)
+      ? appData
+      : (tripId && recentTrips.find((t) => t.id === tripId)) || appData;
     if (!trip || !isReviewable(trip)) return;
     saveTrip({ ...trip, review })
       .then((saved) => {
@@ -446,7 +451,7 @@ function App() {
           executeClose={executeClose}
           handleUpdateAppData={handleUpdateAppData}
           handleUpdateDay={handleUpdateDay}
-          isReviewable={isReviewable}
+          isReviewable={isReviewable(appData)}
           onUpdateReview={debouncedReviewSave}
         />
       )}

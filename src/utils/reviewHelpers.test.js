@@ -204,6 +204,17 @@ describe('withReviewEntry', () => {
     trip = { ...trip, review: withReviewEntry(trip, null, 'tl-1', (e) => ({ ...e, done: true })) };
     expect(trip.review.status).toBe(REVIEW_STATUS.COMPLETED);
   });
+
+  it('stamps label/plannedCost snapshots and overwrites them on re-review', () => {
+    let trip = makeTrip();
+    trip = { ...trip, review: withReviewEntry(trip, null, 'tl-1', (e) => ({ ...e, done: true }), { label: 'Breakfast', plannedCost: 250 }) };
+    expect(trip.review.timeline['tl-1'].label).toBe('Breakfast');
+    expect(trip.review.timeline['tl-1'].plannedCost).toBe(250);
+
+    // Item renamed since review → stale; re-reviewing stamps the new label
+    trip = { ...trip, review: withReviewEntry(trip, null, 'tl-1', (e) => ({ ...e, done: false }), { label: 'Brunch', plannedCost: 250 }) };
+    expect(trip.review.timeline['tl-1'].label).toBe('Brunch');
+  });
 });
 
 describe('normalizeReview tolerance', () => {
