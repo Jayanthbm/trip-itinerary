@@ -8,6 +8,7 @@ import {
   statusStyles,
   isTripInPast
 } from '../utils/itineraryHelpers';
+import { computeReviewProgress } from '../utils/reviewHelpers';
 
 function TripCard({
   trip,
@@ -15,7 +16,8 @@ function TripCard({
   onSelect,
   onTogglePin,
   onToggleArchive,
-  onDelete
+  onDelete,
+  onReview
 }) {
   const daysCount = trip.days ? trip.days.length : 0;
   const endDate = calculateEndDate(trip.startDate, daysCount);
@@ -24,6 +26,11 @@ function TripCard({
   const isActive = status === 'active';
   const isPast = !isActive && isTripInPast(trip.startDate, daysCount);
   const countdown = getTripCountdown(trip.startDate, daysCount);
+
+  // Review entry point: only for trips whose end date has passed (decision #1).
+  const isReviewable = isTripInPast(trip.startDate, daysCount);
+  const progress = isReviewable ? computeReviewProgress(trip) : null;
+  const reviewStatus = trip.review?.status;
 
   const cardStyle = {
     padding: '1.25rem',
@@ -93,6 +100,33 @@ function TripCard({
           }}>
             {countdown.text}
           </div>
+        )}
+        {isReviewable && onReview && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onReview();
+            }}
+            className="tab-btn"
+            title="Review this trip — what was done and what it actually cost"
+            style={{
+              margin: '0.25rem 0 0',
+              width: 'fit-content',
+              padding: '0.3rem 0.7rem',
+              fontSize: '0.75rem',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              background: reviewStatus === 'completed' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(37, 99, 235, 0.15)',
+              border: reviewStatus === 'completed' ? '1px solid rgba(16, 185, 129, 0.5)' : '1px solid rgba(37, 99, 235, 0.4)',
+              color: reviewStatus === 'completed' ? '#6ee7b7' : '#93c5fd',
+            }}
+          >
+            {reviewStatus === 'completed'
+              ? `✓ Review complete${progress && progress.total > 0 ? ` · ${progress.reviewed}/${progress.total}` : ''}`
+              : progress && progress.reviewed > 0
+                ? `Continue Review · ${progress.reviewed}/${progress.total}`
+                : '🔍 Review Trip'}
+          </button>
         )}
       </div>
 

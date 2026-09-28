@@ -7,6 +7,7 @@ import {
   normalizeData,
   validateData
 } from './utils/itineraryHelpers';
+import { useDebouncedSave } from './utils/hooks';
 
 function App() {
   const [activeTab, setActiveTab] = useState('day-0');
@@ -30,6 +31,28 @@ function App() {
     setAppData(trip);
     setActiveTab(tab);
     localStorage.setItem('active_trip_id', trip.id);
+  };
+
+  // A trip becomes reviewable once it has ended (decision #1, §13): archived
+  // trips qualify immediately; un-archived ones once the end date has passed.
+  const isReviewable = (trip) =>
+    !!trip &&
+    (trip.archived === true ||
+      isTripInPast(trip.startDate, trip.days ? trip.days.length : 0));
+
+  // Persist a review update immediately, bypassing the edits_made unsaved-changes
+  // flow (§8). The end-date guard is a data-safety net behind the UI gating.
+  const handleUpdateTripReview = (tripId, review) => {
+    const trip = (tripId && recentTrips.find((t) => t.id === tripId)) || appData;
+    if (!trip || !isReviewable(trip)) return;
+    saveTrip({ ...trip, review })
+      .then((saved) => {
+        if (appData && appData.id === tripId) {
+          setAppData((prev) => (prev && prev.id === tripId ? saved : prev));
+        }
+        setRecentTrips((prev) => prev.map((t) => (t.id === tripId ? saved : t)));
+      })
+      .catch((err) => setError('Failed to save review: ' + err.message));
   };
 
   const loadRecentTrips = async () => {
@@ -352,6 +375,14 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
+  const reviewSaver = useDebouncedSave((value) => {
+    if (!value) return;
+    handleUpdateTripReview(value.tripId, value.review);
+  }, 400);
+  // Review edits always target the currently open trip; tripId is resolved
+  // again inside handleUpdateTripReview (falls back to appData).
+  const debouncedReviewSave = (review) => reviewSaver.save({ tripId: appData?.id, review });
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -415,6 +446,8 @@ function App() {
           executeClose={executeClose}
           handleUpdateAppData={handleUpdateAppData}
           handleUpdateDay={handleUpdateDay}
+          isReviewable={isReviewable}
+          onUpdateReview={debouncedReviewSave}
         />
       )}
 

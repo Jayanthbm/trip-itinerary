@@ -1,6 +1,6 @@
 # Trip Review & Planned-vs-Actual — Implementation Doc
 
-**Status:** Plan finalized (decisions locked — §13), not yet implemented. **✅ Phase 0 (codebase prep) is DONE** — see `REVIEW_READINESS_PLAN.md`. Review implementation can start at Phase 1.
+**Status:** **✅ Implemented** — Phase 0 (see `REVIEW_READINESS_PLAN.md`) and Phases 1–4 of this doc (review computers + tests, ReviewView with tab/button/badge wiring, BudgetView planned-vs-actual, dashboard entry points; Phase 5 core — stale chips, debounced saves, empty states — included). Verified: 34 unit tests, lint clean, build green. Pending: manual browser smoke test on a real completed trip; changes not yet committed.
 **Branch:** `feature_enhancements`
 **Last updated:** 2026-09-28
 

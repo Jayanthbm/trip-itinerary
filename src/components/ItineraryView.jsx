@@ -3,10 +3,11 @@ import Tabs from './Tabs';
 import PrebookingView from './PrebookingView';
 import DayView from './DayView';
 import BudgetView from './BudgetView';
+import ReviewView from './ReviewView';
 import EditView from './EditView';
 import ConfirmPopover from './ConfirmPopover';
 import { formatDate, calculateEndDate, getCurrencySymbol } from '../utils/itineraryHelpers';
-import { DownloadIcon, EyeIcon, EditIcon, XIcon } from './Icons';
+import { DownloadIcon, EyeIcon, EditIcon, XIcon, CheckIcon } from './Icons';
 
 function ItineraryView({
   appData,
@@ -22,7 +23,9 @@ function ItineraryView({
   handleClose,
   executeClose,
   handleUpdateAppData,
-  handleUpdateDay
+  handleUpdateDay,
+  isReviewable,
+  onUpdateReview
 }) {
   if (!appData) return null;
 
@@ -49,8 +52,18 @@ function ItineraryView({
     }
     if (activeTab === 'budget') {
       // Budget tab no longer requires prebookingData (P0-5): daily planned
-      // costs alone are meaningful. BudgetView renders empty sections as nothing.
-      return <BudgetView prebookingData={appData.prebookingData} daysData={appData.days} currencySymbol={currencySymbol} />;
+      // costs alone are meaningful. Shows planned-vs-actual once review data exists.
+      return (
+        <BudgetView
+          appData={appData}
+          currencySymbol={currencySymbol}
+          reviewStatus={appData.review?.status}
+          onStartReview={isReviewable ? () => setActiveTab('review') : undefined}
+        />
+      );
+    }
+    if (activeTab === 'review') {
+      return <ReviewView appData={appData} onUpdateReview={onUpdateReview} currencySymbol={currencySymbol} />;
     }
     if (activeTab.startsWith('day-')) {
       const dayIndex = parseInt(activeTab.split('-')[1], 10);
@@ -84,6 +97,15 @@ function ItineraryView({
           >
             {isEditing ? <EyeIcon size={18} /> : <EditIcon size={18} />}
           </button>
+          {isReviewable && (
+            <button
+              onClick={() => setActiveTab('review')}
+              className={`itinerary-action-btn ${activeTab === 'review' ? 'active' : ''}`}
+              title="Review this trip — what was done and what it actually cost"
+            >
+              <CheckIcon size={18} />
+            </button>
+          )}
           <button onClick={handleClose} className="itinerary-action-btn itinerary-action-btn-close" title="Close Itinerary">
             <XIcon size={18} />
           </button>
@@ -97,7 +119,7 @@ function ItineraryView({
         <p>{formatDate(appData.startDate)} - {calculatedEndDate} {editsMade && <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>(Unsaved Edits)</span>}</p>
       </header>
       <div style={{ paddingBottom: "1rem" }}>
-        <Tabs days={appData.days} activeTab={activeTab} setActiveTab={setActiveTab} hasPrebooking={hasPrebooking} isEditing={isEditing} />
+        <Tabs days={appData.days} activeTab={activeTab} setActiveTab={setActiveTab} hasPrebooking={hasPrebooking} isEditing={isEditing} isReviewable={isReviewable && !isEditing} />
       </div>
       <main>{renderContent()}</main>
 

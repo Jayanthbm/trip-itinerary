@@ -343,6 +343,7 @@ function DashboardView({
                       onTogglePin={handleTogglePin}
                       onToggleArchive={handleToggleArchive}
                       onDelete={setTripToDelete}
+                      onReview={() => openTrip(trip, 'review')}
                     />
                   ))}
                 </div>
@@ -401,6 +402,7 @@ function DashboardView({
                           onSelect={() => openTrip(trip)}
                           onToggleArchive={handleToggleArchive}
                           onDelete={setTripToDelete}
+                          onReview={() => openTrip(trip, 'review')}
                         />
                       ))}
                     </div>
