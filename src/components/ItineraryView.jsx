@@ -47,7 +47,9 @@ function ItineraryView({
     if (activeTab === 'prebooking' && hasPrebooking) {
       return <PrebookingView data={appData.prebookingData} itineraryKey={itineraryKey} currencySymbol={currencySymbol} />;
     }
-    if (activeTab === 'budget' && hasPrebooking) {
+    if (activeTab === 'budget') {
+      // Budget tab no longer requires prebookingData (P0-5): daily planned
+      // costs alone are meaningful. BudgetView renders empty sections as nothing.
       return <BudgetView prebookingData={appData.prebookingData} daysData={appData.days} currencySymbol={currencySymbol} />;
     }
     if (activeTab.startsWith('day-')) {

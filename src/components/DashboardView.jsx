@@ -10,8 +10,6 @@ import { sampleItinerary, validateData } from '../utils/itineraryHelpers';
 
 function DashboardView({
   recentTrips,
-  setAppData,
-  setActiveTab,
   handleTogglePin,
   handleToggleArchive,
   onDeleteTrip,
@@ -21,7 +19,8 @@ function DashboardView({
   isLoading,
   handleExportBackup,
   handleImportBackup,
-  onSetError
+  onSetError,
+  openTrip
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState('modified');
@@ -340,11 +339,7 @@ function DashboardView({
                       key={trip.id}
                       trip={trip}
                       status="active"
-                      onSelect={() => {
-                        setAppData(trip);
-                        setActiveTab('day-0');
-                        localStorage.setItem('active_trip_id', trip.id);
-                      }}
+                      onSelect={() => openTrip(trip)}
                       onTogglePin={handleTogglePin}
                       onToggleArchive={handleToggleArchive}
                       onDelete={setTripToDelete}
@@ -403,11 +398,7 @@ function DashboardView({
                           key={trip.id}
                           trip={trip}
                           status="archived"
-                          onSelect={() => {
-                            setAppData(trip);
-                            setActiveTab('day-0');
-                            localStorage.setItem('active_trip_id', trip.id);
-                          }}
+                          onSelect={() => openTrip(trip)}
                           onToggleArchive={handleToggleArchive}
                           onDelete={setTripToDelete}
                         />

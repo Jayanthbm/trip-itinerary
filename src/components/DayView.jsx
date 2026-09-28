@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CheckIcon, WalletIcon, ChevronDownIcon } from './Icons';
 import { parseTimeString, parseDuration } from '../utils/itineraryHelpers';
+import { parseCost } from '../utils/costUtils';
 
 const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = '₹', onUpdateDay }) => {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
@@ -45,9 +46,14 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
     }
   }, [isToday, selectedPlanTitle, dayIndex]);
 
-  useEffect(() => {
+  // Render-time adjustment (react.dev/learn/you-might-not-need-an-effect):
+  // when the underlying day's active plan changes (or we switch days), reset
+  // local selection state during render instead of via setState-in-effect.
+  const [prevKey, setPrevKey] = useState({ dayIndex, active_plan: dayData.active_plan });
+  if (prevKey.dayIndex !== dayIndex || prevKey.active_plan !== dayData.active_plan) {
+    setPrevKey({ dayIndex, active_plan: dayData.active_plan });
     setSelectedPlanTitle(dayData.active_plan);
-  }, [dayData.active_plan, dayIndex]);
+  }
 
   const [checkedItems, setCheckedItems] = useState(() => {
     const initialState = {};
@@ -65,6 +71,10 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
     const newState = !checkedItems[idx];
     setCheckedItems(prev => ({ ...prev, [idx]: newState }));
     if (itineraryKey !== undefined && dayIndex !== undefined) {
+      // TODO(prep-G5): localStorage-only state — never backed up, and the
+      // itineraryKey collides/orphans on title or date edits. Migrate to
+      // trip-object state (REVIEW_READINESS_PLAN.md G5). Trip Review must
+      // NOT extend this pattern — it stores state on the trip object.
       localStorage.setItem(`${itineraryKey}_day_${dayIndex}_checklist_${idx}`, newState.toString());
     }
   };
@@ -91,10 +101,10 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
   // Calculate budget from timeline costs + additionalBudget
   const timelineItems = (currentPlan.timeline || [])
     .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '')
-    .map(e => ({ title: e.title, cost: Number(e.cost) || 0 }));
+    .map(e => ({ title: e.title, cost: parseCost(e.cost) }));
 
   const additionalItems = (currentPlan.additionalBudget || [])
-    .map(b => ({ title: b.title, cost: Number(b.cost) || 0 }));
+    .map(b => ({ title: b.title, cost: parseCost(b.cost) }));
 
   const allBudgetItems = [...timelineItems, ...additionalItems];
   const totalCost = allBudgetItems.reduce((sum, item) => sum + item.cost, 0);

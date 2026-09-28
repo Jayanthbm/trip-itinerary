@@ -1,4 +1,16 @@
 import ootySample from "../samples/ooty_trip.json";
+import { parseCost } from "./costUtils";
+import { normalizeReview } from "./reviewHelpers";
+
+// Stable per-item identity (REVIEW_READINESS_PLAN.md P0-3).
+// Used as the review key for timeline/additionalBudget/prebooking items so
+// Trip Review data survives inserts, deletes and reorders.
+// Uses globalThis (not window) so it also works in Node/test environments.
+export const genItemId = () => {
+  const c = globalThis.crypto;
+  if (c && typeof c.randomUUID === "function") return c.randomUUID();
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+};
 
 export const formatDate = (dateInput) => {
   if (!dateInput) return "";
@@ -111,13 +123,6 @@ export const getCurrencySymbol = (currency) => {
 
 export const calculateTotalBudget = (trip) => {
   if (!trip) return 0;
-  
-  const parseCost = (val) => {
-    if (val === undefined || val === null || val === '') return 0;
-    if (typeof val === 'number') return val;
-    const numStr = String(val).replace(/[^\d.]/g, '');
-    return parseFloat(numStr) || 0;
-  };
 
   let total = 0;
 
@@ -167,11 +172,12 @@ export const normalizeData = (data) => {
   if (!data) return null;
   const startDate = data.startDate || "";
   const currency = data.currency || "INR";
-  const id = data.id || (window.crypto?.randomUUID ? window.crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2));
+  const id = data.id || genItemId();
 
   return {
     ...data,
     id: id,
+    review: normalizeReview(data.review),
     title: data.title || "Untitled Itinerary",
     startDate: startDate,
     currency: currency,
@@ -181,17 +187,19 @@ export const normalizeData = (data) => {
         plans = day.plans.map((p) => ({
           title: p.title || "Main Plan",
           timeline: (p.timeline || []).map((item) => ({
+            itemId: item.itemId || genItemId(),
             time: item.time || "10:00 AM",
             title: item.title || "",
             description: item.description || "",
             duration: item.duration || "",
             location: item.location || "",
             mapsLink: item.mapsLink || "",
-            cost: typeof item.cost === "number" ? item.cost : 0,
+            cost: parseCost(item.cost),
           })),
           additionalBudget: (p.additionalBudget || []).map((item) => ({
-            title: item.title || "",
-            cost: typeof item.cost === "number" ? item.cost : 0,
+            itemId: item.itemId || genItemId(),
+            title: item.title || item.item || "",
+            cost: parseCost(item.cost),
           })),
         }));
       } else {
@@ -200,17 +208,19 @@ export const normalizeData = (data) => {
           {
             title: "Main Plan",
             timeline: (day.timeline || []).map((item) => ({
+              itemId: item.itemId || genItemId(),
               time: item.time || "10:00 AM",
               title: item.title || "",
               description: item.description || "",
               duration: item.duration || "",
               location: item.location || "",
               mapsLink: item.mapsLink || "",
-              cost: typeof item.cost === "number" ? item.cost : 0,
+              cost: parseCost(item.cost),
             })),
             additionalBudget: (day.additionalBudget || []).map((item) => ({
-              title: item.title || "",
-              cost: typeof item.cost === "number" ? item.cost : 0,
+              itemId: item.itemId || genItemId(),
+              title: item.title || item.item || "",
+              cost: parseCost(item.cost),
             })),
           },
         ];
@@ -232,8 +242,9 @@ export const normalizeData = (data) => {
     }),
     prebookingData: {
       flights: Array.isArray(data.prebookingData?.flights)
-        ? data.prebookingData.flights.map((f, i) => ({
+        ?          data.prebookingData.flights.map((f, i) => ({
             id: i + 1,
+            itemId: f.itemId || genItemId(),
             date: f.date || startDate,
             from: f.from || "",
             to: f.to || "",
@@ -243,7 +254,7 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof f.durationMinutes === "number" ? f.durationMinutes : 0,
             status: f.status || "Pending",
-            cost: typeof f.cost === "number" ? f.cost : 0,
+            cost: parseCost(f.cost),
             terminal: {
               departure: f.terminal?.departure || "",
               arrival: f.terminal?.arrival || "",
@@ -252,8 +263,9 @@ export const normalizeData = (data) => {
           }))
         : [],
       trains: Array.isArray(data.prebookingData?.trains)
-        ? data.prebookingData.trains.map((t, i) => ({
+        ?          data.prebookingData.trains.map((t, i) => ({
             id: i + 1,
+            itemId: t.itemId || genItemId(),
             date: t.date || startDate,
             name: t.name || "",
             from: t.from || "",
@@ -263,13 +275,14 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof t.durationMinutes === "number" ? t.durationMinutes : 0,
             status: t.status || "Pending",
-            cost: typeof t.cost === "number" ? t.cost : 0,
+            cost: parseCost(t.cost),
             links: Array.isArray(t.links) ? t.links : [],
           }))
         : [],
       bus: Array.isArray(data.prebookingData?.bus)
-        ? data.prebookingData.bus.map((b, i) => ({
+        ?          data.prebookingData.bus.map((b, i) => ({
             id: i + 1,
+            itemId: b.itemId || genItemId(),
             date: b.date || startDate,
             from: b.from || "",
             to: b.to || "",
@@ -279,7 +292,7 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof b.durationMinutes === "number" ? b.durationMinutes : 0,
             status: b.status || "Pending",
-            cost: typeof b.cost === "number" ? b.cost : 0,
+            cost: parseCost(b.cost),
             points: {
               pickup: b.points?.pickup || "",
               drop: b.points?.drop || "",
@@ -288,12 +301,13 @@ export const normalizeData = (data) => {
           }))
         : [],
       rooms: Array.isArray(data.prebookingData?.rooms)
-        ? data.prebookingData.rooms.map((r, i) => ({
+        ?          data.prebookingData.rooms.map((r, i) => ({
             id: i + 1,
+            itemId: r.itemId || genItemId(),
             name: r.name || "",
             checkin: r.checkin || "",
             checkout: r.checkout || "",
-            cost: typeof r.cost === "number" ? r.cost : 0,
+            cost: parseCost(r.cost),
             status: r.status || "Pending",
             location: r.location || "",
             mapsLink: r.mapsLink || "",
@@ -301,11 +315,12 @@ export const normalizeData = (data) => {
           }))
         : [],
       activities: Array.isArray(data.prebookingData?.activities)
-        ? data.prebookingData.activities.map((a, i) => ({
+        ?          data.prebookingData.activities.map((a, i) => ({
             id: i + 1,
+            itemId: a.itemId || genItemId(),
             name: a.name || "",
             status: a.status || "Pending",
-            cost: typeof a.cost === "number" ? a.cost : 0,
+            cost: parseCost(a.cost),
             notes: a.notes || "",
             links: Array.isArray(a.links) ? a.links : [],
             excludeFromBudget:

@@ -23,6 +23,15 @@ function App() {
   // IndexedDB specific states
   const [recentTrips, setRecentTrips] = useState([]);
 
+  // Centralized open-trip flow (REVIEW_READINESS_PLAN.md P0-4). Replaces the
+  // scattered setAppData/setActiveTab('day-0')/localStorage triplets so any
+  // entry point (dashboard, URL, review badge) can deep-link to a tab.
+  const openTrip = (trip, tab = 'day-0') => {
+    setAppData(trip);
+    setActiveTab(tab);
+    localStorage.setItem('active_trip_id', trip.id);
+  };
+
   const loadRecentTrips = async () => {
     try {
       const trips = await getAllTrips();
@@ -64,9 +73,7 @@ function App() {
       const normalized = normalizeData(jsonData);
       normalized.sourceUrl = url;
       const saved = await saveTrip(normalized);
-      setAppData(saved);
-      setActiveTab('day-0');
-      localStorage.setItem('active_trip_id', saved.id);
+      openTrip(saved);
       setEditsMade(false);
       localStorage.removeItem('edits_made');
     } catch (err) {
@@ -102,9 +109,7 @@ function App() {
     try {
       const normalized = normalizeData(data);
       const saved = await saveTrip(normalized);
-      setAppData(saved);
-      setActiveTab('day-0');
-      localStorage.setItem('active_trip_id', saved.id);
+      openTrip(saved);
       localStorage.removeItem('last_fetch');
       setEditsMade(false);
       localStorage.removeItem('edits_made');
@@ -248,13 +253,11 @@ function App() {
           const trips = await getAllTrips();
           const existingTrip = trips.find(t => t.sourceUrl === urlParam);
           if (existingTrip && !validateData(existingTrip)) {
-            setAppData(existingTrip);
-            setActiveTab('day-0');
-            localStorage.setItem('active_trip_id', existingTrip.id);
+            openTrip(existingTrip);
           } else {
             await fetchData(urlParam);
           }
-        } catch (e) {
+        } catch {
           await fetchData(urlParam);
         }
       } else {
@@ -264,13 +267,12 @@ function App() {
             const trips = await getAllTrips();
             const activeTrip = trips.find(t => t.id === activeTripId);
             if (activeTrip && !validateData(activeTrip)) {
-              setAppData(activeTrip);
-              setActiveTab('day-0');
+              openTrip(activeTrip);
             } else {
               localStorage.removeItem('active_trip_id');
               await loadRecentTrips();
             }
-          } catch (e) {
+          } catch {
             localStorage.removeItem('active_trip_id');
             await loadRecentTrips();
           }
@@ -325,9 +327,7 @@ function App() {
     try {
       const normalized = normalizeData(newItinerary);
       const saved = await saveTrip(normalized);
-      setAppData(saved);
-      setActiveTab('day-0');
-      localStorage.setItem('active_trip_id', saved.id);
+      openTrip(saved);
       localStorage.removeItem('last_fetch');
       setEditsMade(true);
       localStorage.setItem('edits_made', 'true');
@@ -397,6 +397,7 @@ function App() {
           handleExportBackup={handleExportBackup}
           handleImportBackup={handleImportBackup}
           onSetError={setError}
+          openTrip={openTrip}
         />
       ) : (
         <ItineraryView

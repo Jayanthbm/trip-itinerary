@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { PlusIcon, TrashIcon, ArrowUpIcon, ArrowDownIcon, CheckIcon } from './Icons';
 import ConfirmPopover from './ConfirmPopover';
+import { genItemId } from '../utils/itineraryHelpers';
 
-const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
+const EditDay = ({ dayData, onSave, currencySymbol }) => {
   const [editingPlanTitle, setEditingPlanTitle] = useState(dayData.active_plan || dayData.plans?.[0]?.title || "Main Plan");
   const [confirmDelete, setConfirmDelete] = useState({ show: false, index: null, type: null });
   const lastTimelineRef = useRef(null);
@@ -110,7 +111,7 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
 
   // Timeline
   const handleAddTimeline = () => {
-    const newItem = { time: "09:00 AM", title: "", description: "", duration: "1h", cost: 0, location: "", mapsLink: "" };
+    const newItem = { itemId: genItemId(), time: "09:00 AM", title: "", description: "", duration: "1h", cost: 0, location: "", mapsLink: "" };
     updatePlanField('timeline', [...currentTimeline, newItem]);
   };
   const handleRemoveTimeline = (idx) => {
@@ -142,7 +143,7 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
 
   // Additional Budget
   const handleAddBudget = () => {
-    updatePlanField('additionalBudget', [...currentPlan.additionalBudget, { title: "", cost: 0 }]);
+    updatePlanField('additionalBudget', [...currentPlan.additionalBudget, { itemId: genItemId(), title: "", cost: 0 }]);
   };
   const handleRemoveBudget = (idx) => {
     setConfirmDelete({ show: true, index: idx, type: 'budget' });

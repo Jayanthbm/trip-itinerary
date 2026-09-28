@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronDownIcon } from './Icons';
-
-const parseCost = (val) => {
-  if (val === undefined || val === null || val === '') return 0;
-  if (typeof val === 'number') return val;
-  // Handle legacy string formats like "₹30,000" or "₹30000" or "30000"
-  const numStr = String(val).replace(/[^\d.]/g, '');
-  return parseFloat(numStr) || 0;
-};
+import { parseCost } from '../utils/costUtils';
 
 const BudgetView = ({ prebookingData, daysData, currencySymbol = '₹' }) => {
   const [expandedDays, setExpandedDays] = useState({});

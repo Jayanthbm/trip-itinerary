@@ -36,8 +36,15 @@ const InfoIcon = ({ text }) => {
 };
 
 const PromptGenerator = ({ onCancel, onPaste }) => {
-  const today = new Date().toISOString().split('T')[0];
-  const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  // Impure Date reads are confined to the initializer (evaluated once at
+  // mount) rather than the render body (react-hooks/purity).
+  const [dateBounds] = useState(() => {
+    const today = new Date().toISOString().split('T')[0];
+    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    return { today, nextWeek };
+  });
+  const today = dateBounds.today;
+  const nextWeek = dateBounds.nextWeek;
   const bottomRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -241,7 +248,9 @@ Generate a full ${daysCount}-day itinerary. Return ONLY the JSON object.`;
       try {
         document.execCommand('copy');
         setCopied(true);
-      } catch (err) { }
+      } catch {
+        // copy fallback failure is non-fatal
+      }
       document.body.removeChild(textArea);
     } else {
       navigator.clipboard.writeText(generatedPrompt)

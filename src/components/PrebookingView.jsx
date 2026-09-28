@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { PlaneIcon, TrainIcon, BusIcon, BuildingIcon, CheckIcon, ChevronDownIcon } from './Icons';
-
-const parseCost = (val) => {
-  if (val === undefined || val === null || val === '') return 0;
-  if (typeof val === 'number') return val;
-  // Handle strings like "₹30,000", "30000", etc.
-  const numStr = String(val).replace(/[^\d.]/g, '');
-  return parseFloat(numStr) || 0;
-};
+import { parseCost } from '../utils/costUtils';
 
 const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
   const [openSections, setOpenSections] = useState({
@@ -41,6 +34,10 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
     const newStatus = isBooked ? 'Pending' : 'Booked';
     setStatusState(prev => ({ ...prev, [id]: newStatus }));
     if (itineraryKey !== undefined) {
+      // TODO(prep-G5): localStorage-only state — never backed up, and the
+      // itineraryKey collides/orphans on title or date edits. Migrate to
+      // trip-object state (REVIEW_READINESS_PLAN.md G5). Trip Review must
+      // NOT extend this pattern — it stores state on the trip object.
       localStorage.setItem(`${itineraryKey}_prebook_${category}_${id}`, newStatus);
     }
   };
