@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from './Icons';
 
-const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
+const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing, isReviewable }) => {
   const scrollRef = useRef(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
@@ -133,6 +133,34 @@ const Tabs = ({ days, activeTab, setActiveTab, hasPrebooking, isEditing }) => {
           >
             Budget
           </button>
+          {isReviewable && (
+            <button
+              className={`tab-btn ${isEditing ? "disabled" : ""}`}
+              onClick={() => !isEditing && setActiveTab("review")}
+              disabled={isEditing}
+              title={isEditing ? "Review is disabled during editing" : "Review the completed trip: what was done and what it actually cost"}
+              style={{
+                padding: "0.4rem 1.25rem",
+                background:
+                  topActiveTab === "review"
+                    ? "var(--accent-primary)"
+                    : "var(--bg-secondary)",
+                border:
+                  topActiveTab === "review"
+                    ? "none"
+                    : "1px solid var(--border-light)",
+                margin: 0,
+                color: topActiveTab === "review" ? "#fff" : "var(--text-primary)",
+                fontSize: "0.9rem",
+                boxShadow: "var(--shadow-md)",
+                borderRadius: "6px",
+                cursor: isEditing ? "not-allowed" : "pointer",
+                opacity: isEditing ? 0.5 : 1,
+              }}
+            >
+              Review
+            </button>
+          )}
         </div>
 
         {/* Scroll Chevrons - Only show for Daily Plan selection if days count > 1 */}

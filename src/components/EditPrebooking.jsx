@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { PlaneIcon, TrainIcon, BusIcon, BuildingIcon, CheckIcon, TrashIcon, PlusIcon } from './Icons';
 import ConfirmPopover from './ConfirmPopover';
+import { genItemId } from '../utils/itineraryHelpers';
 
 const EditPrebooking = ({ data, onSave, currencySymbol }) => {
   const [activeSubTab, setActiveSubTab] = useState('flight');
@@ -39,7 +40,7 @@ const EditPrebooking = ({ data, onSave, currencySymbol }) => {
   }, [items.length]);
 
   const handleAddItem = () => {
-    const newItem = { id: Date.now(), status: 'Pending' };
+    const newItem = { id: Date.now(), itemId: genItemId(), status: 'Pending' };
     if (activeSubTab === 'flight') {
       Object.assign(newItem, { date: "", from: "", to: "", departure: "", arrival: "", airline: "", durationMinutes: 0, cost: 0, terminal: { departure: "", arrival: "" } });
     } else if (activeSubTab === 'train') {

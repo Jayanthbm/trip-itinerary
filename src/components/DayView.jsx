@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CheckIcon, WalletIcon, ChevronDownIcon } from './Icons';
 import { parseTimeString, parseDuration } from '../utils/itineraryHelpers';
+import { parseCost } from '../utils/costUtils';
+import { getReviewEntry } from '../utils/reviewHelpers';
+import { timelineReviewKey } from '../utils/reviewHelpers';
 
-const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = '₹', onUpdateDay }) => {
+const DayView = ({ dayData, dayIndex, startDate, currencySymbol = '₹', onUpdateDay, review }) => {
   const [isChecklistOpen, setIsChecklistOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(true);
   const [selectedPlanTitle, setSelectedPlanTitle] = useState(dayData.active_plan);
@@ -45,28 +48,23 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
     }
   }, [isToday, selectedPlanTitle, dayIndex]);
 
-  useEffect(() => {
+  // Render-time adjustment (react.dev/learn/you-might-not-need-an-effect):
+  // when the underlying day's active plan changes (or we switch days), reset
+  // local selection state during render instead of via setState-in-effect.
+  const [prevKey, setPrevKey] = useState({ dayIndex, active_plan: dayData.active_plan });
+  if (prevKey.dayIndex !== dayIndex || prevKey.active_plan !== dayData.active_plan) {
+    setPrevKey({ dayIndex, active_plan: dayData.active_plan });
     setSelectedPlanTitle(dayData.active_plan);
-  }, [dayData.active_plan, dayIndex]);
+  }
 
-  const [checkedItems, setCheckedItems] = useState(() => {
-    const initialState = {};
-    dayData?.checklist?.forEach((_, idx) => {
-      if (itineraryKey !== undefined && dayIndex !== undefined) {
-        const key = `${itineraryKey}_day_${dayIndex}_checklist_${idx}`;
-        const saved = localStorage.getItem(key);
-        if (saved !== null) initialState[idx] = saved === 'true';
-      }
-    });
-    return initialState;
-  });
-
+  // G5: checklist tick state lives on the trip object (entry.checked) — backed
+  // up with the trip, stable under reordering. No localStorage.
   const toggleChecklistItem = (idx) => {
-    const newState = !checkedItems[idx];
-    setCheckedItems(prev => ({ ...prev, [idx]: newState }));
-    if (itineraryKey !== undefined && dayIndex !== undefined) {
-      localStorage.setItem(`${itineraryKey}_day_${dayIndex}_checklist_${idx}`, newState.toString());
-    }
+    if (!onUpdateDay || !Array.isArray(dayData.checklist)) return;
+    const entry = dayData.checklist[idx];
+    if (!entry || typeof entry !== 'object') return;
+    const next = dayData.checklist.map((c, i) => (i === idx ? { ...c, checked: !c.checked } : c));
+    onUpdateDay({ ...dayData, checklist: next });
   };
 
   // Calculate date and day of week from startDate + dayIndex
@@ -88,13 +86,23 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
   const plans = dayData.plans || [];
   const currentPlan = plans.find(p => p.title === selectedPlanTitle) || plans[0] || { timeline: [], additionalBudget: [] };
 
-  // Calculate budget from timeline costs + additionalBudget
+  // Trip Review cross-reference (post-trip): done → green, skipped → red on
+  // the timeline. Inactive until review entries exist.
+  const reviewStateFor = (idx, item) => {
+    const entry = getReviewEntry(review, null, timelineReviewKey(dayIndex, currentPlan.title, idx, item.itemId));
+    if (!entry || (!entry.done && !entry.skipped)) return null;
+    return entry.done ? 'done' : 'skipped';
+  };
+
+  // Calculate budget from timeline costs + additionalBudget.
+  // Custom (unplanned) items are excluded — they are actual spend, not planned.
   const timelineItems = (currentPlan.timeline || [])
+    .filter(e => e.custom !== true)
     .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '')
-    .map(e => ({ title: e.title, cost: Number(e.cost) || 0 }));
+    .map(e => ({ title: e.title, cost: parseCost(e.cost) }));
 
   const additionalItems = (currentPlan.additionalBudget || [])
-    .map(b => ({ title: b.title, cost: Number(b.cost) || 0 }));
+    .map(b => ({ title: b.title, cost: parseCost(b.cost) }));
 
   const allBudgetItems = [...timelineItems, ...additionalItems];
   const totalCost = allBudgetItems.reduce((sum, item) => sum + item.cost, 0);
@@ -252,7 +260,9 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
           {isChecklistOpen && (
             <ul className="checklist mt-4" style={{ marginBottom: 0, paddingLeft: 0, listStyle: 'none' }}>
               {dayData.checklist.map((item, idx) => {
-                const isChecked = checkedItems[idx] || false;
+                // G5 shape: { id, text, checked }; legacy plain strings still render.
+                const text = typeof item === 'object' && item !== null ? item.text : String(item ?? '');
+                const isChecked = typeof item === 'object' && item !== null ? item.checked === true : false;
                 return (
                   <li
                     key={idx}
@@ -278,7 +288,7 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
                       {isChecked && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
                     </div>
                     <span style={{ color: isChecked ? 'var(--text-secondary)' : 'var(--text-primary)', flex: 1, transition: 'all 0.2s', fontSize: '0.95rem' }}>
-                      {item}
+                      {text}
                     </span>
                   </li>
                 );
@@ -293,7 +303,12 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
         <>
           <h3 className="section-title mt-4">Timeline</h3>
           <div className="timeline-container">
-            {parsedTimeline.map((event, idx) => (
+            {parsedTimeline.map((event, idx) => {
+              const rState = reviewStateFor(idx, event);
+              const isDone = rState === 'done';
+              const isSkipped = rState === 'skipped';
+              const isCustom = event.custom === true;
+              return (
               <div 
                 key={idx} 
                 ref={event.isOngoing ? activeEventRef : null}
@@ -306,8 +321,8 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
                 <div 
                   className="timeline-icon" 
                   style={{
-                    borderColor: event.isOngoing ? '#10b981' : event.isPast ? 'var(--border-light)' : 'var(--accent-primary)',
-                    color: event.isOngoing ? '#10b981' : event.isPast ? 'var(--text-secondary)' : 'var(--accent-primary)',
+                    borderColor: event.isOngoing ? '#10b981' : isDone ? '#10b981' : isSkipped ? '#ef4444' : isCustom ? '#f59e0b' : event.isPast ? 'var(--border-light)' : 'var(--accent-primary)',
+                    color: event.isOngoing ? '#10b981' : isDone ? '#10b981' : isSkipped ? '#ef4444' : isCustom ? '#f59e0b' : event.isPast ? 'var(--text-secondary)' : 'var(--accent-primary)',
                     transition: 'all 0.3s ease'
                   }}
                 >
@@ -318,21 +333,25 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
                 <div 
                   className="timeline-content"
                   style={{
-                    background: event.isOngoing ? 'rgba(16, 185, 129, 0.04)' : 'rgba(255, 255, 255, 0.01)',
-                    border: event.isOngoing ? '1px solid #10b981' : '1px solid var(--border-light)',
+                    background: event.isOngoing ? 'rgba(16, 185, 129, 0.04)' : isDone ? 'rgba(16, 185, 129, 0.05)' : isSkipped ? 'rgba(239, 68, 68, 0.05)' : isCustom ? 'rgba(245, 158, 11, 0.07)' : 'rgba(255, 255, 255, 0.01)',
+                    border: event.isOngoing ? '1px solid #10b981' : isDone ? '1px solid rgba(16, 185, 129, 0.45)' : isSkipped ? '1px solid rgba(239, 68, 68, 0.45)' : isCustom ? '1px dashed rgba(245, 158, 11, 0.5)' : '1px solid var(--border-light)',
                     boxShadow: event.isOngoing ? '0 0 15px rgba(16, 185, 129, 0.15)' : 'none',
                     borderRadius: '12px',
                     padding: '1.25rem',
                     position: 'relative',
-                    borderLeft: event.isOngoing ? '4px solid #10b981' : undefined,
-                    transition: 'all 0.3s ease'
+                    borderLeft: event.isOngoing ? '4px solid #10b981' : isDone ? '4px solid #10b981' : isSkipped ? '4px solid #ef4444' : isCustom ? '4px solid #f59e0b' : undefined,
+                    transition: 'all 0.3s ease',
+                    opacity: isSkipped ? 0.85 : 1
                   }}
                 >
-                  <span className="timeline-time" style={{ color: event.isOngoing ? '#10b981' : 'var(--text-secondary)', fontWeight: event.isOngoing ? 'bold' : 'normal' }}>
+                  <span className="timeline-time" style={{ color: event.isOngoing ? '#10b981' : isDone ? '#6ee7b7' : isSkipped ? '#fca5a5' : 'var(--text-secondary)', fontWeight: event.isOngoing ? 'bold' : 'normal' }}>
                     {event.time}
                     {event.isOngoing && <span style={{ marginLeft: '0.5rem', background: '#10b981', color: '#fff', fontSize: '0.65rem', padding: '0.15rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em', verticalAlign: 'middle' }}>Active</span>}
+                    {isDone && <span style={{ marginLeft: '0.5rem', background: 'rgba(16, 185, 129, 0.15)', color: '#6ee7b7', fontSize: '0.65rem', padding: '0.15rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em', verticalAlign: 'middle', border: '1px solid rgba(16, 185, 129, 0.5)' }}>✓ Done</span>}
+                    {isSkipped && <span style={{ marginLeft: '0.5rem', background: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5', fontSize: '0.65rem', padding: '0.15rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em', verticalAlign: 'middle', border: '1px solid rgba(239, 68, 68, 0.5)' }}>⤫ Skipped</span>}
+                    {isCustom && <span style={{ marginLeft: '0.5rem', background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', fontSize: '0.65rem', padding: '0.15rem 0.35rem', borderRadius: '4px', textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: '0.05em', verticalAlign: 'middle', border: '1px solid rgba(245, 158, 11, 0.5)' }}>✦ Custom</span>}
                   </span>
-                  <h4 className="timeline-title" style={{ color: event.isOngoing ? '#fff' : 'var(--text-primary)' }}>{event.title}</h4>
+                  <h4 className="timeline-title" style={{ color: event.isOngoing ? '#fff' : isDone ? '#6ee7b7' : isSkipped ? '#fca5a5' : 'var(--text-primary)', textDecoration: isSkipped ? 'line-through' : 'none' }}>{event.title}</h4>
                   <p className="timeline-desc">{event.description}</p>
 
                   {event.isOngoing && (
@@ -364,9 +383,25 @@ const DayView = ({ dayData, itineraryKey, dayIndex, startDate, currencySymbol = 
                       )}
                     </div>
                   )}
+
+                  {isCustom && (
+                    <button
+                      onClick={() => {
+                        if (!onUpdateDay) return;
+                        const nextTimeline = (currentPlan.timeline || []).filter((it) => it.itemId !== event.itemId);
+                        const nextPlans = plans.map((p) => (p.title === currentPlan.title ? { ...p, timeline: nextTimeline } : p));
+                        onUpdateDay({ ...dayData, plans: nextPlans });
+                      }}
+                      title="Remove this custom item"
+                      style={{ position: 'absolute', top: '0.6rem', right: '0.6rem', background: 'transparent', border: '1px solid var(--border-light)', borderRadius: '6px', color: 'var(--text-muted)', cursor: 'pointer', padding: '0.15rem 0.45rem', fontSize: '0.75rem', margin: 0 }}
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         </>
       )}

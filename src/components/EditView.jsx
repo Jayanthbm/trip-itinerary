@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EditPrebooking from './EditPrebooking';
 import EditDay from './EditDay';
 
@@ -23,7 +23,6 @@ const EditView = ({ appData, activeTab, onUpdate, currencySymbol }) => {
       return (
         <EditDay 
           dayData={dayData} 
-          dayIndex={dayIndex} 
           onSave={(updated) => handleDayUpdate(dayIndex, updated)}
           currencySymbol={currencySymbol}
         />

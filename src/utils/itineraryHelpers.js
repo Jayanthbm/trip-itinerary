@@ -1,4 +1,32 @@
 import ootySample from "../samples/ooty_trip.json";
+import { parseCost } from "./costUtils";
+import {
+  normalizeReview,
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+} from "./reviewHelpers";
+
+// Re-exported for App.jsx convenience; canonical home is ./reviewHelpers.
+export {
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+};
+
+// Stable per-item identity (REVIEW_READINESS_PLAN.md P0-3).
+// Used as the review key for timeline/additionalBudget/prebooking items so
+// Trip Review data survives inserts, deletes and reorders.
+// Uses globalThis (not window) so it also works in Node/test environments.
+export const genItemId = () => {
+  const c = globalThis.crypto;
+  if (c && typeof c.randomUUID === "function") return c.randomUUID();
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+};
 
 export const formatDate = (dateInput) => {
   if (!dateInput) return "";
@@ -111,13 +139,6 @@ export const getCurrencySymbol = (currency) => {
 
 export const calculateTotalBudget = (trip) => {
   if (!trip) return 0;
-  
-  const parseCost = (val) => {
-    if (val === undefined || val === null || val === '') return 0;
-    if (typeof val === 'number') return val;
-    const numStr = String(val).replace(/[^\d.]/g, '');
-    return parseFloat(numStr) || 0;
-  };
 
   let total = 0;
 
@@ -144,7 +165,10 @@ export const calculateTotalBudget = (trip) => {
     const activePlan = (day.plans || []).find(p => p.title === activePlanTitle) || day.plans?.[0];
     if (activePlan) {
       const timelineItems = (activePlan.timeline || [])
-        .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0);
+        .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0)
+        // Custom (unplanned) items are excluded from the PLANNED budget —
+        // they only count toward actual spend (decision #6).
+        .filter(e => e.custom !== true);
       total += timelineItems.reduce((s, i) => s + parseCost(i.cost), 0);
 
       const additionalItems = activePlan.additionalBudget || [];
@@ -153,6 +177,90 @@ export const calculateTotalBudget = (trip) => {
   });
 
   return total;
+};
+
+// ---------------------------------------------------------------------------
+// G5 migration — checklist ticks and prebooking booking statuses used to live
+// ONLY in localStorage under `${title}_${startDate}_${endDate}_...` keys: never
+// backed up, colliding for trips sharing title+dates, orphaned on edits. State
+// now lives on the trip object (day.checklist items + prebooking item.status);
+// these helpers harvest any legacy localStorage state into saved trips.
+// ---------------------------------------------------------------------------
+
+const PREBOOK_SINGULAR = { flights: 'flight', trains: 'train', bus: 'bus', rooms: 'room', activities: 'activity' };
+
+const resolveStorage = (storage) => {
+  if (storage) return storage;
+  if (typeof localStorage !== 'undefined') return localStorage;
+  return undefined;
+};
+
+const legacyUiKeyBase = (trip) => {
+  const end = calculateEndDate(trip.startDate, Array.isArray(trip.days) ? trip.days.length : 0);
+  return `${trip.title || ''}_${trip.startDate || ''}_${end}`.replace(/\s+/g, "_");
+};
+
+// Upgrades a trip in place-ish (returns the SAME object when there is nothing
+// to harvest, a new one otherwise): checklist strings 'true' become checked
+// entries, prebooking items still Pending pick up their saved status.
+export const migrateLegacyUiState = (trip, storage) => {
+  const ls = resolveStorage(storage);
+  if (!trip || !ls) return trip;
+  const base = legacyUiKeyBase(trip);
+  let changed = false;
+
+  const days = (trip.days || []).map((day, dayIndex) => ({
+    ...day,
+    checklist: (day.checklist || []).map((entry, idx) => {
+      const ticked = ls.getItem(`${base}_day_${dayIndex}_checklist_${idx}`) === 'true';
+      if (typeof entry !== 'object' || entry === null) {
+        // Legacy plain-string row (pre-G5 save): materialize it only if ticked.
+        if (!ticked) return entry;
+        changed = true;
+        return { id: genItemId(), text: String(entry ?? ''), checked: true };
+      }
+      if (entry.checked === true) return entry;
+      if (ticked) {
+        changed = true;
+        return { ...entry, checked: true };
+      }
+      return entry;
+    }),
+  }));
+
+  let prebookingData = trip.prebookingData;
+  if (prebookingData) {
+    prebookingData = Object.fromEntries(
+      Object.keys(PREBOOK_SINGULAR).map((section) => [
+        section,
+        (prebookingData[section] || []).map((item) => {
+          if (item.status && item.status !== 'Pending') return item;
+          const saved = ls.getItem(`${base}_prebook_${PREBOOK_SINGULAR[section]}_${item.id}`);
+          if (saved) {
+            changed = true;
+            return { ...item, status: saved };
+          }
+          return item;
+        }),
+      ])
+    );
+  }
+
+  return changed ? { ...trip, days, prebookingData } : trip;
+};
+
+// Removes the legacy localStorage keys for a trip AFTER its migrated state has
+// been persisted — otherwise an un-check would be resurrected on next load.
+export const cleanupLegacyUiState = (trip, storage) => {
+  const ls = resolveStorage(storage);
+  if (!trip || !ls) return;
+  const base = legacyUiKeyBase(trip);
+  const doomed = [];
+  for (let i = 0; i < ls.length; i++) {
+    const key = ls.key(i);
+    if (key && (key.startsWith(`${base}_day_`) || key.startsWith(`${base}_prebook_`))) doomed.push(key);
+  }
+  doomed.forEach((key) => ls.removeItem(key));
 };
 
 export const validateData = (data) => {
@@ -167,11 +275,12 @@ export const normalizeData = (data) => {
   if (!data) return null;
   const startDate = data.startDate || "";
   const currency = data.currency || "INR";
-  const id = data.id || (window.crypto?.randomUUID ? window.crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).substring(2));
+  const id = data.id || genItemId();
 
   return {
     ...data,
     id: id,
+    review: normalizeReview(data.review),
     title: data.title || "Untitled Itinerary",
     startDate: startDate,
     currency: currency,
@@ -181,17 +290,20 @@ export const normalizeData = (data) => {
         plans = day.plans.map((p) => ({
           title: p.title || "Main Plan",
           timeline: (p.timeline || []).map((item) => ({
+            itemId: item.itemId || genItemId(),
             time: item.time || "10:00 AM",
             title: item.title || "",
             description: item.description || "",
             duration: item.duration || "",
             location: item.location || "",
             mapsLink: item.mapsLink || "",
-            cost: typeof item.cost === "number" ? item.cost : 0,
+            cost: parseCost(item.cost),
+            custom: item.custom === true,
           })),
           additionalBudget: (p.additionalBudget || []).map((item) => ({
-            title: item.title || "",
-            cost: typeof item.cost === "number" ? item.cost : 0,
+            itemId: item.itemId || genItemId(),
+            title: item.title || item.item || "",
+            cost: parseCost(item.cost),
           })),
         }));
       } else {
@@ -200,17 +312,20 @@ export const normalizeData = (data) => {
           {
             title: "Main Plan",
             timeline: (day.timeline || []).map((item) => ({
+              itemId: item.itemId || genItemId(),
               time: item.time || "10:00 AM",
               title: item.title || "",
               description: item.description || "",
               duration: item.duration || "",
               location: item.location || "",
               mapsLink: item.mapsLink || "",
-              cost: typeof item.cost === "number" ? item.cost : 0,
+              cost: parseCost(item.cost),
+              custom: item.custom === true,
             })),
             additionalBudget: (day.additionalBudget || []).map((item) => ({
-              title: item.title || "",
-              cost: typeof item.cost === "number" ? item.cost : 0,
+              itemId: item.itemId || genItemId(),
+              title: item.title || item.item || "",
+              cost: parseCost(item.cost),
             })),
           },
         ];
@@ -225,15 +340,27 @@ export const normalizeData = (data) => {
         day: day.day ? day.day : index + 1,
         title: day.title || "",
         summary: day.summary || "",
-        checklist: Array.isArray(day.checklist) ? day.checklist : [],
+        // G5: checklist entries are objects { id, text, checked } so tick state
+        // lives on the trip (backed up, stable under reordering). Legacy string
+        // entries are upgraded non-destructively.
+        checklist: (Array.isArray(day.checklist) ? day.checklist : []).map((entry) =>
+          typeof entry === "object" && entry !== null
+            ? {
+                id: typeof entry.id === "string" && entry.id ? entry.id : genItemId(),
+                text: typeof entry.text === "string" ? entry.text : "",
+                checked: entry.checked === true,
+              }
+            : { id: genItemId(), text: String(entry ?? ""), checked: false }
+        ),
         active_plan: activePlan,
         plans: plans,
       };
     }),
     prebookingData: {
       flights: Array.isArray(data.prebookingData?.flights)
-        ? data.prebookingData.flights.map((f, i) => ({
+        ?          data.prebookingData.flights.map((f, i) => ({
             id: i + 1,
+            itemId: f.itemId || genItemId(),
             date: f.date || startDate,
             from: f.from || "",
             to: f.to || "",
@@ -243,7 +370,7 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof f.durationMinutes === "number" ? f.durationMinutes : 0,
             status: f.status || "Pending",
-            cost: typeof f.cost === "number" ? f.cost : 0,
+            cost: parseCost(f.cost),
             terminal: {
               departure: f.terminal?.departure || "",
               arrival: f.terminal?.arrival || "",
@@ -252,8 +379,9 @@ export const normalizeData = (data) => {
           }))
         : [],
       trains: Array.isArray(data.prebookingData?.trains)
-        ? data.prebookingData.trains.map((t, i) => ({
+        ?          data.prebookingData.trains.map((t, i) => ({
             id: i + 1,
+            itemId: t.itemId || genItemId(),
             date: t.date || startDate,
             name: t.name || "",
             from: t.from || "",
@@ -263,13 +391,14 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof t.durationMinutes === "number" ? t.durationMinutes : 0,
             status: t.status || "Pending",
-            cost: typeof t.cost === "number" ? t.cost : 0,
+            cost: parseCost(t.cost),
             links: Array.isArray(t.links) ? t.links : [],
           }))
         : [],
       bus: Array.isArray(data.prebookingData?.bus)
-        ? data.prebookingData.bus.map((b, i) => ({
+        ?          data.prebookingData.bus.map((b, i) => ({
             id: i + 1,
+            itemId: b.itemId || genItemId(),
             date: b.date || startDate,
             from: b.from || "",
             to: b.to || "",
@@ -279,7 +408,7 @@ export const normalizeData = (data) => {
             durationMinutes:
               typeof b.durationMinutes === "number" ? b.durationMinutes : 0,
             status: b.status || "Pending",
-            cost: typeof b.cost === "number" ? b.cost : 0,
+            cost: parseCost(b.cost),
             points: {
               pickup: b.points?.pickup || "",
               drop: b.points?.drop || "",
@@ -288,12 +417,13 @@ export const normalizeData = (data) => {
           }))
         : [],
       rooms: Array.isArray(data.prebookingData?.rooms)
-        ? data.prebookingData.rooms.map((r, i) => ({
+        ?          data.prebookingData.rooms.map((r, i) => ({
             id: i + 1,
+            itemId: r.itemId || genItemId(),
             name: r.name || "",
             checkin: r.checkin || "",
             checkout: r.checkout || "",
-            cost: typeof r.cost === "number" ? r.cost : 0,
+            cost: parseCost(r.cost),
             status: r.status || "Pending",
             location: r.location || "",
             mapsLink: r.mapsLink || "",
@@ -301,11 +431,12 @@ export const normalizeData = (data) => {
           }))
         : [],
       activities: Array.isArray(data.prebookingData?.activities)
-        ? data.prebookingData.activities.map((a, i) => ({
+        ?          data.prebookingData.activities.map((a, i) => ({
             id: i + 1,
+            itemId: a.itemId || genItemId(),
             name: a.name || "",
             status: a.status || "Pending",
-            cost: typeof a.cost === "number" ? a.cost : 0,
+            cost: parseCost(a.cost),
             notes: a.notes || "",
             links: Array.isArray(a.links) ? a.links : [],
             excludeFromBudget:

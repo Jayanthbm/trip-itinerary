@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { PlusIcon, TrashIcon, ArrowUpIcon, ArrowDownIcon, CheckIcon } from './Icons';
 import ConfirmPopover from './ConfirmPopover';
+import { genItemId } from '../utils/itineraryHelpers';
 
-const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
+const EditDay = ({ dayData, onSave, currencySymbol }) => {
   const [editingPlanTitle, setEditingPlanTitle] = useState(dayData.active_plan || dayData.plans?.[0]?.title || "Main Plan");
   const [confirmDelete, setConfirmDelete] = useState({ show: false, index: null, type: null });
   const lastTimelineRef = useRef(null);
@@ -10,7 +11,13 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
   const plans = dayData.plans || [];
   const currentPlanIndex = plans.findIndex(p => p.title === editingPlanTitle);
   const currentPlan = plans[currentPlanIndex] || plans[0] || { title: "Main Plan", timeline: [], additionalBudget: [] };
-  const currentTimeline = currentPlan.timeline || [];
+  // Custom (unplanned, review-added) items are hidden in Edit mode (user
+  // decision): visible only in Plan + Review views. Kept as index-mapped pairs
+  // so edits/deletes/up-moves write back to the REAL timeline index.
+  const visibleTimeline = (currentPlan.timeline || [])
+    .map((item, realIdx) => ({ item, realIdx }))
+    .filter((pair) => pair.item.custom !== true);
+  const currentTimeline = visibleTimeline.map((pair) => pair.item);
   
   const prevCountRef = useRef(currentTimeline.length);
 
@@ -95,22 +102,25 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
     });
   };
 
-  // Checklist
+  // Checklist — G5 shape: { id, text, checked } on the trip object.
   const handleAddChecklist = () => {
-    updateField('checklist', [...dayData.checklist, ""]);
+    updateField('checklist', [...(dayData.checklist || []), { id: genItemId(), text: "", checked: false }]);
   };
   const handleRemoveChecklist = (idx) => {
     setConfirmDelete({ show: true, index: idx, type: 'checklist' });
   };
   const handleUpdateChecklist = (idx, val) => {
-    const next = [...dayData.checklist];
-    next[idx] = val;
+    const next = (dayData.checklist || []).map((entry, i) =>
+      i === idx
+        ? (typeof entry === 'object' && entry !== null ? { ...entry, text: val } : { id: genItemId(), text: val, checked: false })
+        : entry
+    );
     updateField('checklist', next);
   };
 
   // Timeline
   const handleAddTimeline = () => {
-    const newItem = { time: "09:00 AM", title: "", description: "", duration: "1h", cost: 0, location: "", mapsLink: "" };
+    const newItem = { itemId: genItemId(), time: "09:00 AM", title: "", description: "", duration: "1h", cost: 0, location: "", mapsLink: "" };
     updatePlanField('timeline', [...currentTimeline, newItem]);
   };
   const handleRemoveTimeline = (idx) => {
@@ -119,7 +129,8 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
   const executeDelete = () => {
     const { index, type } = confirmDelete;
     if (type === 'timeline') {
-      updatePlanField('timeline', currentTimeline.filter((_, i) => i !== index));
+      const realIdx = visibleTimeline[index]?.realIdx;
+      updatePlanField('timeline', (currentPlan.timeline || []).filter((_, i) => i !== realIdx));
     } else if (type === 'budget') {
       updatePlanField('additionalBudget', currentPlan.additionalBudget.filter((_, i) => i !== index));
     } else if (type === 'checklist') {
@@ -133,16 +144,19 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
     updatePlanField('timeline', next);
   };
   const handleMoveTimeline = (idx, dir) => {
-    const next = [...currentTimeline];
     const target = idx + dir;
-    if (target < 0 || target >= next.length) return;
-    [next[idx], next[target]] = [next[target], next[idx]];
+    if (target < 0 || target >= visibleTimeline.length) return;
+    // Translate visible positions back to real indices, then swap in-place.
+    const next = [...(currentPlan.timeline || [])];
+    const a = visibleTimeline[idx].realIdx;
+    const b = visibleTimeline[target].realIdx;
+    [next[a], next[b]] = [next[b], next[a]];
     updatePlanField('timeline', next);
   };
 
   // Additional Budget
   const handleAddBudget = () => {
-    updatePlanField('additionalBudget', [...currentPlan.additionalBudget, { title: "", cost: 0 }]);
+    updatePlanField('additionalBudget', [...currentPlan.additionalBudget, { itemId: genItemId(), title: "", cost: 0 }]);
   };
   const handleRemoveBudget = (idx) => {
     setConfirmDelete({ show: true, index: idx, type: 'budget' });
@@ -283,14 +297,14 @@ const EditDay = ({ dayData, dayIndex, onSave, currencySymbol }) => {
           </button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          {dayData.checklist.map((item, idx) => (
-            <div key={idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {(dayData.checklist || []).map((item, idx) => (
+            <div key={typeof item === 'object' && item !== null ? item.id : idx} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
               <CheckIcon size={18} style={{ color: 'var(--accent-secondary)', flexShrink: 0 }} />
               <input
                 type="text"
                 className="form-input"
                 style={{ padding: '0.4rem 0.75rem' }}
-                value={item}
+                value={typeof item === 'object' && item !== null ? item.text : String(item ?? '')}
                 onChange={(e) => handleUpdateChecklist(idx, e.target.value)}
                 placeholder="Checklist item..."
               />
