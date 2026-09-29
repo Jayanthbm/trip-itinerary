@@ -24,8 +24,14 @@ function ItineraryView({
   executeClose,
   handleUpdateAppData,
   handleUpdateDay,
-  isReviewable,
-  onUpdateReview
+  onAddReviewItem,
+  onUpdateReview,
+  onUpdatePrebookingItem,
+  onUpdateCustomItem,
+  onDeleteCustomItem,
+  onMoveCustomItem,
+  onClearReview,
+  isReviewable
 }) {
   if (!appData) return null;
 
@@ -45,10 +51,8 @@ function ItineraryView({
       );
     }
 
-    const itineraryKey = `${appData.title}_${appData.startDate}_${calculatedEndDate}`.replace(/\s+/g, "_");
-
     if (activeTab === 'prebooking' && hasPrebooking) {
-      return <PrebookingView data={appData.prebookingData} itineraryKey={itineraryKey} currencySymbol={currencySymbol} />;
+      return <PrebookingView data={appData.prebookingData} onUpdateItem={onUpdatePrebookingItem} currencySymbol={currencySymbol} />;
     }
     if (activeTab === 'budget') {
       // Budget tab no longer requires prebookingData (P0-5): daily planned
@@ -63,7 +67,18 @@ function ItineraryView({
       );
     }
     if (activeTab === 'review') {
-      return <ReviewView appData={appData} onUpdateReview={onUpdateReview} currencySymbol={currencySymbol} />;
+      return (
+        <ReviewView
+          appData={appData}
+          onUpdateReview={onUpdateReview}
+          onAddItem={onAddReviewItem}
+          onUpdateCustomItem={onUpdateCustomItem}
+          onDeleteCustomItem={onDeleteCustomItem}
+          onMoveCustomItem={onMoveCustomItem}
+          onClearReview={onClearReview}
+          currencySymbol={currencySymbol}
+        />
+      );
     }
     if (activeTab.startsWith('day-')) {
       const dayIndex = parseInt(activeTab.split('-')[1], 10);
@@ -72,10 +87,10 @@ function ItineraryView({
         return (
           <DayView
             dayData={dayData}
-            itineraryKey={itineraryKey}
             dayIndex={dayIndex}
             startDate={appData.startDate}
             currencySymbol={currencySymbol}
+            review={appData.review}
             onUpdateDay={(updated) => handleUpdateDay(dayIndex, updated)}
           />
         );

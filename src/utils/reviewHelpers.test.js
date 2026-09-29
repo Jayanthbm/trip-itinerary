@@ -8,8 +8,20 @@ import {
   computeActualTotals,
   withReviewEntry,
   isEntryReviewed,
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+  timelineReviewKey,
   REVIEW_STATUS,
 } from './reviewHelpers';
+
+// Helper: a trip with one custom item added to Day 1's active plan.
+const addCustom = (title, cost) => {
+  const trip = makeTrip();
+  return { ...trip, days: [addTimelineItemToDay(trip.days[0], { title, cost }), ...trip.days.slice(1)] };
+};
 
 const makeTrip = (overrides = {}) => ({
   id: 't1',
@@ -214,6 +226,131 @@ describe('withReviewEntry', () => {
     // Item renamed since review → stale; re-reviewing stamps the new label
     trip = { ...trip, review: withReviewEntry(trip, null, 'tl-1', (e) => ({ ...e, done: false }), { label: 'Brunch', plannedCost: 250 }) };
     expect(trip.review.timeline['tl-1'].label).toBe('Brunch');
+  });
+});
+
+describe('timelineReviewKey', () => {
+  it('prefers itemId and falls back to the positional key', () => {
+    expect(timelineReviewKey(0, 'Main Plan', 2, 'tl-9')).toBe('tl-9');
+    expect(timelineReviewKey(0, 'Main Plan', 2, undefined)).toBe('d0|Main Plan|2');
+  });
+});
+
+describe('addTimelineItemToDay', () => {
+  it('appends a fully-shaped item to the ACTIVE plan timeline', () => {
+    const day = makeTrip().days[0]; // active_plan: 'Main Plan'
+    const updated = addTimelineItemToDay(day, { title: '  Night market  ', time: '9:30 PM', cost: '₹350' });
+    const added = updated.plans.find((p) => p.title === 'Main Plan').timeline.at(-1);
+    expect(added.title).toBe('Night market'); // trimmed
+    expect(added.time).toBe('9:30 PM');
+    expect(added.cost).toBe(350); // parsed via canonical parseCost
+    expect(typeof added.itemId).toBe('string');
+    expect(added.duration).toBe('');
+    // Rainy plan untouched
+    expect(updated.plans.find((p) => p.title === 'Rainy Plan').timeline).toHaveLength(1);
+    // Original day object untouched (immutability)
+    expect(day.plans.find((p) => p.title === 'Main Plan').timeline).toHaveLength(3);
+  });
+
+  it('works on legacy flat days (no plans array) by creating a Main Plan', () => {
+    const updated = addTimelineItemToDay({ day: 'Day 1', timeline: [], additionalBudget: [] }, { title: 'Extra stop', cost: 0 });
+    expect(updated.plans[0].title).toBe('Main Plan');
+    expect(updated.plans[0].timeline[0]).toMatchObject({ title: 'Extra stop', cost: 0, time: '' });
+  });
+
+  it('flows through getReviewableItems and withReviewEntry like a planned item', () => {
+    let day = makeTrip().days[0];
+    day = addTimelineItemToDay(day, { title: 'Souvenir', cost: 500 });
+    const trip = { ...makeTrip(), days: [day] };
+    const added = getReviewableItems(trip).find((i) => i.label === 'Souvenir');
+    expect(added).toBeDefined();
+    expect(added.kind).toBe('timeline');
+    expect(added.plannedCost).toBe(500);
+    // Reviewing the new item by its key works
+    const review = withReviewEntry(trip, null, added.key, (e) => ({ ...e, done: true, actualCost: 450 }), { label: 'Souvenir', plannedCost: 500 });
+    expect(review.timeline[added.key].done).toBe(true);
+    expect(review.timeline[added.key].plannedCost).toBe(500);
+  });
+});
+
+describe('custom (unplanned) items — decision #6', () => {
+  it('addTimelineItemToDay stamps custom: true', () => {
+    const day = makeTrip().days[0];
+    const updated = addTimelineItemToDay(day, { title: 'Extra', cost: 100 });
+    expect(updated.plans[0].timeline.at(-1)).toMatchObject({ title: 'Extra', custom: true });
+  });
+
+  it('custom items appear in getReviewableItems but carry no entry and are excluded from planned totals', () => {
+    const trip = addCustom('Snacks', 300);
+    const item = getReviewableItems(trip).find((i) => i.label === 'Snacks');
+    expect(item.custom).toBe(true);
+    expect(item.entry).toBeNull();
+    expect(computePlannedTotals(trip).grand).toBe(28500 + 7200 + 3500 + 1850); // unchanged
+  });
+
+  it('custom item costs count toward ACTUAL totals (added = done)', () => {
+    const trip = addCustom('Snacks', 300);
+    const a = computeActualTotals(trip);
+    expect(a.hasAny).toBe(true);
+    expect(a.sections.daily).toBe(300);
+    expect(a.grand).toBe(300);
+  });
+
+  it('zero-cost custom items do not flip hasAny', () => {
+    const a = computeActualTotals(addCustom('Free stroll', 0));
+    expect(a.hasAny).toBe(false);
+    expect(a.grand).toBe(0);
+  });
+
+  it('custom items are excluded from review progress', () => {
+    expect(computeReviewProgress(addCustom('Snacks', 300)).total).toBe(8);
+  });
+
+  it('updateCustomItemInDay edits only that custom item', () => {
+    const trip = addCustom('Snacks', 300);
+    const itemId = trip.days[0].plans[0].timeline.at(-1).itemId;
+    const updated = updateCustomItemInDay(trip.days[0], itemId, { cost: 450 });
+    const tl = updated.plans[0].timeline;
+    expect(tl.at(-1)).toMatchObject({ title: 'Snacks', cost: 450, custom: true });
+    expect(tl[0].cost).toBe(250); // planned item untouched
+  });
+
+  it('removeCustomItemFromDay deletes only that item', () => {
+    const trip = addCustom('Snacks', 300);
+    const itemId = trip.days[0].plans[0].timeline.at(-1).itemId;
+    const tl = removeCustomItemFromDay(trip.days[0], itemId).plans[0].timeline;
+    expect(tl).toHaveLength(3);
+    expect(tl.some((i) => i.title === 'Snacks')).toBe(false);
+  });
+
+  it('moveCustomItemInDay repositions using the displayed (pre-removal) target index', () => {
+    let trip = addCustom('Snacks', 300);
+    const itemId = trip.days[0].plans[0].timeline.at(-1).itemId;
+    // Display order (pre-move): Breakfast(0) Museum(1) Free walk(2) Snacks(3)
+    // Drop Snacks onto index 0 → takes Breakfast's place, shifting it down
+    let day = moveCustomItemInDay(trip.days[0], itemId, 0);
+    expect(day.plans[0].timeline.map((i) => i.title)).toEqual(['Snacks', 'Breakfast', 'Museum', 'Free walk']);
+    // Drop Snacks (now at 0) onto displayed index 2 (Museum) → lands in
+    // Museum's place, shifting it (and Free walk) down
+    day = moveCustomItemInDay(day, itemId, 2);
+    expect(day.plans[0].timeline.map((i) => i.title)).toEqual(['Breakfast', 'Snacks', 'Museum', 'Free walk']);
+  });
+
+  it('stripCustomItems removes custom items from ALL plans/days', () => {
+    const trip = addCustom('Snacks', 300);
+    trip.days[0].plans[1].timeline.push({ itemId: 'c2', title: 'Rainy extra', cost: 50, custom: true });
+    const stripped = stripCustomItems(trip);
+    expect(stripped.days[0].plans[0].timeline.some((i) => i.custom)).toBe(false);
+    expect(stripped.days[0].plans[1].timeline.some((i) => i.custom)).toBe(false);
+    expect(stripped.days[0].plans[0].timeline).toHaveLength(3); // planned intact
+  });
+
+  it('non-custom items keep planned/actual behaviour unchanged', () => {
+    const trip = addCustom('Snacks', 300);
+    const withReview = { ...trip, review: withReviewEntry(trip, null, 'tl-1', (e) => ({ ...e, done: true, actualCost: 300 })) };
+    const a = computeActualTotals(withReview);
+    expect(a.grand).toBe(600); // 300 planned-item actual + 300 custom
+    expect(computePlannedTotals(withReview).grand).toBe(28500 + 7200 + 3500 + 1850);
   });
 });
 

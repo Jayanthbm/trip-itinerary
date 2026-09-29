@@ -1,6 +1,22 @@
 import ootySample from "../samples/ooty_trip.json";
 import { parseCost } from "./costUtils";
-import { normalizeReview } from "./reviewHelpers";
+import {
+  normalizeReview,
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+} from "./reviewHelpers";
+
+// Re-exported for App.jsx convenience; canonical home is ./reviewHelpers.
+export {
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+};
 
 // Stable per-item identity (REVIEW_READINESS_PLAN.md P0-3).
 // Used as the review key for timeline/additionalBudget/prebooking items so
@@ -149,7 +165,10 @@ export const calculateTotalBudget = (trip) => {
     const activePlan = (day.plans || []).find(p => p.title === activePlanTitle) || day.plans?.[0];
     if (activePlan) {
       const timelineItems = (activePlan.timeline || [])
-        .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0);
+        .filter(e => e.cost !== undefined && e.cost !== null && e.cost !== '' && e.cost > 0)
+        // Custom (unplanned) items are excluded from the PLANNED budget —
+        // they only count toward actual spend (decision #6).
+        .filter(e => e.custom !== true);
       total += timelineItems.reduce((s, i) => s + parseCost(i.cost), 0);
 
       const additionalItems = activePlan.additionalBudget || [];
@@ -158,6 +177,90 @@ export const calculateTotalBudget = (trip) => {
   });
 
   return total;
+};
+
+// ---------------------------------------------------------------------------
+// G5 migration — checklist ticks and prebooking booking statuses used to live
+// ONLY in localStorage under `${title}_${startDate}_${endDate}_...` keys: never
+// backed up, colliding for trips sharing title+dates, orphaned on edits. State
+// now lives on the trip object (day.checklist items + prebooking item.status);
+// these helpers harvest any legacy localStorage state into saved trips.
+// ---------------------------------------------------------------------------
+
+const PREBOOK_SINGULAR = { flights: 'flight', trains: 'train', bus: 'bus', rooms: 'room', activities: 'activity' };
+
+const resolveStorage = (storage) => {
+  if (storage) return storage;
+  if (typeof localStorage !== 'undefined') return localStorage;
+  return undefined;
+};
+
+const legacyUiKeyBase = (trip) => {
+  const end = calculateEndDate(trip.startDate, Array.isArray(trip.days) ? trip.days.length : 0);
+  return `${trip.title || ''}_${trip.startDate || ''}_${end}`.replace(/\s+/g, "_");
+};
+
+// Upgrades a trip in place-ish (returns the SAME object when there is nothing
+// to harvest, a new one otherwise): checklist strings 'true' become checked
+// entries, prebooking items still Pending pick up their saved status.
+export const migrateLegacyUiState = (trip, storage) => {
+  const ls = resolveStorage(storage);
+  if (!trip || !ls) return trip;
+  const base = legacyUiKeyBase(trip);
+  let changed = false;
+
+  const days = (trip.days || []).map((day, dayIndex) => ({
+    ...day,
+    checklist: (day.checklist || []).map((entry, idx) => {
+      const ticked = ls.getItem(`${base}_day_${dayIndex}_checklist_${idx}`) === 'true';
+      if (typeof entry !== 'object' || entry === null) {
+        // Legacy plain-string row (pre-G5 save): materialize it only if ticked.
+        if (!ticked) return entry;
+        changed = true;
+        return { id: genItemId(), text: String(entry ?? ''), checked: true };
+      }
+      if (entry.checked === true) return entry;
+      if (ticked) {
+        changed = true;
+        return { ...entry, checked: true };
+      }
+      return entry;
+    }),
+  }));
+
+  let prebookingData = trip.prebookingData;
+  if (prebookingData) {
+    prebookingData = Object.fromEntries(
+      Object.keys(PREBOOK_SINGULAR).map((section) => [
+        section,
+        (prebookingData[section] || []).map((item) => {
+          if (item.status && item.status !== 'Pending') return item;
+          const saved = ls.getItem(`${base}_prebook_${PREBOOK_SINGULAR[section]}_${item.id}`);
+          if (saved) {
+            changed = true;
+            return { ...item, status: saved };
+          }
+          return item;
+        }),
+      ])
+    );
+  }
+
+  return changed ? { ...trip, days, prebookingData } : trip;
+};
+
+// Removes the legacy localStorage keys for a trip AFTER its migrated state has
+// been persisted — otherwise an un-check would be resurrected on next load.
+export const cleanupLegacyUiState = (trip, storage) => {
+  const ls = resolveStorage(storage);
+  if (!trip || !ls) return;
+  const base = legacyUiKeyBase(trip);
+  const doomed = [];
+  for (let i = 0; i < ls.length; i++) {
+    const key = ls.key(i);
+    if (key && (key.startsWith(`${base}_day_`) || key.startsWith(`${base}_prebook_`))) doomed.push(key);
+  }
+  doomed.forEach((key) => ls.removeItem(key));
 };
 
 export const validateData = (data) => {
@@ -195,6 +298,7 @@ export const normalizeData = (data) => {
             location: item.location || "",
             mapsLink: item.mapsLink || "",
             cost: parseCost(item.cost),
+            custom: item.custom === true,
           })),
           additionalBudget: (p.additionalBudget || []).map((item) => ({
             itemId: item.itemId || genItemId(),
@@ -216,6 +320,7 @@ export const normalizeData = (data) => {
               location: item.location || "",
               mapsLink: item.mapsLink || "",
               cost: parseCost(item.cost),
+              custom: item.custom === true,
             })),
             additionalBudget: (day.additionalBudget || []).map((item) => ({
               itemId: item.itemId || genItemId(),
@@ -235,7 +340,18 @@ export const normalizeData = (data) => {
         day: day.day ? day.day : index + 1,
         title: day.title || "",
         summary: day.summary || "",
-        checklist: Array.isArray(day.checklist) ? day.checklist : [],
+        // G5: checklist entries are objects { id, text, checked } so tick state
+        // lives on the trip (backed up, stable under reordering). Legacy string
+        // entries are upgraded non-destructively.
+        checklist: (Array.isArray(day.checklist) ? day.checklist : []).map((entry) =>
+          typeof entry === "object" && entry !== null
+            ? {
+                id: typeof entry.id === "string" && entry.id ? entry.id : genItemId(),
+                text: typeof entry.text === "string" ? entry.text : "",
+                checked: entry.checked === true,
+              }
+            : { id: genItemId(), text: String(entry ?? ""), checked: false }
+        ),
         active_plan: activePlan,
         plans: plans,
       };

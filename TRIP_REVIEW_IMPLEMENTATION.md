@@ -1,8 +1,8 @@
 # Trip Review & Planned-vs-Actual — Implementation Doc
 
-**Status:** **✅ Implemented** — Phase 0 (see `REVIEW_READINESS_PLAN.md`) and Phases 1–4 of this doc (review computers + tests, ReviewView with tab/button/badge wiring, BudgetView planned-vs-actual, dashboard entry points; Phase 5 core — stale chips, debounced saves, empty states — included). Verified: 34 unit tests, lint clean, build green. Pending: manual browser smoke test on a real completed trip; changes not yet committed.
+**Status:** **✅ Implemented & verified** — Phase 0 (see `REVIEW_READINESS_PLAN.md`), Phases 1–4, and Phase 5 core of this doc, plus post-test hardening (in-session edit-clobber fix, reviewable gating fix, stale snapshots), the Review-tab add-item form, timeline done/skipped colouring, the skip-reason typing fix, the `?it=` duplicate-trip fix, the G5 localStorage→trip-object migration, and custom/unplanned items (decision #6: amber styling, actual-spend treatment, Review-tab drag-and-drop, remove + clear behaviour). Verified: 57 unit tests, lint clean, build green; all recent changes on `feature_enhancements` (uncommitted).
 **Branch:** `feature_enhancements`
-**Last updated:** 2026-09-28
+**Last updated:** 2026-09-29
 
 ---
 
@@ -249,4 +249,13 @@ Each phase is independently shippable; Phase 0 is fully shippable on its own.
 2. **Skipped items:** a **checkbox** plus an **optional free-text box** for the reason. No structured reason picker in v1 (kept as a future idea in §12).
 3. **Range cost strings** (e.g. `"₹600 – ₹1,000"`, present in real sample data): canonical `parseCost` takes the **first number** (₹600). Locked in Phase 0 P0-1, pinned by unit test.
 4. **`updatedAt` reorder:** review edits bump `updatedAt` (via `saveTrip`), surfacing recently-reviewed trips on the dashboard — accepted behaviour.
-5. **Existing localStorage checklist/prebook state:** migration into the trip object is **deferred** (tracked in `REVIEW_READINESS_PLAN.md` G5); the Review feature uses trip-object state only and never extends the localStorage pattern.
+5. **Existing localStorage checklist/prebook state:** migration into the trip object is **deferred** (tracked in `REVIEW_READINESS_PLAN.md` G5); the Review feature uses trip-object state only and never extends the localStorage pattern. *(Since implemented — see G5 status.)*
+6. **Custom (unplanned) items** (added via the Review tab's per-day "Add item"):
+   - Stamped `custom: true` on the timeline item; `normalizeData` and `EditDay` preserve it.
+   - **Added = done:** no review entry, no ✓/⤫ state checkboxes, no reason field. Their entered **cost IS the actual spend**.
+   - **Excluded from Planned** everywhere (Review header, Budget tab incl. day subtotals, `calculateTotalBudget`, Day "Budget For The Day"); **included in Actual** totals.
+   - Excluded from review progress ("n/m reviewed" counts planned items only).
+   - Rendered **amber** (`#f59e0b`): amber badge/dot/border in Plan view (dashed card + ✕ delete), amber tint + drag handle in Review.
+   - **Drag-and-drop reordering in the Review tab only** (custom items draggable; every row of the same day is a drop target). Drop-on-row semantics: the dragged item takes the target row's place, shifting it down. Edit mode never reorders.
+   - **Removable** (⤫ in Review, ✕ in Plan). **Clear Review deletes custom items too** (single atomic save). **Hidden in Edit mode** (index-safe mapping so planned-item edits/deletes stay correct).
+   - Helpers live in `reviewHelpers.js`: `updateCustomItemInDay`, `removeCustomItemFromDay`, `moveCustomItemInDay`, `stripCustomItems`.

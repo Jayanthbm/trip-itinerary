@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckIcon, ChevronDownIcon, PlaneIcon, TrainIcon, BusIcon, BuildingIcon, WalletIcon } from './Icons';
+import { CheckIcon, ChevronDownIcon, PlaneIcon, TrainIcon, BusIcon, BuildingIcon, WalletIcon, PlusIcon } from './Icons';
 import ConfirmPopover from './ConfirmPopover';
 import {
   REVIEW_STATUS,
@@ -69,7 +69,76 @@ const CostInput = ({ value, placeholder, onCommit, sym }) => {
   );
 };
 
-const ReviewItemRow = ({ item, sym, onEntry }) => {
+// Inline form to add an unplanned item (something done on the trip that was
+// never in the plan) to a day's active-plan timeline. It lands in the day
+// timeline, both budget totals and this list immediately.
+const AddItemForm = ({ sym, onAdd, onCancel }) => {
+  const [title, setTitle] = useState('');
+  const [time, setTime] = useState('');
+  const [cost, setCost] = useState('');
+
+  const submit = () => {
+    if (!title.trim()) return;
+    onAdd({ title, time, cost: cost.trim() ? parseFloat(cost.replace(/[^\d.]/g, '')) || 0 : 0 });
+    setTitle('');
+    setTime('');
+    setCost('');
+  };
+
+  return (
+    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', padding: '0.45rem 0.25rem' }}>
+      <input
+        type="text"
+        className="form-input"
+        style={{ flex: 2, minWidth: '120px', padding: '0.3rem 0.5rem', fontSize: '0.85rem' }}
+        placeholder="Item name (e.g. Late-night street food)"
+        value={title}
+        autoFocus
+        onChange={(e) => setTitle(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter') submit(); if (e.key === 'Escape') onCancel(); }}
+      />
+      <input
+        type="text"
+        className="form-input"
+        style={{ flex: 1, minWidth: '90px', padding: '0.3rem 0.5rem', fontSize: '0.85rem' }}
+        placeholder="Time (optional)"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+        onKeyDown={(e) => { if (e.key === 'Enter') submit(); if (e.key === 'Escape') onCancel(); }}
+      />
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>{sym}</span>
+        <input
+          type="text"
+          inputMode="decimal"
+          className="form-input"
+          style={{ width: '80px', padding: '0.3rem 0.5rem', fontSize: '0.85rem', textAlign: 'right' }}
+          placeholder="Cost"
+          value={cost}
+          onChange={(e) => setCost(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') submit(); if (e.key === 'Escape') onCancel(); }}
+        />
+      </div>
+      <button
+        className="tab-btn"
+        onClick={submit}
+        title="Add to the day's timeline and review"
+        style={{ margin: 0, padding: '0.35rem 0.7rem', background: 'var(--accent-primary)', border: 'none', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.25rem', flexShrink: 0 }}
+      >
+        <PlusIcon size={13} /> Add
+      </button>
+      <button
+        className="tab-btn"
+        onClick={onCancel}
+        style={{ margin: 0, padding: '0.35rem 0.7rem', flexShrink: 0 }}
+      >
+        Cancel
+      </button>
+    </div>
+  );
+};
+
+const ReviewItemRow = ({ item, sym, onEntry, dropHandlers, isDropTarget }) => {
   const entry = item.entry || { actualCost: null, done: false, skipped: false, notes: '' };
   const showNotes = entry.skipped || (entry.notes && entry.notes.length > 0);
 
@@ -77,6 +146,7 @@ const ReviewItemRow = ({ item, sym, onEntry }) => {
 
   return (
     <div
+      {...(dropHandlers ? dropHandlers(item.timelineIndex) : {})}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -85,6 +155,7 @@ const ReviewItemRow = ({ item, sym, onEntry }) => {
         borderBottom: '1px solid rgba(255,255,255,0.04)',
         flexWrap: 'wrap',
         opacity: entry.skipped ? 0.65 : 1,
+        boxShadow: isDropTarget ? 'inset 0 2px 0 0 var(--accent-primary)' : 'none',
       }}
     >
       {/* Done checkbox */}
@@ -156,11 +227,87 @@ const ReviewItemRow = ({ item, sym, onEntry }) => {
   );
 };
 
-const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) => {
+// Custom (unplanned) item row — decision #6: added = done (no state
+// checkboxes, no reason), its cost IS the actual spend, ⤫ removes it, and it
+// can be dragged to any position in the day's timeline (Review tab only).
+const CustomItemRow = ({ item, sym, onUpdateCost, onRemove, dragHandlers, dropHandlers, isDragging, isDropTarget }) => (
+  <div
+    draggable
+    onDragStart={(e) => dragHandlers.onDragStart(e, item)}
+    onDragEnd={dragHandlers.onDragEnd}
+    {...dropHandlers(item.timelineIndex)}
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.6rem',
+      padding: '0.45rem 0.25rem',
+      borderBottom: '1px solid rgba(255,255,255,0.04)',
+      flexWrap: 'wrap',
+      background: 'rgba(245, 158, 11, 0.06)',
+      borderRadius: '6px',
+      opacity: isDragging ? 0.4 : 1,
+      boxShadow: isDropTarget ? 'inset 0 2px 0 0 #f59e0b' : 'none',
+      cursor: 'grab',
+    }}
+  >
+    {/* Drag handle */}
+    <span title="Drag to reposition in the day timeline" style={{ color: '#f59e0b', fontSize: '0.9rem', flexShrink: 0, userSelect: 'none', letterSpacing: '-2px' }}>⠿</span>
+
+    {/* Label + time */}
+    <div style={{ flex: 1, minWidth: '140px' }}>
+      <div style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+        {item.time && <span style={{ color: '#f59e0b', fontSize: '0.75rem' }}>{item.time}</span>}
+        <span>{item.label}</span>
+        <span className="badge pending" title="Unplanned — added during review. Counts toward actual spend, not planned budget." style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.4)' }}>✦ custom</span>
+      </div>
+    </div>
+
+    {/* Planned: none (excluded from planned budget) */}
+    <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem', flexShrink: 0 }} title="Not in planned budget">
+      —
+    </span>
+
+    {/* Actual = its cost (editable) */}
+    <CostInput
+      sym={sym}
+      value={item.plannedCost}
+      placeholder="0"
+      onCommit={(num) => onUpdateCost(num ?? 0)}
+    />
+
+    {/* Remove */}
+    <button
+      onClick={onRemove}
+      title="Remove this custom item"
+      style={{
+        width: '26px', height: '26px', borderRadius: '6px', flexShrink: 0,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', margin: 0, padding: 0,
+        background: 'transparent', border: '1px solid var(--border-light)',
+        color: 'var(--text-muted)', fontSize: '0.75rem',
+      }}
+    >
+      ⤫
+    </button>
+  </div>
+);
+
+const ReviewView = ({
+  appData,
+  onUpdateReview,
+  onAddItem,
+  onUpdateCustomItem,
+  onDeleteCustomItem,
+  onMoveCustomItem,
+  onClearReview,
+  currencySymbol: sym = '₹',
+}) => {
   const [openDays, setOpenDays] = useState({});
   const [openSections, setOpenSections] = useState({});
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [addingDay, setAddingDay] = useState(null);
+  const [dragItem, setDragItem] = useState(null); // { dayIndex, itemId }
+  const [dropIndex, setDropIndex] = useState(null);
 
   const items = getReviewableItems(appData);
   const progress = computeReviewProgress(appData);
@@ -198,9 +345,39 @@ const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) =>
   };
 
   const clearReview = () => {
-    onUpdateReview(emptyReview());
+    onClearReview(); // also deletes custom items (decision: Clear resets everything)
     setShowClearConfirm(false);
   };
+
+  // Drag & drop (Review tab only): custom items are draggable, every row in
+  // the same day is a drop target. HTML5 dnd — desktop browsers.
+  const dragHandlers = {
+    onDragStart: (e, item) => {
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', item.key);
+      setDragItem({ dayIndex: item.dayIndex, itemId: item.key });
+    },
+    onDragEnd: () => {
+      setDragItem(null);
+      setDropIndex(null);
+    },
+  };
+  const dropHandlers = (dayIndex) => (index) => ({
+    onDragOver: (e) => {
+      if (!dragItem || dragItem.dayIndex !== dayIndex) return;
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      setDropIndex(index);
+    },
+    onDrop: (e) => {
+      e.preventDefault();
+      if (dragItem && dragItem.dayIndex === dayIndex) {
+        onMoveCustomItem(dayIndex, dragItem.itemId, index);
+      }
+      setDragItem(null);
+      setDropIndex(null);
+    },
+  });
 
   const prebookingBySection = SECTION_META.map((meta) => ({
     ...meta,
@@ -217,7 +394,31 @@ const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) =>
     bucket.items.push(item);
   });
 
-  const renderRows = (rows) => rows.map((item) => <ReviewItemRow key={item.key} item={item} sym={sym} onEntry={onEntry} />);
+  const renderRows = (rows, dayIndex) =>
+    rows.map((item) =>
+      item.custom ? (
+        <CustomItemRow
+          key={item.key}
+          item={item}
+          sym={sym}
+          onUpdateCost={(num) => onUpdateCustomItem(item.dayIndex, item.key, { cost: num })}
+          onRemove={() => onDeleteCustomItem(item.dayIndex, item.key)}
+          dragHandlers={dragHandlers}
+          dropHandlers={dropHandlers(item.dayIndex)}
+          isDragging={dragItem?.itemId === item.key}
+          isDropTarget={dropIndex === item.timelineIndex && dragItem?.dayIndex === item.dayIndex && dragItem?.itemId !== item.key}
+        />
+      ) : (
+        <ReviewItemRow
+          key={item.key}
+          item={item}
+          sym={sym}
+          onEntry={onEntry}
+          dropHandlers={dayIndex !== undefined ? dropHandlers(dayIndex) : undefined}
+          isDropTarget={dayIndex !== undefined && dropIndex === item.timelineIndex && dragItem?.dayIndex === dayIndex && dragItem?.itemId !== item.key}
+        />
+      )
+    );
 
   const sectionHeader = (title, icon, count, isOpen, onToggle) => (
     <div
@@ -291,7 +492,31 @@ const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) =>
             return (
               <div key={day.dayIndex} style={{ marginBottom: '1rem' }}>
                 {sectionHeader(`📅 ${day.dayLabel}`, <WalletIcon size={16} />, day.items.length, isOpen, () => setOpenDays((p) => ({ ...p, [day.dayIndex]: !isOpen })))}
-                {isOpen && renderRows(day.items)}
+                {isOpen && (
+                  <>
+                    {renderRows(day.items, day.dayIndex)}
+                    {onAddItem && (
+                      <div style={{ marginTop: '0.35rem' }}>
+                        {addingDay === day.dayIndex ? (
+                          <AddItemForm
+                            sym={sym}
+                            onAdd={(fields) => { onAddItem(day.dayIndex, fields); setAddingDay(null); }}
+                            onCancel={() => setAddingDay(null)}
+                          />
+                        ) : (
+                          <button
+                            className="tab-btn"
+                            onClick={() => setAddingDay(day.dayIndex)}
+                            title="Something you did that wasn't planned — add it to this day's timeline and review it"
+                            style={{ margin: 0, padding: '0.3rem 0.7rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--text-secondary)', background: 'transparent', border: '1px dashed var(--border-light)', borderRadius: '6px', cursor: 'pointer' }}
+                          >
+                            <PlusIcon size={13} /> Add item
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             );
           })}
@@ -341,7 +566,7 @@ const ReviewView = ({ appData, onUpdateReview, currencySymbol: sym = '₹' }) =>
       )}
       {showClearConfirm && (
         <ConfirmPopover
-          message="This resets the entire review (costs, checkboxes, notes and rating) for this trip. Continue?"
+          message="This resets the entire review (costs, checkboxes, notes, rating) and removes any custom items added during the review. Continue?"
           confirmText="Clear Review"
           onConfirm={clearReview}
           onCancel={() => setShowClearConfirm(false)}

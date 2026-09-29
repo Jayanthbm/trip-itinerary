@@ -2,47 +2,23 @@ import React, { useState } from 'react';
 import { PlaneIcon, TrainIcon, BusIcon, BuildingIcon, CheckIcon, ChevronDownIcon } from './Icons';
 import { parseCost } from '../utils/costUtils';
 
-const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
+const PrebookingView = ({ data, onUpdateItem, currencySymbol = '₹' }) => {
   const [openSections, setOpenSections] = useState({
     flights: true, trains: true, bus: true, rooms: true, activities: true
   });
 
   const toggleSection = (key) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
 
-  const getInitialStatus = (category, items) => {
-    const initialState = {};
-    items.forEach(item => {
-      if (itineraryKey !== undefined && item.id) {
-        const key = `${itineraryKey}_prebook_${category}_${item.id}`;
-        const saved = localStorage.getItem(key);
-        initialState[item.id] = saved !== null ? saved : (item.status || 'Pending');
-      } else {
-        initialState[item.id] = item.status || 'Pending';
-      }
-    });
-    return initialState;
+  // G5: booking status lives on the trip object (item.status) — backed up with
+  // the trip, no localStorage, no title-derived key collisions.
+  const toggleStatus = (section, item) => {
+    if (!onUpdateItem) return;
+    const isBooked = ['booked', 'done', 'completed'].includes((item.status || 'Pending')?.toLowerCase());
+    onUpdateItem(section, item.itemId ?? item.id, { status: isBooked ? 'Pending' : 'Booked' });
   };
 
-  const [flightStatuses, setFlightStatuses] = useState(() => getInitialStatus('flight', data?.flights || []));
-  const [trainStatuses, setTrainStatuses] = useState(() => getInitialStatus('train', data?.trains || []));
-  const [busStatuses, setBusStatuses] = useState(() => getInitialStatus('bus', data?.bus || []));
-  const [roomStatuses, setRoomStatuses] = useState(() => getInitialStatus('room', data?.rooms || []));
-  const [activityStatuses, setActivityStatuses] = useState(() => getInitialStatus('activity', data?.activities || []));
-
-  const toggleStatus = (category, id, currentState, setStatusState) => {
-    const isBooked = ['booked', 'done', 'completed'].includes(currentState?.toLowerCase());
-    const newStatus = isBooked ? 'Pending' : 'Booked';
-    setStatusState(prev => ({ ...prev, [id]: newStatus }));
-    if (itineraryKey !== undefined) {
-      // TODO(prep-G5): localStorage-only state — never backed up, and the
-      // itineraryKey collides/orphans on title or date edits. Migrate to
-      // trip-object state (REVIEW_READINESS_PLAN.md G5). Trip Review must
-      // NOT extend this pattern — it stores state on the trip object.
-      localStorage.setItem(`${itineraryKey}_prebook_${category}_${id}`, newStatus);
-    }
-  };
-
-  const renderStatusBadge = (category, id, status, setStatusState) => {
+  const renderStatusBadge = (section, item) => {
+    const status = item.status || 'Pending';
     const isBooked = ['booked', 'done', 'completed'].includes(status?.toLowerCase());
     return (
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0 }}>
@@ -50,7 +26,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
           {status}
         </span>
         <button
-          onClick={(e) => { e.stopPropagation(); toggleStatus(category, id, status, setStatusState); }}
+          onClick={(e) => { e.stopPropagation(); toggleStatus(section, item); }}
           style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '0.75rem', padding: '0.1rem 0.3rem' }}
           title="Toggle status"
         >
@@ -194,7 +170,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
           durationMinutes: f.durationMinutes,
           cost: f.cost,
           links: f.links,
-          statusBadge: renderStatusBadge('flight', f.id, flightStatuses[f.id], setFlightStatuses)
+          statusBadge: renderStatusBadge('flights', f)
         }))}
       </div>
     );
@@ -218,7 +194,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
           durationMinutes: t.durationMinutes,
           cost: t.cost,
           links: t.links,
-          statusBadge: renderStatusBadge('train', t.id, trainStatuses[t.id], setTrainStatuses)
+          statusBadge: renderStatusBadge('trains', t)
         }))}
       </div>
     );
@@ -244,7 +220,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
           durationMinutes: b.durationMinutes,
           cost: b.cost,
           links: b.links,
-          statusBadge: renderStatusBadge('bus', b.id, busStatuses[b.id], setBusStatuses)
+          statusBadge: renderStatusBadge('bus', b)
         }))}
       </div>
     );
@@ -264,7 +240,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
               </div>
               <div className="prebook-meta-row">
                 <div className="prebook-status-wrapper" style={{ marginLeft: 'auto' }}>
-                  {renderStatusBadge('room', room.id, roomStatuses[room.id], setRoomStatuses)}
+                  {renderStatusBadge('rooms', room)}
                 </div>
               </div>
             </div>
@@ -318,7 +294,7 @@ const PrebookingView = ({ data, itineraryKey, currencySymbol = '₹' }) => {
               </div>
               <div className="prebook-meta-row">
                 <div className="prebook-status-wrapper" style={{ marginLeft: 'auto' }}>
-                  {renderStatusBadge('activity', activity.id, activityStatuses[activity.id], setActivityStatuses)}
+                  {renderStatusBadge('activities', activity)}
                 </div>
               </div>
             </div>

@@ -8,6 +8,7 @@
 // ---------------------------------------------------------------------------
 
 import { parseCost } from './costUtils';
+import { genItemId } from './itineraryHelpers';
 
 export const REVIEW_STATUS = {
   NOT_STARTED: 'not_started',
@@ -146,7 +147,7 @@ export const getReviewableItems = (trip) => {
     if (!plan) return;
 
     (plan.timeline || []).forEach((item, itemIndex) => {
-      const key = String(item.itemId ?? `d${dayIndex}|${plan.title}|${itemIndex}`);
+      const key = timelineReviewKey(dayIndex, plan.title, itemIndex, item.itemId);
       const liveLabel = item.title || '';
       const entry = getReviewEntry(review, null, key);
       items.push({
@@ -155,10 +156,12 @@ export const getReviewableItems = (trip) => {
         dayLabel: day.day || `Day ${dayIndex + 1}`,
         planTitle: plan.title,
         key,
+        timelineIndex: itemIndex,
         label: liveLabel || `Item ${itemIndex + 1}`,
         time: item.time || '',
         plannedCost: parseCost(item.cost),
         excludeFromTotals: false,
+        custom: item.custom === true,
         entry,
         stale: isEntryStale(entry, liveLabel),
       });
@@ -187,11 +190,104 @@ export const getReviewableItems = (trip) => {
   return items;
 };
 
+// Canonical review key for a timeline item (must match the fallback key
+// getReviewableItems computes for items without itemId).
+export const timelineReviewKey = (dayIndex, planTitle, itemIndex, itemId) =>
+  String(itemId ?? `d${dayIndex}|${planTitle}|${itemIndex}`);
+
+// Adds a CUSTOM (unplanned) item to a day's ACTIVE plan timeline (immutable).
+// Used by the Review tab's per-day "Add item" form: things done on the trip
+// that were never in the plan. Decision #6 (TRIP_REVIEW_IMPLEMENTATION.md
+// §13): custom items are stamped `custom: true`, count as DONE by default (no
+// review entry — their cost IS the actual spend), are excluded from PLANNED
+// totals, included in ACTUAL totals, hidden in Edit mode, and removable.
+export const addTimelineItemToDay = (day, { title, time = '', cost = 0 }) => {
+  const activePlanTitle = day.active_plan || 'Main Plan';
+  const plans = Array.isArray(day.plans) && day.plans.length > 0
+    ? day.plans
+    : [{ title: 'Main Plan', timeline: [], additionalBudget: [] }];
+  const planIndex = plans.findIndex((p) => p.title === activePlanTitle);
+  const idx = planIndex !== -1 ? planIndex : 0;
+  const plan = plans[idx] || plans[0];
+  const item = {
+    itemId: genItemId(),
+    time: typeof time === 'string' ? time.trim() : '',
+    title: (title || '').trim(),
+    description: '',
+    duration: '',
+    location: '',
+    mapsLink: '',
+    cost: parseCost(cost),
+    custom: true,
+  };
+  const updatedPlan = { ...plan, timeline: [...(plan.timeline || []), item] };
+  const updatedPlans = plans.map((p, i) => (i === idx ? updatedPlan : p));
+  return { ...day, plans: updatedPlans };
+};
+
+// Resolves a day's active plan (same rules everywhere: active_plan title, or
+// first plan, or a fresh Main Plan shell).
+const resolveActivePlan = (day) => {
+  const activePlanTitle = day?.active_plan || 'Main Plan';
+  const plans = Array.isArray(day?.plans) && day.plans.length > 0
+    ? day.plans
+    : [{ title: 'Main Plan', timeline: [], additionalBudget: [] }];
+  const idx = plans.findIndex((p) => p.title === activePlanTitle);
+  const planIndex = idx !== -1 ? idx : 0;
+  return { plans, planIndex, plan: plans[planIndex] || plans[0] };
+};
+
+const withActivePlanTimeline = (day, transform) => {
+  const { plans, planIndex, plan } = resolveActivePlan(day);
+  const updatedPlan = { ...plan, timeline: transform(plan.timeline || []) };
+  return { ...day, plans: plans.map((p, i) => (i === planIndex ? updatedPlan : p)) };
+};
+
+// Edits a custom item (currently: its cost, which is its actual spend).
+export const updateCustomItemInDay = (day, itemId, updates) =>
+  withActivePlanTimeline(day, (timeline) =>
+    timeline.map((item) => (item.itemId === itemId && item.custom === true ? { ...item, ...updates } : item))
+  );
+
+// Removes a custom item from the day's active plan timeline.
+export const removeCustomItemFromDay = (day, itemId) =>
+  withActivePlanTimeline(day, (timeline) => timeline.filter((item) => item.itemId !== itemId));
+
+// Moves a custom item so it sits at `targetIndex` — the index of the row it
+// was dropped on, BEFORE the removal (i.e. exactly what the UI shows).
+// Planned items keep their relative order.
+export const moveCustomItemInDay = (day, itemId, targetIndex) =>
+  withActivePlanTimeline(day, (timeline) => {
+    const from = timeline.findIndex((item) => item.itemId === itemId);
+    if (from === -1) return timeline;
+    const next = [...timeline];
+    const [moved] = next.splice(from, 1);
+    const adjusted = targetIndex > from ? targetIndex - 1 : targetIndex;
+    const clamped = Math.max(0, Math.min(adjusted, next.length));
+    next.splice(clamped, 0, moved);
+    return next;
+  });
+
+// Strips every custom item from all plans of all days (Clear Review also
+// deletes the custom items added during the review — user decision).
+export const stripCustomItems = (trip) => ({
+  ...trip,
+  days: (trip?.days || []).map((day) => ({
+    ...day,
+    plans: (day.plans || []).map((plan) => ({
+      ...plan,
+      timeline: (plan.timeline || []).filter((item) => item.custom !== true),
+    })),
+  })),
+});
+
 // { total, reviewed, done, skipped } — "reviewed" = done || skipped.
+// Custom (unplanned) items are outside the review checklist — not counted.
 export const computeReviewProgress = (trip) => {
   const items = getReviewableItems(trip);
   return items.reduce(
     (acc, item) => {
+      if (item.custom) return acc;
       acc.total += 1;
       if (isEntryReviewed(item.entry)) {
         acc.reviewed += 1;
@@ -205,10 +301,11 @@ export const computeReviewProgress = (trip) => {
 };
 
 // Planned totals per section + grand total (mirrors calculateTotalBudget).
+// Custom (unplanned) items are excluded — they were never planned (decision #6).
 export const computePlannedTotals = (trip) => {
   const totals = { sections: {}, grand: 0 };
   for (const item of getReviewableItems(trip)) {
-    if (item.excludeFromTotals) continue;
+    if (item.excludeFromTotals || item.custom) continue;
     totals.sections[item.kind === 'prebooking' ? item.section : 'daily'] =
       (totals.sections[item.kind === 'prebooking' ? item.section : 'daily'] || 0) + item.plannedCost;
     totals.grand += item.plannedCost;
@@ -219,10 +316,20 @@ export const computePlannedTotals = (trip) => {
 // Actual totals: only committed entries count (actualCost !== null). Items
 // skipped without an actual cost contribute 0 (money deliberately not spent);
 // zero-planned items WITH a committed actual count (unplanned spending).
+// Custom items always count (added = done): their cost IS the actual spend.
 export const computeActualTotals = (trip) => {
   const totals = { sections: {}, grand: 0, hasAny: false };
   for (const item of getReviewableItems(trip)) {
-    if (item.excludeFromTotals || !item.entry) continue;
+    if (item.excludeFromTotals) continue;
+    if (item.custom) {
+      const spend = item.plannedCost; // parsed from item.cost
+      if (spend > 0) totals.hasAny = true;
+      const bucket = item.kind === 'prebooking' ? item.section : 'daily';
+      totals.sections[bucket] = (totals.sections[bucket] || 0) + spend;
+      totals.grand += spend;
+      continue;
+    }
+    if (!item.entry) continue;
     const actual = item.entry.actualCost;
     if (actual === null || actual === undefined) continue;
     totals.hasAny = true;

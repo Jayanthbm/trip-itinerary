@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DashboardView from './components/DashboardView';
 import ItineraryView from './components/ItineraryView';
 import { saveTrip, deleteTrip, getAllTrips, importTrips } from './utils/db';
 import {
   isTripInPast,
   normalizeData,
-  validateData
+  validateData,
+  addTimelineItemToDay,
+  updateCustomItemInDay,
+  removeCustomItemFromDay,
+  moveCustomItemInDay,
+  stripCustomItems,
+  migrateLegacyUiState,
+  cleanupLegacyUiState
 } from './utils/itineraryHelpers';
 import { useDebouncedSave } from './utils/hooks';
+import { emptyReview } from './utils/reviewHelpers';
 
 function App() {
   const [activeTab, setActiveTab] = useState('day-0');
@@ -23,6 +31,11 @@ function App() {
 
   // IndexedDB specific states
   const [recentTrips, setRecentTrips] = useState([]);
+
+  // Guards the startup init effect: StrictMode (dev) mounts effects twice,
+  // and two concurrent initApp() calls both miss the existing-trip check
+  // before either save lands — creating duplicate IndexedDB trips.
+  const initStartedRef = useRef(false);
 
   // Centralized open-trip flow (REVIEW_READINESS_PLAN.md P0-4). Replaces the
   // scattered setAppData/setActiveTab('day-0')/localStorage triplets so any
@@ -60,6 +73,36 @@ function App() {
       .catch((err) => setError('Failed to save review: ' + err.message));
   };
 
+  const reviewSaver = useDebouncedSave((value) => {
+    if (!value) return;
+    handleUpdateTripReview(value.tripId, value.review);
+  }, 400);
+  // Review edits always target the currently open trip; tripId is resolved
+  // again inside handleUpdateTripReview (falls back to appData).
+  // The review is applied to appData OPTIMISTICALLY: ReviewView's inputs are
+  // controlled by appData, so without this every keystroke recomputed from the
+  // stale prop and the debounced re-render wiped typed text (skip-reason bug).
+  // The IndexedDB write itself stays debounced (P0-7/G8).
+  const debouncedReviewSave = (review) => {
+    const tripId = appData?.id;
+    setAppData((prev) => (prev && prev.id === tripId ? { ...prev, review } : prev));
+    reviewSaver.save({ tripId, review });
+  };
+
+  // Plan writes and review writes are two async writers on the same trip. If a
+  // plan save lands while a review write is still debounced (or vice versa),
+  // the older snapshot would silently revert the newer one. Folding the
+  // pending review into the plan save keeps both.
+  const savePlanWithPendingReview = (base) => {
+    const pending = reviewSaver.peek();
+    if (pending && pending.tripId === appData?.id && pending.review) {
+      reviewSaver.cancel();
+      handleUpdateAppData({ ...base, review: pending.review });
+      return;
+    }
+    handleUpdateAppData(base);
+  };
+
   const loadRecentTrips = async () => {
     try {
       const trips = await getAllTrips();
@@ -67,10 +110,18 @@ function App() {
       let updatedAny = false;
       const processedTrips = await Promise.all(trips.map(async (trip) => {
         const daysCount = trip.days ? trip.days.length : 0;
+        // G5: harvest any legacy localStorage checklist/prebook state into the
+        // trip object alongside the auto-archive upgrade.
+        let updated = migrateLegacyUiState(trip);
         if (!trip.archived && isTripInPast(trip.startDate, daysCount)) {
-          const updated = { ...trip, archived: true };
+          updated = { ...updated, archived: true };
+        }
+        if (updated !== trip) {
           await saveTrip(updated);
           updatedAny = true;
+          // Harvested state is persisted; the legacy keys are now redundant
+          // (and would resurrect un-checked ticks if left behind).
+          cleanupLegacyUiState(updated);
           return updated;
         }
         return trip;
@@ -89,6 +140,9 @@ function App() {
     }
   };
 
+  // Idempotent per sourceUrl: if a trip from this URL is already saved,
+  // refresh that record in place (same id) instead of creating a duplicate —
+  // preserving its review, pin and archive state.
   const fetchData = async (url) => {
     setIsLoading(true);
     setError(null);
@@ -100,6 +154,13 @@ function App() {
 
       const normalized = normalizeData(jsonData);
       normalized.sourceUrl = url;
+      const existing = (await getAllTrips().catch(() => [])).find((t) => t.sourceUrl === url);
+      if (existing) {
+        normalized.id = existing.id;
+        if (existing.review) normalized.review = existing.review;
+        normalized.pinned = existing.pinned;
+        normalized.archived = existing.archived;
+      }
       const saved = await saveTrip(normalized);
       openTrip(saved);
       setEditsMade(false);
@@ -126,7 +187,61 @@ function App() {
   const handleUpdateDay = (dayIndex, updatedDay) => {
     const newDays = [...appData.days];
     newDays[dayIndex] = updatedDay;
-    handleUpdateAppData({ ...appData, days: newDays });
+    savePlanWithPendingReview({ ...appData, days: newDays });
+  };
+
+  // Prebooking booking-status toggle (G5): lives on the trip object — backed
+  // up with the trip, no localStorage, no title-derived key collisions.
+  const handleUpdatePrebookingItem = (section, itemId, updates) => {
+    if (!appData?.prebookingData?.[section]) return;
+    const items = appData.prebookingData[section].map((item) =>
+      (item.itemId ?? item.id) === itemId ? { ...item, ...updates } : item
+    );
+    savePlanWithPendingReview({
+      ...appData,
+      prebookingData: { ...appData.prebookingData, [section]: items }
+    });
+  };
+
+  // Review tab "Add item": things done on the trip that were never planned
+  // (custom items — decision #6). Appends to the day's ACTIVE plan timeline.
+  const handleAddReviewItem = (dayIndex, fields) => {
+    const day = appData.days?.[dayIndex];
+    if (!day) return;
+    const newDays = [...appData.days];
+    newDays[dayIndex] = addTimelineItemToDay(day, fields);
+    savePlanWithPendingReview({ ...appData, days: newDays });
+  };
+
+  const handleUpdateCustomItem = (dayIndex, itemId, updates) => {
+    const day = appData.days?.[dayIndex];
+    if (!day) return;
+    const newDays = [...appData.days];
+    newDays[dayIndex] = updateCustomItemInDay(day, itemId, updates);
+    savePlanWithPendingReview({ ...appData, days: newDays });
+  };
+
+  const handleDeleteCustomItem = (dayIndex, itemId) => {
+    const day = appData.days?.[dayIndex];
+    if (!day) return;
+    const newDays = [...appData.days];
+    newDays[dayIndex] = removeCustomItemFromDay(day, itemId);
+    savePlanWithPendingReview({ ...appData, days: newDays });
+  };
+
+  const handleMoveCustomItem = (dayIndex, itemId, toIndex) => {
+    const day = appData.days?.[dayIndex];
+    if (!day) return;
+    const newDays = [...appData.days];
+    newDays[dayIndex] = moveCustomItemInDay(day, itemId, toIndex);
+    savePlanWithPendingReview({ ...appData, days: newDays });
+  };
+
+  // Clear review = reset review state AND delete the custom (unplanned) items
+  // added during the review (user decision). One atomic save.
+  const handleClearReview = () => {
+    if (!appData) return;
+    savePlanWithPendingReview({ ...appData, review: emptyReview(), days: stripCustomItems(appData).days });
   };
 
   const handleLoadLocalData = async (data) => {
@@ -276,6 +391,8 @@ function App() {
     const urlParam = params.get('it');
 
     const initApp = async () => {
+      if (initStartedRef.current) return; // StrictMode double-mount guard
+      initStartedRef.current = true;
       if (urlParam) {
         try {
           const trips = await getAllTrips();
@@ -380,14 +497,6 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-  const reviewSaver = useDebouncedSave((value) => {
-    if (!value) return;
-    handleUpdateTripReview(value.tripId, value.review);
-  }, 400);
-  // Review edits always target the currently open trip; tripId is resolved
-  // again inside handleUpdateTripReview (falls back to appData).
-  const debouncedReviewSave = (review) => reviewSaver.save({ tripId: appData?.id, review });
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -451,6 +560,12 @@ function App() {
           executeClose={executeClose}
           handleUpdateAppData={handleUpdateAppData}
           handleUpdateDay={handleUpdateDay}
+          onUpdatePrebookingItem={handleUpdatePrebookingItem}
+          onAddReviewItem={handleAddReviewItem}
+          onUpdateCustomItem={handleUpdateCustomItem}
+          onDeleteCustomItem={handleDeleteCustomItem}
+          onMoveCustomItem={handleMoveCustomItem}
+          onClearReview={handleClearReview}
           isReviewable={isReviewable(appData)}
           onUpdateReview={debouncedReviewSave}
         />

@@ -15,7 +15,7 @@
 | G2 | 🔴 High | Data model | `additionalBudget` items in the wild use an `item` key, not `title` — `normalizeData` **silently drops their label and cost** |
 | G3 | 🟠 Medium | Data safety | `normalizeData` destroys legacy string costs permanently on first load+save (not idempotent-safe) |
 | G4 | 🟠 Medium | Identity | No stable ids on timeline items; prebooking ids are positional and regenerated — review keys would be fragile |
-| G5 | 🟠 Medium | State location | Checklist/prebooking status lives in localStorage only — not backed up, collision-prone keys; must not extend this pattern |
+| G5 | 🟠 Medium | State location | ✅ **Resolved.** Checklist/prebooking status now lives on the trip object (backed up); legacy localStorage state is harvested once on load |
 | G6 | 🟡 Low-Med | Navigation | Open-trip flow hardcodes `setActiveTab('day-0')` in ~6 places — blocks "open directly into Review" |
 | G7 | 🟡 Low-Med | UX gate | Budget tab unreachable for trips without `prebookingData` (button hidden / render guard) |
 | G8 | 🟡 Low | Performance | Every keystroke in Edit mode writes the whole trip to IndexedDB; review inputs would amplify this |
@@ -85,7 +85,15 @@ Positional keys survive *most* usage but break on insert/delete/reorder, and `Ed
 - `EditDay` add/delete paths must **preserve** `itemId` of untouched items (spread existing objects — verify no object re-creation drops it).
 - Trip Review keys then prefer `itemId`, falling back to positional keys for pre-id trips (the review doc's keying section already allows snapshots for drift).
 
-### G5 — localStorage-only UI state (🟠 — don't extend, optionally migrate)
+### G5 — localStorage-only UI state (🟠 — ✅ RESOLVED: migrated to the trip object)
+
+> **Status (2026-09-29):** Implemented. Checklist ticks are now `{ id, text, checked }` entries on
+> `day.checklist` (upgraded by `normalizeData`), and prebooking booking status is written to
+> `item.status` on the trip object (`PrebookingView` → `onUpdateItem`). A one-time harvest
+> (`migrateLegacyUiState` + `cleanupLegacyUiState` in `itineraryHelpers.js`, run from
+> `loadRecentTrips`) pulls any old localStorage state into saved trips and then removes the
+> legacy keys. All state is backed up with the trip; the `itineraryKey` plumbing is gone.
+> Tests: `src/utils/g5Migration.test.js`.
 
 Checklist ticks (`${itineraryKey}_day_${i}_checklist_${idx}`) and prebooking status (`${itineraryKey}_prebook_${cat}_${id}`) live in localStorage:
 - **Not in backups** (export/import never touch them).

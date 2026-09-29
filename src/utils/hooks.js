@@ -7,6 +7,8 @@ import { useRef, useCallback, useEffect } from 'react';
 // Usage:
 //   const { save, flush, cancel } = useDebouncedSave(saveFn, 400);
 //   save(value);      // schedules; latest value wins
+//   peek();           // pending value (or undefined) — lets other writers
+//                     // fold it into their own save so nothing is clobbered
 //   flush();          // force the pending write now (tab switch / close)
 //   cancel();         // drop the pending write
 //
@@ -43,6 +45,9 @@ export const useDebouncedSave = (saveFn, delay = 400) => {
     latestRef.current = { hasValue: false, value: undefined };
   }, []);
 
+  const peek = useCallback(() =>
+    (latestRef.current.hasValue ? latestRef.current.value : undefined), []);
+
   const save = useCallback(
     (value) => {
       latestRef.current = { hasValue: true, value };
@@ -55,7 +60,7 @@ export const useDebouncedSave = (saveFn, delay = 400) => {
   // Flush pending writes on unmount.
   useEffect(() => () => flush(), [flush]);
 
-  return { save, flush, cancel };
+  return { save, peek, flush, cancel };
 };
 
 export default useDebouncedSave;

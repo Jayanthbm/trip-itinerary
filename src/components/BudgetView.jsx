@@ -81,9 +81,11 @@ const BudgetView = ({ appData, currencySymbol = '₹', onStartReview, reviewStat
                     {day.dayLabel}
                   </span>
                   <span style={{ display: 'flex', flexShrink: 0, fontWeight: 600, fontSize: '0.9rem' }}>
-                    <span style={{ width: '90px', textAlign: 'right' }}>{fmt(day.items.reduce((s, i) => s + i.plannedCost, 0), currencySymbol)}</span>
-                    <span style={{ width: '90px', textAlign: 'right', color: day.items.some((i) => i.entry?.actualCost !== null && i.entry?.actualCost !== undefined) ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                      {day.items.every((i) => i.entry?.actualCost == null) ? '—' : fmt(day.items.reduce((s, i) => s + (i.entry?.actualCost ?? 0), 0), currencySymbol)}
+                    <span style={{ width: '90px', textAlign: 'right' }}>{fmt(day.items.filter((i) => !i.custom).reduce((s, i) => s + i.plannedCost, 0), currencySymbol)}</span>
+                    <span style={{ width: '90px', textAlign: 'right', color: day.items.some((i) => (i.custom ? i.plannedCost > 0 : i.entry?.actualCost !== null && i.entry?.actualCost !== undefined)) ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                      {day.items.some((i) => (i.custom ? i.plannedCost > 0 : i.entry?.actualCost !== null && i.entry?.actualCost !== undefined))
+                        ? fmt(day.items.reduce((s, i) => s + (i.custom ? i.plannedCost : (i.entry?.actualCost ?? 0)), 0), currencySymbol)
+                        : '—'}
                     </span>
                     <span style={{ width: '90px', textAlign: 'right' }} />
                   </span>
@@ -115,6 +117,26 @@ const BudgetView = ({ appData, currencySymbol = '₹', onStartReview, reviewStat
 
   const renderItemRows = (items) =>
     items.map((item) => {
+      // Custom (unplanned) items: their cost IS the actual spend — no planned
+      // column, no variance (decision #6).
+      if (item.custom) {
+        return (
+          <div key={item.key} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
+            <span style={{ color: 'var(--text-secondary)', flex: 1, paddingRight: '1rem', display: 'flex', alignItems: 'center', gap: '0.4rem', minWidth: 0 }}>
+              {item.kind !== 'prebooking' && item.time && <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem' }}>{item.time}</span>}
+              <span style={{ color: '#fbbf24' }}>{item.label}</span>
+              <span className="badge pending" title="Unplanned — added during review; counts toward actual spend only" style={{ background: 'rgba(245, 158, 11, 0.15)', color: '#fbbf24', border: '1px solid rgba(245, 158, 11, 0.4)' }}>✦</span>
+            </span>
+            <span style={{ display: 'flex', flexShrink: 0 }}>
+              <span style={{ width: '90px', textAlign: 'right', color: 'var(--text-muted)' }}>—</span>
+              <span style={{ width: '90px', textAlign: 'right', color: item.plannedCost > 0 ? 'var(--text-primary)' : 'var(--text-muted)' }}>
+                {item.plannedCost > 0 ? fmt(item.plannedCost, currencySymbol) : '—'}
+              </span>
+              <span style={{ width: '90px', textAlign: 'right', color: 'var(--text-muted)' }}>—</span>
+            </span>
+          </div>
+        );
+      }
       const actual = item.entry?.actualCost;
       const hasActual = actual !== null && actual !== undefined;
       const variance = hasActual ? actual - item.plannedCost : null;
